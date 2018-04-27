@@ -1,5 +1,7 @@
 package requirementsM;
 
+import processing.core.PApplet;
+
 // import_______________________ ;
 /**
  * 
@@ -15,7 +17,7 @@ package requirementsM;
  *
  * @author Sources: None
  */
-public class Movable2
+public class Movable2 extends PApplet
 {
 
 }
