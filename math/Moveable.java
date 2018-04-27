@@ -51,14 +51,14 @@ public class Moveable extends Structure3D implements Collidable
 
     protected int turnDirection()
     {
-        //TODO: Complete both
+        // TODO: Complete both
         return 0;
     }
 
 
     protected int moveDirection()
     {
-        //TODO: Complete both
+        // TODO: Complete both
         return 0;
     }
 
@@ -115,9 +115,23 @@ public class Moveable extends Structure3D implements Collidable
 
         curTime = newTime;
     }
+
+
     protected void updateCorners()
     {
+        double rotatedX = (double)( super.getX().getExactValue() )
+            * Math.cos( (double)( super.getAngle().getExactValue() ) )
+            - (double)( super.getZ().getExactValue() )
+                * Math.sin( (double)( super.getAngle().getExactValue() ) );
+        double rotatedZ = (double)( super.getX().getExactValue() )
+            * Math.sin( (double)( super.getAngle().getExactValue() ) )
+            + (double)( super.getZ().getExactValue() )
+                * Math.cos( (double)( super.getAngle().getExactValue() ) );
         
-    }
 
+        // translate back
+        x = rotatedX + cx;
+        y = rotatedZ + cy;
+
+    }
 }

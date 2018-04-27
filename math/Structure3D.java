@@ -27,6 +27,7 @@ public class Structure3D extends Value3D
         width = Amount.valueOf( w, SI.METER );
         height = Amount.valueOf( h, SI.METER );
         this.angle = Amount.valueOf( angle, SI.RADIAN );
+        points = new Value3D[8];
     }
 
 
@@ -60,21 +61,46 @@ public class Structure3D extends Value3D
     }
 
 
-    protected void calculateAngles()
+    protected Value3D[] getPoints()
     {
+        return points;
+    }
 
-        float tempX = x - cx;
-        float tempY = y - cy;
 
-        // now apply rotation
-        double rotatedX = tempX * Math.cos( angle.getExactValue() )
-            - tempY * Math.sin( angle.getExactValue() );
-        double rotatedY = tempX * Math.sin( angle.getExactValue() )
-            + tempY * Math.cos( angle.getExactValue() );
+    protected void calculatePoints()
+    {
+        points[0] = new Value3D( (int)super.getX().getExactValue(),
+            (int)super.getY().getExactValue(),
+            (int)super.getZ().getExactValue() );
+        
+        points[1] = new Value3D( (int)( super.getX().getExactValue() + length.getExactValue() ),
+            (int)super.getY().getExactValue(),
+            (int)super.getZ().getExactValue() );
+        
+        points[2] = new Value3D( (int)( super.getX().getExactValue() + length.getExactValue() ),
+            (int)( super.getY().getExactValue() + height.getExactValue() ),
+            (int)( super.getZ().getExactValue() ) );
+        
+        points[3] = new Value3D( (int)( super.getX().getExactValue() + length.getExactValue() ),
+            (int)( super.getY().getExactValue() + height.getExactValue() ),
+            (int)( super.getZ().getExactValue() + width.getExactValue() ) );
+        
+        points[4] = new Value3D( (int)( super.getX().getExactValue() ),
+            (int)( super.getY().getExactValue() + height.getExactValue() ),
+            (int)( super.getZ().getExactValue() ) );
+        
+        points[5] = new Value3D( (int)( super.getX().getExactValue() ),
+            (int)( super.getY().getExactValue() + height.getExactValue() ),
+            (int)( super.getZ().getExactValue() + width.getExactValue() ) );
+        
+        points[6] = new Value3D( (int)( super.getX().getExactValue() ),
+            (int)( super.getY().getExactValue() ),
+            (int)( super.getZ().getExactValue() + width.getExactValue() ) );
+        
+        points[7] = new Value3D( (int)( super.getX().getExactValue() + length.getExactValue()),
+            (int)( super.getY().getExactValue()),
+            (int)( super.getZ().getExactValue() + width.getExactValue() ) );
 
-        // translate back
-        x = rotatedX + cx;
-        y = rotatedY + cy;
 
     }
 }
