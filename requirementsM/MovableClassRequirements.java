@@ -4,6 +4,7 @@ import processing.core.PApplet;
 
 
 /**
+ * does not compile yet - ahhhh
  * 
  * description of class TODO
  *
@@ -22,6 +23,7 @@ public class MovableClassRequirements extends PApplet
     float y;
 
     float z;
+    // does not compile yet - problem!
 
 
     public void setup()
