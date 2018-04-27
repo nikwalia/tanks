@@ -7,7 +7,7 @@ import org.jscience.geography.coordinates.Time;
 import org.jscience.physics.amount.Amount;
 
 
-public abstract class Moveable extends Structure3D
+public class Moveable extends Structure3D implements Collidable
 {
     private Time curTime;
 
@@ -34,9 +34,9 @@ public abstract class Moveable extends Structure3D
         SI.RADIAN.divide( SI.SECOND ).asType( AngularVelocity.class ) );
 
 
-    public Moveable( int x, int y, int z, int angle, int l, int w )
+    public Moveable( int x, int y, int z, int angle, int l, int w, int h )
     {
-        super( x, y, z, angle, l, w );
+        super( x, y, z, angle, l, w, h );
         curTime = new Time( System.nanoTime(), SI.SECOND );
         velocity = ZEROVELOCITY;
         angularVelocity = ZEROANGULARVELOCITY;
@@ -49,9 +49,18 @@ public abstract class Moveable extends Structure3D
     }
 
 
-    abstract int turnDirection();
+    protected int turnDirection()
+    {
+        // TODO: Complete both
+        return 0;
+    }
 
-    abstract int moveDirection();
+
+    protected int moveDirection()
+    {
+        // TODO: Complete both
+        return 0;
+    }
 
 
     protected void translate()
@@ -103,7 +112,26 @@ public abstract class Moveable extends Structure3D
         super.changeY( ( velocity.times( deltaTime.doubleValue( SI.SECOND ) )
             .times( Math.sin( getAngle().longValue( SI.RADIAN ) ) )
             .doubleValue( SI.METERS_PER_SECOND ) ) );
-        
+
         curTime = newTime;
+    }
+
+
+    protected void updateCorners()
+    {
+        double rotatedX = (double)( super.getX().getExactValue() )
+            * Math.cos( (double)( super.getAngle().getExactValue() ) )
+            - (double)( super.getZ().getExactValue() )
+                * Math.sin( (double)( super.getAngle().getExactValue() ) );
+        double rotatedZ = (double)( super.getX().getExactValue() )
+            * Math.sin( (double)( super.getAngle().getExactValue() ) )
+            + (double)( super.getZ().getExactValue() )
+                * Math.cos( (double)( super.getAngle().getExactValue() ) );
+        
+
+        // translate back
+        x = rotatedX + cx;
+        y = rotatedZ + cy;
+
     }
 }
