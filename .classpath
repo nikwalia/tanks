@@ -2,7 +2,25 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path=""/>
-	<classpathentry kind="lib" path="/Users/Roopak/Documents/GitHub/tanks/core.jar"/>
-	<classpathentry kind="lib" path="/Users/Roopak/Documents/GitHub/tanks/jscience-4.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/core.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/jscience-4.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/junit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/gluegen-rt-natives-linux-aarch64.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/gluegen-rt-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/gluegen-rt-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/gluegen-rt-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/gluegen-rt-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/gluegen-rt-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/jogl-all.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/jogl-all-natives-linux-aarch64.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/jogl-all-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/jogl-all-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/jogl-all-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/jogl-all-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nikash/Documents/GitHub/tanks/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
