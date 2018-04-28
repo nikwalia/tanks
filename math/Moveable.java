@@ -1,7 +1,7 @@
 package math;
 import math.Structure3D;
 
-public class Moveable extends Structure3D implements Collidable
+public class Moveable extends Structure3D
 {
     protected double curTime;
 
@@ -91,10 +91,11 @@ public class Moveable extends Structure3D implements Collidable
             }
         }
 
-        super.changeAngle( angularVelocity * deltaTime );
-        super.changeX( velocity * deltaTime * Math.cos( getAngle() ) );
-        super.changeY( velocity * deltaTime * Math.sin( getAngle() ) );
+        changeAngle( angularVelocity * deltaTime );
+        changeX( velocity * deltaTime * Math.cos( getAngle() ) );
+        changeY( velocity * deltaTime * Math.sin( getAngle() ) );
         
         curTime = newTime;
+        updateCorners();
     }
 }

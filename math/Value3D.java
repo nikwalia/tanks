@@ -6,7 +6,7 @@ public class Value3D
     private double y_coordinate;
     private double z_coordinate;
     
-    public Value3D(int x, int y, int z)
+    public Value3D(double x, double y, double z)
     {
         x_coordinate = x;
         y_coordinate = y;
