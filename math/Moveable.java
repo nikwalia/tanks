@@ -93,7 +93,7 @@ public class Moveable extends Structure3D
 
         changeAngle( angularVelocity * deltaTime );
         changeX( velocity * deltaTime * Math.cos( getAngle() ) );
-        changeY( velocity * deltaTime * Math.sin( getAngle() ) );
+        changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
         
         curTime = newTime;
         updateCorners();
