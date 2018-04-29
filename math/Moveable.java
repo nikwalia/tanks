@@ -1,32 +1,32 @@
 package math;
 import math.Structure3D;
 
-public abstract class Moveable extends Structure3D
+public class Moveable extends Structure3D
 {
-    private double curTime;
+    protected double curTime;
 
-    private double velocity;
+    protected double velocity;
 
-    private static final double ACCELERATION = 8;
+    protected static final double ACCELERATION = 8;
 
-    private static final double MAXVELOCITY = 20;
+    protected static final double MAXVELOCITY = 20;
 
-    private static final double MINVELOCITY = -20;
+    protected static final double MINVELOCITY = -20;
 
-    private static final double ZEROVELOCITY = 0;
+    protected static final double ZEROVELOCITY = 0;
 
-    private double angularVelocity;
+    protected double angularVelocity;
 
-    private static final double MAXANGULARVELOCITY = Math.PI / 8;
+    protected static final double MAXANGULARVELOCITY = Math.PI / 8;
 
-    private static final double MINANGULARVELOCITY = -Math.PI / 8;
+    protected static final double MINANGULARVELOCITY = -Math.PI / 8;
 
-    private static final double ZEROANGULARVELOCITY = 0;
+    protected static final double ZEROANGULARVELOCITY = 0;
 
 
-    public Moveable( int x, int y, int z, int angle, int l, int w )
+    public Moveable( int x, int y, int z, int angle, int l, int w, int h )
     {
-        super( x, y, z, angle, l, w );
+        super( x, y, z, angle, l, w, h );
         curTime = System.nanoTime();
         velocity = ZEROVELOCITY;
         angularVelocity = ZEROANGULARVELOCITY;
@@ -39,9 +39,18 @@ public abstract class Moveable extends Structure3D
     }
 
 
-    abstract int turnDirection();
+    protected int turnDirection()
+    {
+        // TODO: Complete both
+        return 0;
+    }
 
-    abstract int moveDirection();
+
+    protected int moveDirection()
+    {
+        // TODO: Complete both
+        return 0;
+    }
 
 
     protected void translate()
@@ -82,10 +91,11 @@ public abstract class Moveable extends Structure3D
             }
         }
 
-        super.changeAngle( angularVelocity * deltaTime );
-        super.changeX( velocity * deltaTime * Math.cos( getAngle() ) );
-        super.changeY( velocity * deltaTime * Math.sin( getAngle() ) );
+        changeAngle( angularVelocity * deltaTime );
+        changeX( velocity * deltaTime * Math.cos( getAngle() ) );
+        changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
         
         curTime = newTime;
+        updateCorners();
     }
 }
