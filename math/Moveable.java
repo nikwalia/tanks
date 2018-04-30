@@ -1,7 +1,5 @@
 package math;
 
-import math.Structure3D;
-
 
 public class Moveable extends Structure3D
 {
@@ -47,7 +45,6 @@ public class Moveable extends Structure3D
         return 0;
     }
 
-
     protected int moveDirection()
     {
         // TODO: Complete both
@@ -73,7 +70,8 @@ public class Moveable extends Structure3D
             angularVelocity = MAXANGULARVELOCITY;
         }
 
-        if ( moveDirection() == 0 && Math.abs( velocity - ZEROVELOCITY ) < 0.1 )
+
+        if ( moveDirection() == 0 && Math.abs(velocity - ZEROVELOCITY) < 0.1 )
         {
             if ( velocity < ZEROVELOCITY )
             {
@@ -88,6 +86,7 @@ public class Moveable extends Structure3D
         {
             if ( !( moveDirection() == -1 && Math.abs( velocity - MINVELOCITY ) < 0.1 )
                 && !( moveDirection() == 1 && Math.abs( velocity - MAXVELOCITY ) < 0.1 ) )
+
             {
                 velocity += ACCELERATION * deltaTime * moveDirection();
             }
@@ -96,7 +95,6 @@ public class Moveable extends Structure3D
         changeAngle( angularVelocity * deltaTime );
         changeX( velocity * deltaTime * Math.cos( getAngle() ) );
         changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
-
         curTime = newTime;
         updateCorners();
     }
