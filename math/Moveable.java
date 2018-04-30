@@ -131,7 +131,7 @@ public class Moveable extends Structure3D implements Collidable
 
         // translate back
         x = rotatedX + cx;
-        y = rotatedZ + cy;
+        z = rotatedZ + cz;
 
     }
 }

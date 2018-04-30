@@ -7,4 +7,5 @@ import org.jscience.physics.amount.Amount;
 
 public interface Collidable
 {
+    
 }
