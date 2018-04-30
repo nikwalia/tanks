@@ -1,106 +1,156 @@
 package math;
 
-import javax.measure.quantity.Angle;
-import javax.measure.quantity.Length;
-import javax.measure.unit.SI;
-
-import org.jscience.physics.amount.Amount;
-
-
-public class Structure3D extends Value3D
+public class Structure3D extends Value3D implements Collidable
 {
-    private final Amount<Length> length;
 
-    private final Amount<Length> width;
+    private final double length;
 
-    private final Amount<Length> height;
+    private final double width;
 
-    private Amount<Angle> angle;
+    private final double height;
 
-    private Value3D[] points;
+    private double angle;
 
 
     public Structure3D( int x, int y, int z, int angle, int l, int w, int h )
     {
         super( x, y, z );
-        length = Amount.valueOf( l, SI.METER );
-        width = Amount.valueOf( w, SI.METER );
-        height = Amount.valueOf( h, SI.METER );
-        this.angle = Amount.valueOf( angle, SI.RADIAN );
-        points = new Value3D[8];
+        length = l;
+        width = w;
+        height = h;
+        this.angle = angle;
+        updateCorners();
     }
 
 
-    protected Amount<Length> getLength()
+    protected double getLength()
     {
         return length;
     }
 
 
-    protected Amount<Length> getWidth()
+    protected double getWidth()
     {
         return width;
     }
 
 
-    protected Amount<Length> getHeight()
+    protected double getHeight()
     {
         return height;
     }
 
 
-    protected void changeAngle( double dAngle )
-    {
-        angle.plus( Amount.valueOf( dAngle, SI.RADIAN ) );
-    }
-
-
-    protected Amount<Angle> getAngle()
+    protected double getAngle()
     {
         return angle;
     }
 
 
-    protected Value3D[] getPoints()
+    protected void changeAngle( double deltaAngle )
     {
-        return points;
+        angle += deltaAngle;
     }
 
 
-    protected void calculatePoints()
+    public void updateCorners()
     {
-        points[0] = new Value3D( (int)super.getX().getExactValue(),
-            (int)super.getY().getExactValue(),
-            (int)super.getZ().getExactValue() );
-        
-        points[1] = new Value3D( (int)( super.getX().getExactValue() + length.getExactValue() ),
-            (int)super.getY().getExactValue(),
-            (int)super.getZ().getExactValue() );
-        
-        points[2] = new Value3D( (int)( super.getX().getExactValue() + length.getExactValue() ),
-            (int)( super.getY().getExactValue() + height.getExactValue() ),
-            (int)( super.getZ().getExactValue() ) );
-        
-        points[3] = new Value3D( (int)( super.getX().getExactValue() + length.getExactValue() ),
-            (int)( super.getY().getExactValue() + height.getExactValue() ),
-            (int)( super.getZ().getExactValue() + width.getExactValue() ) );
-        
-        points[4] = new Value3D( (int)( super.getX().getExactValue() ),
-            (int)( super.getY().getExactValue() + height.getExactValue() ),
-            (int)( super.getZ().getExactValue() ) );
-        
-        points[5] = new Value3D( (int)( super.getX().getExactValue() ),
-            (int)( super.getY().getExactValue() + height.getExactValue() ),
-            (int)( super.getZ().getExactValue() + width.getExactValue() ) );
-        
-        points[6] = new Value3D( (int)( super.getX().getExactValue() ),
-            (int)( super.getY().getExactValue() ),
-            (int)( super.getZ().getExactValue() + width.getExactValue() ) );
-        
-        points[7] = new Value3D( (int)( super.getX().getExactValue() + length.getExactValue()),
-            (int)( super.getY().getExactValue()),
-            (int)( super.getZ().getExactValue() + width.getExactValue() ) );
+        base[0] = new Value3D(
+            getX() + width / 2 * Math.cos( angle ) - length / 2 * Math.sin( angle ),
+            getY() + width / 2 * Math.sin( angle ) + length / 2 * Math.cos( angle ),
+            0 );
+        base[1] = new Value3D(
+            getX() - width / 2 * Math.cos( angle ) - length / 2 * Math.sin( angle ),
+            getY() - width / 2 * Math.sin( angle ) + length / 2 * Math.cos( angle ),
+            0 );
+        base[2] = new Value3D(
+            getX() - width / 2 * Math.cos( angle ) + length / 2 * Math.sin( angle ),
+            getY() - width / 2 * Math.sin( angle ) - length / 2 * Math.cos( angle ),
+            0 );
+        base[3] = new Value3D(
+            getX() + width / 2 * Math.cos( angle ) + length / 2 * Math.sin( angle ),
+            getY() + width / 2 * Math.sin( angle ) - length / 2 * Math.cos( angle ),
+            0 );
+    }
 
 
+    public boolean hasCollided( Collidable other )
+    {
+        double otherX = other.base[0].getX();
+        double otherY = other.base[0].getY();
+        double areaOfBase = width * length;
+        int max;
+        if (other.base[2] == null)
+        {
+            max = 1;
+        }
+        else
+        {
+            max = 4;
+        }
+
+        for ( int i = 0; i < max; i++ )
+        {
+            otherX = other.base[i].getX();
+            otherY = other.base[i].getY();
+            if ( Math.sqrt( Math.pow( otherX - getX(), 2 ) + Math.pow( otherY - getY(), 2 ) ) > Math
+                .sqrt( width * width + length * length ) / 2 )
+            {
+                continue;
+            }
+            else
+            {
+                double totalTriangleArea = 0;
+                double firstSide = Math.sqrt( Math.pow( otherX - base[0].getX(), 2 )
+                    + Math.pow( otherY - base[0].getY(), 2 ) );
+                double secondSide = Math.sqrt( Math.pow( otherX - base[1].getX(), 2 )
+                    + Math.pow( otherY - base[1].getY(), 2 ) );
+                double thirdSide = Math.sqrt( Math.pow( base[0].getX() - base[1].getX(), 2 )
+                    + Math.pow( base[0].getX() - base[1].getY(), 2 ) );
+                double semiperimeter = ( firstSide + secondSide + thirdSide ) / 2;
+                totalTriangleArea += Math.sqrt( semiperimeter * ( semiperimeter - firstSide )
+                    * ( semiperimeter - secondSide ) * ( semiperimeter - thirdSide ) );
+
+                firstSide = Math.sqrt( Math.pow( otherX - base[1].getX(), 2 )
+                    + Math.pow( otherY - base[1].getY(), 2 ) );
+                secondSide = Math.sqrt( Math.pow( otherX - base[2].getX(), 2 )
+                    + Math.pow( otherY - base[2].getY(), 2 ) );
+                thirdSide = Math.sqrt( Math.pow( base[1].getX() - base[2].getX(), 2 )
+                    + Math.pow( base[1].getX() - base[2].getY(), 2 ) );
+                semiperimeter = ( firstSide + secondSide + thirdSide ) / 2;
+                totalTriangleArea += Math.sqrt( semiperimeter * ( semiperimeter - firstSide )
+                    * ( semiperimeter - secondSide ) * ( semiperimeter - thirdSide ) );
+
+                firstSide = Math.sqrt( Math.pow( otherX - base[2].getX(), 2 )
+                    + Math.pow( otherY - base[2].getY(), 2 ) );
+                secondSide = Math.sqrt( Math.pow( otherX - base[3].getX(), 2 )
+                    + Math.pow( otherY - base[3].getY(), 2 ) );
+                thirdSide = Math.sqrt( Math.pow( base[2].getX() - base[3].getX(), 2 )
+                    + Math.pow( base[2].getX() - base[3].getY(), 2 ) );
+                semiperimeter = ( firstSide + secondSide + thirdSide ) / 2;
+                totalTriangleArea += Math.sqrt( semiperimeter * ( semiperimeter - firstSide )
+                    * ( semiperimeter - secondSide ) * ( semiperimeter - thirdSide ) );
+
+                firstSide = Math.sqrt( Math.pow( otherX - base[0].getX(), 2 )
+                    + Math.pow( otherY - base[0].getY(), 2 ) );
+                secondSide = Math.sqrt( Math.pow( otherX - base[3].getX(), 2 )
+                    + Math.pow( otherY - base[3].getY(), 2 ) );
+                thirdSide = Math.sqrt( Math.pow( base[0].getX() - base[3].getX(), 2 )
+                    + Math.pow( base[0].getX() - base[3].getY(), 2 ) );
+                semiperimeter = ( firstSide + secondSide + thirdSide ) / 2;
+                totalTriangleArea += Math.sqrt( semiperimeter * ( semiperimeter - firstSide )
+                    * ( semiperimeter - secondSide ) * ( semiperimeter - thirdSide ) );
+
+                if ( totalTriangleArea < areaOfBase )
+                {
+                    return true;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+        return false;
     }
 }

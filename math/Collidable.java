@@ -1,11 +1,9 @@
 package math;
 
-import javax.measure.quantity.Length;
-import javax.measure.unit.SI;
-
-import org.jscience.physics.amount.Amount;
-
 public interface Collidable
 {
+    Value3D[] base = new Value3D[4];
     
+    void updateCorners();
+    boolean hasCollided(Collidable other);
 }
