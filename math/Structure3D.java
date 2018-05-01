@@ -80,7 +80,7 @@ public class Structure3D extends Value3D implements Collidable
         double otherY = other.base[0].getY();
         double areaOfBase = width * length;
         int max;
-        if (other.base[2] == null)
+        if ( other.base[2] == null )
         {
             max = 1;
         }

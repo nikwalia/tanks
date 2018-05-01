@@ -7,21 +7,21 @@ public class Moveable extends Structure3D
 
     protected double velocity;
 
-    protected static final double ACCELERATION = 8;
+    protected final double ACCELERATION = 8;
 
-    protected static final double MAXVELOCITY = 20;
+    protected final double MAXVELOCITY = 20;
 
-    protected static final double MINVELOCITY = -20;
+    protected final double MINVELOCITY = -20;
 
-    protected static final double ZEROVELOCITY = 0;
+    protected final double ZEROVELOCITY = 0;
 
     protected double angularVelocity;
 
-    protected static final double MAXANGULARVELOCITY = Math.PI / 8;
+    protected final double MAXANGULARVELOCITY = Math.PI / 8;
 
-    protected static final double MINANGULARVELOCITY = -Math.PI / 8;
+    protected final double MINANGULARVELOCITY = -Math.PI / 8;
 
-    protected static final double ZEROANGULARVELOCITY = 0;
+    protected final double ZEROANGULARVELOCITY = 0;
 
 
     public Moveable( int x, int y, int z, int angle, int l, int w, int h )
