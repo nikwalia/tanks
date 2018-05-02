@@ -3,9 +3,9 @@ package math;
 public class Structure3D extends Value3D
 {
 
-    private final double length;
+    protected final double length;
 
-    private final double width;
+    protected final double width;
 
     private final double height;
 
@@ -31,6 +31,7 @@ public class Structure3D extends Value3D
 
     protected final double ZEROANGULARVELOCITY = 0;
 
+    private Value3D[] base;
 
     public Structure3D( int x, int y, int z, int angle, int l, int w, int h )
     {
@@ -42,7 +43,6 @@ public class Structure3D extends Value3D
         curTime = System.nanoTime();
         velocity = ZEROVELOCITY;
         angularVelocity = ZEROANGULARVELOCITY;
-        updateCorners();
     }
 
     protected double getTime()

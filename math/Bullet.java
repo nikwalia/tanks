@@ -5,15 +5,16 @@ public class Bullet extends Structure3D implements Collidable
     private Value3D bullet;
 
 
-    public Bullet()
+    public Bullet(int x, int y, int z, int angle, int l, int w, int h)
     {
-        bullet = new Value3D( 0, 0, 0 );
+        super(x, y, z, angle, 1, 1, 1);
+        bullet = new Value3D( x, y, z );
     }
 
 
     public boolean hasCollided( Collidable other )
     {
-        Base obj = new Base( 0, 0, 0, 0, 0, 0, 0, 0 );
+        Base obj = new Base( 0, 0, 0, 0, 0, 1, 1, 1 );
         return (obj.getHitPoints() == 0);
         
     }

@@ -1,10 +1,11 @@
 package math;
 
-public class Base extends Structure3D
+public class Base extends Structure3D implements Collidable
 {
     private int hitPoints;
+    private Structure3D obj;
+    private Value3D[] base;
 
-    private Structure3D base;
 
 
     public Base( int x, int y, int z, int angle, int l, int w, int h, int hitPts )
@@ -22,8 +23,8 @@ public class Base extends Structure3D
 
     protected void changeHitPoints()
     {
-        Bullet bullet = new Bullet();
-        if ( base.hasCollided( bullet ) )
+        Bullet bullet = new Bullet(0, 0, 0, 0, 1, 1, 1);
+        if ( ( (Base)obj ).hasCollided( bullet ) )
         {
             hitPoints -= 5;
         }
