@@ -1,11 +1,22 @@
 package math;
 
-public class Base extends Structure3D implements Collidable
+public class Gun extends Structure3D implements Collidable
 {
-
-    public Base( int x, int y, int z, int angle, int l, int w, int h )
+    public Gun( int x, int y, int z, int angle, int l, int w, int h )
     {
         super( x, y, z, angle, l, w, h );
+    }
+    
+    public int onCollision(Collidable other)
+    {
+        if (other instanceof Bullet)
+        {
+           return -1;
+        }
+        else
+        {
+            return 1;
+        }
     }
     
     public void updateCorners()
@@ -28,19 +39,6 @@ public class Base extends Structure3D implements Collidable
             0 );
     }
     
-    public int onCollision(Collidable other)
-    {
-        if (other instanceof Bullet)
-        {
-            return -1;
-        }
-        else
-        {
-            return 1;
-        }
-    }
-
-
     public boolean hasCollided( Collidable other )
     {
         double otherX = other.base[0].getX();

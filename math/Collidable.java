@@ -6,5 +6,5 @@ public interface Collidable
     
     void updateCorners();
     boolean hasCollided(Collidable other);
-    void onCollision(Collidable other);
+    int onCollision(Collidable other);
 }
