@@ -31,8 +31,6 @@ public class Structure3D extends Value3D
 
     protected final double ZEROANGULARVELOCITY = 0;
 
-    private Value3D[] base;
-
     public Structure3D( int x, int y, int z, int angle, int l, int w, int h )
     {
         super( x, y, z );
@@ -78,17 +76,16 @@ public class Structure3D extends Value3D
     {
         angle += deltaAngle;
     }
+    
     protected int turnDirection()
     {
-        // TODO: Complete both
-        return 0;
+        return 100;
     }
 
 
     protected int moveDirection()
     {
-        // TODO: Complete both
-        return 0;
+        return 100;
     }
 
     protected void translate()
@@ -134,26 +131,5 @@ public class Structure3D extends Value3D
         changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
 
         curTime = newTime;
-        updateCorners();
-    }
-    
-    public void updateCorners()
-    {
-        base[0] = new Value3D(
-            getX() + width / 2 * Math.cos( angle ) - length / 2 * Math.sin( angle ),
-            getY() + width / 2 * Math.sin( angle ) + length / 2 * Math.cos( angle ),
-            0 );
-        base[1] = new Value3D(
-            getX() - width / 2 * Math.cos( angle ) - length / 2 * Math.sin( angle ),
-            getY() - width / 2 * Math.sin( angle ) + length / 2 * Math.cos( angle ),
-            0 );
-        base[2] = new Value3D(
-            getX() - width / 2 * Math.cos( angle ) + length / 2 * Math.sin( angle ),
-            getY() - width / 2 * Math.sin( angle ) - length / 2 * Math.cos( angle ),
-            0 );
-        base[3] = new Value3D(
-            getX() + width / 2 * Math.cos( angle ) + length / 2 * Math.sin( angle ),
-            getY() + width / 2 * Math.sin( angle ) - length / 2 * Math.cos( angle ),
-            0 );
     }
 }

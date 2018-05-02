@@ -4,9 +4,6 @@ public class Base extends Structure3D implements Collidable
 {
     private int hitPoints;
     private Structure3D obj;
-    private Value3D[] base;
-
-
 
     public Base( int x, int y, int z, int angle, int l, int w, int h, int hitPts )
     {
@@ -14,6 +11,18 @@ public class Base extends Structure3D implements Collidable
         hitPoints = hitPts;
     }
 
+    protected int turnDirection()
+    {
+        //TODO implement
+        return 0;
+    }
+    
+    protected int moveDirection()
+    {
+        //TODO implement
+        return 0;
+    }
+    
 
     protected int getHitPoints()
     {
@@ -23,17 +32,41 @@ public class Base extends Structure3D implements Collidable
 
     protected void changeHitPoints()
     {
-        Bullet bullet = new Bullet(0, 0, 0, 0, 1, 1, 1);
-        if ( ( (Base)obj ).hasCollided( bullet ) )
-        {
-            hitPoints -= 5;
-        }
+        hitPoints -= 5;
     }
 
 
     protected boolean isDead()
     {
         return hitPoints == 0;
+    }
+    
+    public void updateCorners()
+    {
+        base[0] = new Value3D(
+            getX() + width / 2 * Math.cos( getAngle() ) - length / 2 * Math.sin( getAngle() ),
+            getY() + width / 2 * Math.sin( getAngle() ) + length / 2 * Math.cos( getAngle() ),
+            0 );
+        base[1] = new Value3D(
+            getX() - width / 2 * Math.cos( getAngle() ) - length / 2 * Math.sin( getAngle() ),
+            getY() - width / 2 * Math.sin( getAngle() ) + length / 2 * Math.cos( getAngle() ),
+            0 );
+        base[2] = new Value3D(
+            getX() - width / 2 * Math.cos( getAngle() ) + length / 2 * Math.sin( getAngle() ),
+            getY() - width / 2 * Math.sin( getAngle() ) - length / 2 * Math.cos( getAngle() ),
+            0 );
+        base[3] = new Value3D(
+            getX() + width / 2 * Math.cos( getAngle() ) + length / 2 * Math.sin( getAngle() ),
+            getY() + width / 2 * Math.sin( getAngle() ) - length / 2 * Math.cos( getAngle() ),
+            0 );
+    }
+    
+    public void onCollision(Collidable other)
+    {
+        if (other instanceof Bullet)
+        {
+            changeHitPoints();
+        }
     }
 
 
