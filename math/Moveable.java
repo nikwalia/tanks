@@ -1,5 +1,6 @@
 package math;
 import math.Structure3D;
+import processing.core.PApplet;
 
 public class Moveable extends Structure3D
 {
@@ -22,14 +23,17 @@ public class Moveable extends Structure3D
     protected static final double MINANGULARVELOCITY = -Math.PI / 8;
 
     protected static final double ZEROANGULARVELOCITY = 0;
+    
+    protected PApplet parent;
 
 
-    public Moveable( int x, int y, int z, int angle, int l, int w, int h )
+    public Moveable( int x, int y, int z, int angle, int l, int w, int h, PApplet p )
     {
         super( x, y, z, angle, l, w, h );
         curTime = System.nanoTime();
         velocity = ZEROVELOCITY;
         angularVelocity = ZEROANGULARVELOCITY;
+        parent = p;
     }
 
 
