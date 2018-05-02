@@ -1,6 +1,6 @@
 package math;
 
-public class Bullet implements Collidable
+public class Bullet extends Structure3D implements Collidable
 {
     private Value3D bullet;
 
@@ -13,7 +13,7 @@ public class Bullet implements Collidable
 
     public boolean hasCollided( Collidable other )
     {
-        Tank obj = new Tank( 0, 0, 0, 0, 0, 0, 0, 0 );
+        Base obj = new Base( 0, 0, 0, 0, 0, 0, 0, 0 );
         return (obj.getHitPoints() == 0);
         
     }
