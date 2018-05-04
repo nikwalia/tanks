@@ -1,9 +1,9 @@
 package math;
 
+
 public class Bullet extends Structure3D implements Collidable
 {
     private Value3D bullet;
-
 
     public Bullet(int x, int y, int z, int angle, int l, int w, int h)
     {

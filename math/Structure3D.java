@@ -78,20 +78,20 @@ public class Structure3D extends Value3D
     {
         angle += deltaAngle;
     }
-    protected int turnDirection()
+    public int turnDirection()
     {
         // TODO: Complete both
         return 0;
     }
 
 
-    protected int moveDirection()
+    public int moveDirection()
     {
         // TODO: Complete both
         return 0;
     }
 
-    protected void translate()
+    public void translate()
     {
         double newTime = System.nanoTime();
         double deltaTime = newTime - curTime;
