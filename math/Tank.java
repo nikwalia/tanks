@@ -20,7 +20,7 @@ public class Tank
         int baseLength,
         int baseWidth,
         int baseHeight,
-        int hp)
+        int hp )
     {
         gun = new Gun( x, y, z, angle, gunLength, gunWidth, gunHeight );
         base = new Base( x, y, z, angle, baseLength, baseWidth, baseHeight );
@@ -44,7 +44,8 @@ public class Tank
     {
         return hitPoints == 0;
     }
-    
+
+
     protected void update()
     {
         gun.translate();
