@@ -30,8 +30,10 @@ public class Structure3D extends Value3D
     protected final double MINANGULARVELOCITY = -Math.PI / 8;
 
     protected final double ZEROANGULARVELOCITY = 0;
-
-    private Value3D[] base;
+    
+    private int turnDirection;
+    
+    private int moveDirection;
 
     public Structure3D( int x, int y, int z, int angle, int l, int w, int h )
     {
@@ -43,6 +45,8 @@ public class Structure3D extends Value3D
         curTime = System.nanoTime();
         velocity = ZEROVELOCITY;
         angularVelocity = ZEROANGULARVELOCITY;
+        turnDirection = 0;
+        moveDirection = 0;
     }
 
     protected double getTime()
@@ -78,17 +82,30 @@ public class Structure3D extends Value3D
     {
         angle += deltaAngle;
     }
-    public int turnDirection()
+    
+    protected void setTurnDirection(int t)
     {
-        // TODO: Complete both
-        return 0;
+        turnDirection = t;
     }
 
-
-    public int moveDirection()
+    protected void setMoveDirection(int m)
     {
-        // TODO: Complete both
-        return 0;
+        moveDirection = m;
+    }
+    
+    protected void setVelocity(double v)
+    {
+        velocity = v;
+    }
+    
+    protected double getVelocity()
+    {
+        return velocity;
+    }
+    
+    protected double getAngularVelocity()
+    {
+        return angularVelocity;
     }
 
     public void translate()
@@ -96,11 +113,11 @@ public class Structure3D extends Value3D
         double newTime = System.nanoTime();
         double deltaTime = newTime - curTime;
 
-        if ( turnDirection() == 0 )
+        if ( turnDirection == 0 )
         {
             angularVelocity = ZEROANGULARVELOCITY;
         }
-        else if ( turnDirection() == -1 )
+        else if ( turnDirection == -1 )
         {
             angularVelocity = MINANGULARVELOCITY;
         }
@@ -109,7 +126,7 @@ public class Structure3D extends Value3D
             angularVelocity = MAXANGULARVELOCITY;
         }
 
-        if ( moveDirection() == 0 && Math.abs(velocity - ZEROVELOCITY) < 0.1 )
+        if ( moveDirection == 0 && Math.abs(velocity - ZEROVELOCITY) < 0.1 )
         {
             if ( velocity < ZEROVELOCITY )
             {
@@ -122,10 +139,10 @@ public class Structure3D extends Value3D
         }
         else
         {
-            if ( !( moveDirection() == -1 && Math.abs( velocity - MINVELOCITY ) < 0.1 )
-                && !( moveDirection() == 1 && Math.abs( velocity - MAXVELOCITY) < 0.1 ) )
+            if ( !( moveDirection == -1 && Math.abs( velocity - MINVELOCITY ) < 0.1 )
+                && !( moveDirection == 1 && Math.abs( velocity - MAXVELOCITY) < 0.1 ) )
             {
-                velocity += ACCELERATION * deltaTime * moveDirection();
+                velocity += ACCELERATION * deltaTime * moveDirection;
             }
         }
 
@@ -134,26 +151,5 @@ public class Structure3D extends Value3D
         changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
 
         curTime = newTime;
-        updateCorners();
-    }
-    
-    public void updateCorners()
-    {
-        base[0] = new Value3D(
-            getX() + width / 2 * Math.cos( angle ) - length / 2 * Math.sin( angle ),
-            getY() + width / 2 * Math.sin( angle ) + length / 2 * Math.cos( angle ),
-            0 );
-        base[1] = new Value3D(
-            getX() - width / 2 * Math.cos( angle ) - length / 2 * Math.sin( angle ),
-            getY() - width / 2 * Math.sin( angle ) + length / 2 * Math.cos( angle ),
-            0 );
-        base[2] = new Value3D(
-            getX() - width / 2 * Math.cos( angle ) + length / 2 * Math.sin( angle ),
-            getY() - width / 2 * Math.sin( angle ) - length / 2 * Math.cos( angle ),
-            0 );
-        base[3] = new Value3D(
-            getX() + width / 2 * Math.cos( angle ) + length / 2 * Math.sin( angle ),
-            getY() + width / 2 * Math.sin( angle ) - length / 2 * Math.cos( angle ),
-            0 );
     }
 }
