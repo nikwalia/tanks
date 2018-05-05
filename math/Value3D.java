@@ -3,10 +3,13 @@ package math;
 public class Value3D
 {
     private double x_coordinate;
+
     private double y_coordinate;
+
     private double z_coordinate;
-    
-    public Value3D(double x, double y, double z)
+
+
+    public Value3D( double x, double y, double z )
     {
         x_coordinate = x;
         y_coordinate = y;
@@ -31,17 +34,20 @@ public class Value3D
         z_coordinate += dz;
     }
 
-    protected double getX()
+
+    public double getX()
     {
         return x_coordinate;
     }
-    
-    protected double getY()
+
+
+    public double getY()
     {
         return y_coordinate;
     }
-    
-    protected double getZ()
+
+
+    public double getZ()
     {
         return z_coordinate;
     }

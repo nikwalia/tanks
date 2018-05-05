@@ -7,9 +7,11 @@ public class SystemPacket
     private int callTurn;
 
     private int callMove;
+
     private int callGunTurn;
-    
-    public SystemPacket(boolean fire, int turn, int move, int gunTurn)
+
+
+    public SystemPacket( boolean fire, int turn, int move, int gunTurn )
     {
         callFire = fire;
         callTurn = turn;
@@ -34,10 +36,11 @@ public class SystemPacket
     {
         return callMove;
     }
-    
+
+
     public int calledGunTurn()
     {
         return callGunTurn;
     }
-    
+
 }

@@ -36,13 +36,21 @@ public class Structure3D extends Value3D
     private int moveDirection;
 
 
-    public Structure3D( int x, int y, int z, int angle, int l, int w, int h, double maxangularvel )
+    public Structure3D(
+        double x,
+        double y,
+        double z,
+        double angle2,
+        int l,
+        int w,
+        int h,
+        double maxangularvel )
     {
         super( x, y, z );
         length = l;
         width = w;
         height = h;
-        this.angle = angle;
+        this.angle = angle2;
         curTime = System.nanoTime() / 1e+9;
         velocity = ZEROVELOCITY;
         angularVelocity = ZEROANGULARVELOCITY;
@@ -94,6 +102,7 @@ public class Structure3D extends Value3D
         turnDirection = t;
     }
 
+
     protected void setMoveDirection( int m )
     {
         moveDirection = m;
@@ -122,12 +131,14 @@ public class Structure3D extends Value3D
     {
         return angularVelocity;
     }
-    
+
+
     public double getTurnDirection()
     {
         return turnDirection;
     }
-    
+
+
     public double getMoveDirection()
     {
         return moveDirection;
@@ -136,6 +147,6 @@ public class Structure3D extends Value3D
 
     public void translate()
     {
-        //stub method
+        // stub method
     }
 }

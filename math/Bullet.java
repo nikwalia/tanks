@@ -1,14 +1,13 @@
 package math;
 
-
 public class Bullet extends Structure3D implements Collidable
 {
 
-    public Bullet( int x, int y, int z, int angle, int l, int w, int h )
+    public Bullet( double x, double y, double z, double angle )
     {
         super( x, y, z, angle, 1, 1, 1, 0 );
         base[0] = new Value3D( x, y, z );
-        setVelocity(100);
+        setVelocity( 100 );
         setMoveDirection( 1 );
     }
 

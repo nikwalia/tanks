@@ -3,27 +3,32 @@ package math;
 public class Gun extends Structure3D implements Collidable
 {
     private int baseTurnState;
+
     private double baseVelocity;
-    
+
+
     public Gun( int x, int y, int z, int angle, int l, int w, int h )
     {
         super( x, y, z, angle, l, w, h, Math.PI / 4 );
         baseTurnState = 0;
         baseVelocity = 0;
     }
-    
-    public int onCollision(Collidable other)
+
+
+    public int onCollision( Collidable other )
     {
-        if (other instanceof Bullet)
+        if ( other instanceof Bullet )
         {
-           return -1;
+            other.onCollision( this );
+            return -1;
         }
         else
         {
             return 1;
         }
     }
-    
+
+
     public void updateCorners()
     {
         base[0] = new Value3D(
@@ -43,7 +48,8 @@ public class Gun extends Structure3D implements Collidable
             getY() + width / 2 * Math.sin( getAngle() ) - length / 2 * Math.cos( getAngle() ),
             0 );
     }
-    
+
+
     public boolean hasCollided( Collidable other )
     {
         double otherX = other.base[0].getX();
@@ -123,17 +129,20 @@ public class Gun extends Structure3D implements Collidable
         }
         return false;
     }
-    
-    public void setBaseTurn(int state)
+
+
+    public void setBaseTurn( int state )
     {
         baseTurnState = state;
     }
-    
-    public void setBaseVelocity(double d)
+
+
+    public void setBaseVelocity( double d )
     {
         baseVelocity = d;
     }
-    
+
+
     public void translate()
     {
         double newTime = System.nanoTime() / 1e+9;
@@ -152,8 +161,8 @@ public class Gun extends Structure3D implements Collidable
             angularVelocity = maxAngularVelocity;
         }
         angularVelocity += baseTurnState * Math.PI / 8;
-        
-        setVelocity(baseVelocity);
+
+        setVelocity( baseVelocity );
 
         changeAngle( angularVelocity * deltaTime );
         changeX( velocity * deltaTime * Math.cos( getAngle() ) );

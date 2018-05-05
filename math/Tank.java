@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import io.*;
 
+
 public class Tank
 {
     private Gun gun;
@@ -14,14 +15,15 @@ public class Tank
     private int hitPoints;
 
     private Queue<SystemPacket> data;
-    
+
     private boolean canFire;
-    
+
     private double lastFireTime;
-    
-    private final static double RELOADTIME = 1e+9;
-    
+
+    private final static double RELOADTIME = 5e+9;
+
     private boolean hasFired;
+
 
     public Tank(
         int x,
@@ -52,9 +54,9 @@ public class Tank
     }
 
 
-    protected void changeHitPoints()
+    public void changeHitPoints()
     {
-        hitPoints -= 5;
+        hitPoints -= 250;
     }
 
 
@@ -62,18 +64,41 @@ public class Tank
     {
         return hitPoints == 0;
     }
-    
+
+
+    public void receiveData( SystemPacket p )
+    {
+        data.add( p );
+    }
+
+
+    public boolean hasCollided( Collidable other )
+    {
+        return gun.hasCollided( other ) || base.hasCollided( other );
+    }
+
+
+    public void onCollision( Collidable other )
+    {
+        if ( ( gun.hasCollided( other ) && gun.onCollision( other ) == -1 )
+            || ( base.hasCollided( other ) && base.onCollision( other ) == -1 ) )
+        {
+            changeHitPoints();
+        }
+    }
+
+
     public void update()
     {
         double curTime = System.nanoTime();
-        if (curTime - lastFireTime > RELOADTIME)
+        if ( curTime - lastFireTime > RELOADTIME )
         {
             canFire = true;
         }
-        if (!data.isEmpty())
+        if ( !data.isEmpty() )
         {
             SystemPacket temp = data.remove();
-            if (temp.calledFire() && canFire)
+            if ( temp.calledFire() && canFire )
             {
                 canFire = false;
                 hasFired = true;
@@ -90,16 +115,16 @@ public class Tank
         gun.updateCorners();
         base.updateCorners();
     }
-    
+
+
     public TankPacket sendData()
     {
-        TankPacket temp = new TankPacket(
-            new Value3D(base.getX(), base.getY(), base.getZ()),
-            new Value3D(gun.getX(), gun.getY(), gun.getZ()),
+        TankPacket temp = new TankPacket( new Value3D( base.getX(), base.getY(), base.getZ() ),
+            new Value3D( gun.getX(), gun.getY(), gun.getZ() ),
             base.getAngle(),
             gun.getAngle(),
             hitPoints,
-            hasFired);
+            hasFired );
         hasFired = false;
         return temp;
     }

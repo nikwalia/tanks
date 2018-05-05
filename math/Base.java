@@ -9,12 +9,12 @@ public class Base extends Structure3D implements Collidable
     private Value3D[] base;
 
 
-
     public Base( int x, int y, int z, int angle, int l, int w, int h )
     {
         super( x, y, z, angle, l, w, h, Math.PI / 4 );
     }
-    
+
+
     public void updateCorners()
     {
         base[0] = new Value3D(
@@ -34,12 +34,13 @@ public class Base extends Structure3D implements Collidable
             getY() + width / 2 * Math.sin( getAngle() ) - length / 2 * Math.cos( getAngle() ),
             0 );
     }
-    
-    public int onCollision(Collidable other)
+
+
+    public int onCollision( Collidable other )
     {
-        Bullet bullet = new Bullet( 0, 0, 0, 0, 1, 1, 1 );
-        if (other instanceof Bullet)
+        if ( other instanceof Bullet )
         {
+            other.onCollision( this );
             return -1;
         }
         else
@@ -128,7 +129,8 @@ public class Base extends Structure3D implements Collidable
         }
         return false;
     }
-    
+
+
     public void translate()
     {
         double newTime = System.nanoTime() / 1e+9;
