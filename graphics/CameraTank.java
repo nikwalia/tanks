@@ -2,10 +2,10 @@ package graphics;
 
 import math.Tank;
 
-public class GraphicsTank
+public class CameraTank
 {
     Tank myTank;
-    public GraphicsTank(Tank t)
+    public CameraTank(Tank t)
     {
         myTank = t;
     }
