@@ -6,8 +6,10 @@ public class Bullet extends Structure3D implements Collidable
 
     public Bullet( int x, int y, int z, int angle, int l, int w, int h )
     {
-        super( x, y, z, angle, 1, 1, 1 );
+        super( x, y, z, angle, 1, 1, 1, 0 );
         base[0] = new Value3D( x, y, z );
+        setVelocity(100);
+        setMoveDirection( 1 );
     }
 
 
@@ -30,7 +32,11 @@ public class Bullet extends Structure3D implements Collidable
 
     public void translate()
     {
-        super.translate();
+        double newTime = System.nanoTime() / 1e+9;
+        double deltaTime = newTime - curTime;
+        changeX( velocity * deltaTime * Math.cos( getAngle() ) );
+        changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
+        curTime = newTime;
     }
 
 

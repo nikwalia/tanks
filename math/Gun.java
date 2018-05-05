@@ -2,9 +2,14 @@ package math;
 
 public class Gun extends Structure3D implements Collidable
 {
+    private int baseTurnState;
+    private double baseVelocity;
+    
     public Gun( int x, int y, int z, int angle, int l, int w, int h )
     {
-        super( x, y, z, angle, l, w, h );
+        super( x, y, z, angle, l, w, h, Math.PI / 4 );
+        baseTurnState = 0;
+        baseVelocity = 0;
     }
     
     public int onCollision(Collidable other)
@@ -117,5 +122,43 @@ public class Gun extends Structure3D implements Collidable
             }
         }
         return false;
+    }
+    
+    public void setBaseTurn(int state)
+    {
+        baseTurnState = state;
+    }
+    
+    public void setBaseVelocity(double d)
+    {
+        baseVelocity = d;
+    }
+    
+    public void translate()
+    {
+        double newTime = System.nanoTime() / 1e+9;
+        double deltaTime = newTime - curTime;
+
+        if ( getTurnDirection() == 0 )
+        {
+            angularVelocity = ZEROANGULARVELOCITY;
+        }
+        else if ( getTurnDirection() == -1 )
+        {
+            angularVelocity = minAngularVelocity;
+        }
+        else
+        {
+            angularVelocity = maxAngularVelocity;
+        }
+        angularVelocity += baseTurnState * Math.PI / 8;
+        
+        setVelocity(baseVelocity);
+
+        changeAngle( angularVelocity * deltaTime );
+        changeX( velocity * deltaTime * Math.cos( getAngle() ) );
+        changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
+
+        curTime = newTime;
     }
 }

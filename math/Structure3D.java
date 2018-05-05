@@ -9,8 +9,8 @@ public class Structure3D extends Value3D
 
     private final double height;
 
-    private double angle; 
-    
+    private double angle;
+
     protected double curTime;
 
     protected double velocity;
@@ -25,34 +25,39 @@ public class Structure3D extends Value3D
 
     protected double angularVelocity;
 
-    protected final double MAXANGULARVELOCITY = Math.PI / 8;
+    protected double maxAngularVelocity = Math.PI / 8;
 
-    protected final double MINANGULARVELOCITY = -Math.PI / 8;
+    protected double minAngularVelocity = -Math.PI / 8;
 
     protected final double ZEROANGULARVELOCITY = 0;
-    
+
     private int turnDirection;
-    
+
     private int moveDirection;
 
-    public Structure3D( int x, int y, int z, int angle, int l, int w, int h )
+
+    public Structure3D( int x, int y, int z, int angle, int l, int w, int h, double maxangularvel )
     {
         super( x, y, z );
         length = l;
         width = w;
         height = h;
         this.angle = angle;
-        curTime = System.nanoTime();
+        curTime = System.nanoTime() / 1e+9;
         velocity = ZEROVELOCITY;
         angularVelocity = ZEROANGULARVELOCITY;
         turnDirection = 0;
         moveDirection = 0;
+        maxAngularVelocity = maxangularvel;
+        minAngularVelocity = -maxangularvel;
     }
+
 
     protected double getTime()
     {
         return curTime;
     }
+
 
     protected double getLength()
     {
@@ -82,74 +87,55 @@ public class Structure3D extends Value3D
     {
         angle += deltaAngle;
     }
-    
-    protected void setTurnDirection(int t)
+
+
+    protected void setTurnDirection( int t )
     {
         turnDirection = t;
     }
 
-    protected void setMoveDirection(int m)
+    protected void setMoveDirection( int m )
     {
         moveDirection = m;
     }
-    
-    protected void setVelocity(double v)
+
+
+    protected void setVelocity( double v )
     {
         velocity = v;
     }
-    
+
+
+    protected void setAngularvelocity( double a )
+    {
+        angularVelocity = a;
+    }
+
+
     protected double getVelocity()
     {
         return velocity;
     }
-    
+
+
     protected double getAngularVelocity()
     {
         return angularVelocity;
     }
+    
+    public double getTurnDirection()
+    {
+        return turnDirection;
+    }
+    
+    public double getMoveDirection()
+    {
+        return moveDirection;
+    }
+
 
     public void translate()
     {
-        double newTime = System.nanoTime();
-        double deltaTime = newTime - curTime;
-
-        if ( turnDirection == 0 )
-        {
-            angularVelocity = ZEROANGULARVELOCITY;
-        }
-        else if ( turnDirection == -1 )
-        {
-            angularVelocity = MINANGULARVELOCITY;
-        }
-        else
-        {
-            angularVelocity = MAXANGULARVELOCITY;
-        }
-
-        if ( moveDirection == 0 && Math.abs(velocity - ZEROVELOCITY) < 0.1 )
-        {
-            if ( velocity < ZEROVELOCITY )
-            {
-                velocity += ACCELERATION * deltaTime;
-            }
-            else
-            {
-                velocity += ACCELERATION * deltaTime * -1;
-            }
-        }
-        else
-        {
-            if ( !( moveDirection == -1 && Math.abs( velocity - MINVELOCITY ) < 0.1 )
-                && !( moveDirection == 1 && Math.abs( velocity - MAXVELOCITY) < 0.1 ) )
-            {
-                velocity += ACCELERATION * deltaTime * moveDirection;
-            }
-        }
-
-        changeAngle( angularVelocity * deltaTime );
-        changeX( velocity * deltaTime * Math.cos( getAngle() ) );
-        changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
-
-        curTime = newTime;
+        //stub method
     }
 }
