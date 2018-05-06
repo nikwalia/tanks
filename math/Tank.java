@@ -38,7 +38,7 @@ public class Tank
         int baseHeight,
         int hp )
     {
-        gun = new Gun( x, y, z, angle, gunLength, gunWidth, gunHeight );
+        gun = new Gun( angle, gunLength, gunWidth, gunHeight, new Value3D(x, y, z), baseHeight );
         base = new Base( x, y, z, angle, baseLength, baseWidth, baseHeight );
         hitPoints = hp;
         data = new LinkedList<SystemPacket>();
@@ -72,13 +72,13 @@ public class Tank
     }
 
 
-    public boolean hasCollided( Collidable other )
+    public boolean hasCollided( Structure3D other )
     {
         return gun.hasCollided( other ) || base.hasCollided( other );
     }
 
 
-    public void onCollision( Collidable other )
+    public void onCollision( Structure3D other )
     {
         if ( ( gun.hasCollided( other ) && gun.onCollision( other ) == -1 )
             || ( base.hasCollided( other ) && base.onCollision( other ) == -1 ) )
@@ -110,7 +110,7 @@ public class Tank
             gun.setBaseTurn( temp.calledTurn() );
         }
         base.translate();
-        gun.setBaseVelocity( base.getVelocity() );
+        gun.setBaseCenter( new Value3D(base.getX(), base.getY(), base.getZ()) );
         gun.translate();
         gun.updateCorners();
         base.updateCorners();

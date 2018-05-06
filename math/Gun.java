@@ -1,21 +1,22 @@
 package math;
 
-public class Gun extends Structure3D implements Collidable
+public class Gun extends Structure3D
 {
     private int baseTurnState;
 
-    private double baseVelocity;
+    private Value3D baseCenter;
 
 
-    public Gun( int x, int y, int z, int angle, int l, int w, int h )
+    public Gun( int angle, int l, int w, int h, Value3D b, int baseHeight )
     {
-        super( x, y, z, angle, l, w, h, Math.PI / 4 );
+        super( b.getX(), b.getY() + h / 2 + baseHeight / 2, b.getZ(), angle, l, w, h, Math.PI / 4 );
         baseTurnState = 0;
-        baseVelocity = 0;
+        baseCenter = b;
+        updateCenter();
     }
 
 
-    public int onCollision( Collidable other )
+    public int onCollision( Structure3D other )
     {
         if ( other instanceof Bullet )
         {
@@ -31,32 +32,32 @@ public class Gun extends Structure3D implements Collidable
 
     public void updateCorners()
     {
-        base[0] = new Value3D(
+        baseRectangle[0] = new Value3D(
             getX() + width / 2 * Math.cos( getAngle() ) - length / 2 * Math.sin( getAngle() ),
             getY() + width / 2 * Math.sin( getAngle() ) + length / 2 * Math.cos( getAngle() ),
             0 );
-        base[1] = new Value3D(
+        baseRectangle[1] = new Value3D(
             getX() - width / 2 * Math.cos( getAngle() ) - length / 2 * Math.sin( getAngle() ),
             getY() - width / 2 * Math.sin( getAngle() ) + length / 2 * Math.cos( getAngle() ),
             0 );
-        base[2] = new Value3D(
+        baseRectangle[2] = new Value3D(
             getX() - width / 2 * Math.cos( getAngle() ) + length / 2 * Math.sin( getAngle() ),
             getY() - width / 2 * Math.sin( getAngle() ) - length / 2 * Math.cos( getAngle() ),
             0 );
-        base[3] = new Value3D(
+        baseRectangle[3] = new Value3D(
             getX() + width / 2 * Math.cos( getAngle() ) + length / 2 * Math.sin( getAngle() ),
             getY() + width / 2 * Math.sin( getAngle() ) - length / 2 * Math.cos( getAngle() ),
             0 );
     }
 
 
-    public boolean hasCollided( Collidable other )
+    public boolean hasCollided( Structure3D other )
     {
-        double otherX = other.base[0].getX();
-        double otherY = other.base[0].getY();
+        double otherX = other.baseRectangle[0].getX();
+        double otherY = other.baseRectangle[0].getY();
         double areaOfBase = width * length;
         int max;
-        if ( other.base[2] == null )
+        if ( other.baseRectangle[2] == null )
         {
             max = 1;
         }
@@ -67,8 +68,8 @@ public class Gun extends Structure3D implements Collidable
 
         for ( int i = 0; i < max; i++ )
         {
-            otherX = other.base[i].getX();
-            otherY = other.base[i].getY();
+            otherX = other.baseRectangle[i].getX();
+            otherY = other.baseRectangle[i].getY();
             if ( Math.sqrt( Math.pow( otherX - getX(), 2 ) + Math.pow( otherY - getY(), 2 ) ) > Math
                 .sqrt( width * width + length * length ) / 2 )
             {
@@ -77,42 +78,42 @@ public class Gun extends Structure3D implements Collidable
             else
             {
                 double totalTriangleArea = 0;
-                double firstSide = Math.sqrt( Math.pow( otherX - base[0].getX(), 2 )
-                    + Math.pow( otherY - base[0].getY(), 2 ) );
-                double secondSide = Math.sqrt( Math.pow( otherX - base[1].getX(), 2 )
-                    + Math.pow( otherY - base[1].getY(), 2 ) );
-                double thirdSide = Math.sqrt( Math.pow( base[0].getX() - base[1].getX(), 2 )
-                    + Math.pow( base[0].getX() - base[1].getY(), 2 ) );
+                double firstSide = Math.sqrt( Math.pow( otherX - baseRectangle[0].getX(), 2 )
+                    + Math.pow( otherY - baseRectangle[0].getY(), 2 ) );
+                double secondSide = Math.sqrt( Math.pow( otherX - baseRectangle[1].getX(), 2 )
+                    + Math.pow( otherY - baseRectangle[1].getY(), 2 ) );
+                double thirdSide = Math.sqrt( Math.pow( baseRectangle[0].getX() - baseRectangle[1].getX(), 2 )
+                    + Math.pow( baseRectangle[0].getX() - baseRectangle[1].getY(), 2 ) );
                 double semiperimeter = ( firstSide + secondSide + thirdSide ) / 2;
                 totalTriangleArea += Math.sqrt( semiperimeter * ( semiperimeter - firstSide )
                     * ( semiperimeter - secondSide ) * ( semiperimeter - thirdSide ) );
 
-                firstSide = Math.sqrt( Math.pow( otherX - base[1].getX(), 2 )
-                    + Math.pow( otherY - base[1].getY(), 2 ) );
-                secondSide = Math.sqrt( Math.pow( otherX - base[2].getX(), 2 )
-                    + Math.pow( otherY - base[2].getY(), 2 ) );
-                thirdSide = Math.sqrt( Math.pow( base[1].getX() - base[2].getX(), 2 )
-                    + Math.pow( base[1].getX() - base[2].getY(), 2 ) );
+                firstSide = Math.sqrt( Math.pow( otherX - baseRectangle[1].getX(), 2 )
+                    + Math.pow( otherY - baseRectangle[1].getY(), 2 ) );
+                secondSide = Math.sqrt( Math.pow( otherX - baseRectangle[2].getX(), 2 )
+                    + Math.pow( otherY - baseRectangle[2].getY(), 2 ) );
+                thirdSide = Math.sqrt( Math.pow( baseRectangle[1].getX() - baseRectangle[2].getX(), 2 )
+                    + Math.pow( baseRectangle[1].getX() - baseRectangle[2].getY(), 2 ) );
                 semiperimeter = ( firstSide + secondSide + thirdSide ) / 2;
                 totalTriangleArea += Math.sqrt( semiperimeter * ( semiperimeter - firstSide )
                     * ( semiperimeter - secondSide ) * ( semiperimeter - thirdSide ) );
 
-                firstSide = Math.sqrt( Math.pow( otherX - base[2].getX(), 2 )
-                    + Math.pow( otherY - base[2].getY(), 2 ) );
-                secondSide = Math.sqrt( Math.pow( otherX - base[3].getX(), 2 )
-                    + Math.pow( otherY - base[3].getY(), 2 ) );
-                thirdSide = Math.sqrt( Math.pow( base[2].getX() - base[3].getX(), 2 )
-                    + Math.pow( base[2].getX() - base[3].getY(), 2 ) );
+                firstSide = Math.sqrt( Math.pow( otherX - baseRectangle[2].getX(), 2 )
+                    + Math.pow( otherY - baseRectangle[2].getY(), 2 ) );
+                secondSide = Math.sqrt( Math.pow( otherX - baseRectangle[3].getX(), 2 )
+                    + Math.pow( otherY - baseRectangle[3].getY(), 2 ) );
+                thirdSide = Math.sqrt( Math.pow( baseRectangle[2].getX() - baseRectangle[3].getX(), 2 )
+                    + Math.pow( baseRectangle[2].getX() - baseRectangle[3].getY(), 2 ) );
                 semiperimeter = ( firstSide + secondSide + thirdSide ) / 2;
                 totalTriangleArea += Math.sqrt( semiperimeter * ( semiperimeter - firstSide )
                     * ( semiperimeter - secondSide ) * ( semiperimeter - thirdSide ) );
 
-                firstSide = Math.sqrt( Math.pow( otherX - base[0].getX(), 2 )
-                    + Math.pow( otherY - base[0].getY(), 2 ) );
-                secondSide = Math.sqrt( Math.pow( otherX - base[3].getX(), 2 )
-                    + Math.pow( otherY - base[3].getY(), 2 ) );
-                thirdSide = Math.sqrt( Math.pow( base[0].getX() - base[3].getX(), 2 )
-                    + Math.pow( base[0].getX() - base[3].getY(), 2 ) );
+                firstSide = Math.sqrt( Math.pow( otherX - baseRectangle[0].getX(), 2 )
+                    + Math.pow( otherY - baseRectangle[0].getY(), 2 ) );
+                secondSide = Math.sqrt( Math.pow( otherX - baseRectangle[3].getX(), 2 )
+                    + Math.pow( otherY - baseRectangle[3].getY(), 2 ) );
+                thirdSide = Math.sqrt( Math.pow( baseRectangle[0].getX() - baseRectangle[3].getX(), 2 )
+                    + Math.pow( baseRectangle[0].getX() - baseRectangle[3].getY(), 2 ) );
                 semiperimeter = ( firstSide + secondSide + thirdSide ) / 2;
                 totalTriangleArea += Math.sqrt( semiperimeter * ( semiperimeter - firstSide )
                     * ( semiperimeter - secondSide ) * ( semiperimeter - thirdSide ) );
@@ -137,9 +138,16 @@ public class Gun extends Structure3D implements Collidable
     }
 
 
-    public void setBaseVelocity( double d )
+    public void setBaseCenter( Value3D baseCenter )
     {
-        baseVelocity = d;
+        this.baseCenter = baseCenter;
+    }
+
+
+    public void updateCenter()
+    {
+        this.setX( baseCenter.getX() + getLength() / 2 * Math.cos( getAngle() ) );
+        this.setZ( baseCenter.getZ() + getLength() / 2 * Math.sin( getAngle() ) );
     }
 
 
@@ -161,12 +169,13 @@ public class Gun extends Structure3D implements Collidable
             angularVelocity = maxAngularVelocity;
         }
         angularVelocity += baseTurnState * Math.PI / 8;
-
-        setVelocity( baseVelocity );
-
         changeAngle( angularVelocity * deltaTime );
-        changeX( velocity * deltaTime * Math.cos( getAngle() ) );
-        changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
+
+        updateCenter();
+        setX( baseCenter.getX() + ( getX() - baseCenter.getX() ) * Math.cos( getAngle() )
+            - ( getZ() - baseCenter.getZ() ) * Math.sin( getAngle() ) );
+        setZ( baseCenter.getZ() + ( getX() - baseCenter.getX() ) * Math.sin( getAngle() )
+            + ( getZ() - baseCenter.getZ() ) * Math.cos( getAngle() ) );
 
         curTime = newTime;
     }
