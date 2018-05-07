@@ -6,7 +6,7 @@ import math.Value3D;
 public class TankPacket
 {
     private Value3D loc;
-    
+
     private Value3D gunLoc;
 
     private double angle;
@@ -14,7 +14,7 @@ public class TankPacket
     private double gunAngle;
 
     private double hitpoints;
-    
+
     private boolean firedBullet;
 
 
@@ -33,7 +33,8 @@ public class TankPacket
     {
         return loc;
     }
-    
+
+
     public Value3D getGunLoc()
     {
         return gunLoc;
@@ -56,7 +57,8 @@ public class TankPacket
     {
         return hitpoints;
     }
-    
+
+
     public boolean checkIfFired()
     {
         return firedBullet;

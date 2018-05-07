@@ -1,24 +1,27 @@
 package math;
 
-public class Bullet extends Structure3D implements Collidable
+public class Bullet extends Structure3D
 {
 
-    public Bullet( int x, int y, int z, int angle, int l, int w, int h )
+    public Bullet( double x, double y, double z, double angle )
     {
         super( x, y, z, angle, 1, 1, 1, 0 );
-        base[0] = new Value3D( x, y, z );
-        setVelocity(100);
+        baseRectangle[0] = new Value3D( x, y, z );
+        setVelocity( 100 );
         setMoveDirection( 1 );
+        baseRectangle[1] = null;
+        baseRectangle[2] = null;
+        baseRectangle[3] = null;
     }
 
 
-    public boolean hasCollided( Collidable other )
+    public boolean hasCollided( Structure3D other )
     {
         return other.hasCollided( this );
     }
 
 
-    public int onCollision( Collidable other )
+    public int onCollision( Structure3D other )
     {
         setVelocity( 0 );
         super.changeX( -getX() );
@@ -41,6 +44,6 @@ public class Bullet extends Structure3D implements Collidable
 
     public void updateCorners()
     {
-        base[0] = new Value3D( getX(), getY(), getZ() );
+        baseRectangle[0] = new Value3D( getX(), getY(), getZ() );
     }
 }
