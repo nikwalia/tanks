@@ -1,25 +1,42 @@
 package graphics;
 
+import io.TankPacket;
+import math.Tank;
 import processing.core.PApplet;
 
 
 public class RunnerWindow extends PApplet
 {
-    GraphicsTank enemy;
+    Tank same;
 
-    CameraTank same;
+    Tank enemy;
+    
+    GraphicsTank enemyGraphics;
+    
+    CameraTank sameCamera;
+    
+    TankPacket sameCurData;
+    
+    TankPacket enemyCurData;
 
 
-    public RunnerWindow( GraphicsTank e, CameraTank s )
+    public RunnerWindow( Tank s, Tank e )
     {
-        enemy = e;
         same = s;
+        enemy = e;
+        enemyGraphics = new GraphicsTank(enemy, this);
+        sameCamera = new CameraTank(same, this);
     }
 
 
     public static void main( String[] args )
     {
         PApplet.main( "graphics.RunnerWindow" );
+    }
+    
+    public void update(TankPacket p)
+    {
+        
     }
 
 

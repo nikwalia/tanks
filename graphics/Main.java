@@ -32,14 +32,6 @@ public class Main extends PApplet
 
     private Tank playerTwoTank;
 
-    private static GraphicsTank playerOneGraphicsTank;
-
-    private static GraphicsTank playerTwoGraphicsTank;
-
-    private static CameraTank playerOneCameraTank;
-
-    private static CameraTank playerTwoCameraTank;
-
     private Bullet playerOneBullet;
 
     private Bullet playerTwoBullet;
@@ -51,15 +43,13 @@ public class Main extends PApplet
 
     public Main()
     {
+        w1 = new RunnerWindow( playerOneTank, playerTwoTank );
+        w2 = new RunnerWindow( playerTwoTank, playerOneTank );
         data = new LinkedList<TankPacket>();
         playerOneData = new int[7];
         playerTwoData = new int[7];
         playerOneTank = new Tank( 0, 0, 0, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
         playerTwoTank = new Tank( 100, 0, 100, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
-        playerOneGraphicsTank = new GraphicsTank( playerOneTank );
-        playerTwoGraphicsTank = new GraphicsTank( playerTwoTank );
-        playerOneCameraTank = new CameraTank( playerOneTank );
-        playerTwoCameraTank = new CameraTank( playerTwoTank );
         playerOneBullet = null;
         playerTwoBullet = null;
     }
@@ -68,8 +58,6 @@ public class Main extends PApplet
     public static void main( String[] args )
     {
         PApplet.main( "graphics.Main" );
-        w1 = new RunnerWindow( playerTwoGraphicsTank, playerOneCameraTank );
-        w2 = new RunnerWindow( playerOneGraphicsTank, playerTwoCameraTank );
         w1.main( args );
         w2.main( args );
     }
