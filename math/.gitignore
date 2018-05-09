@@ -11,3 +11,7 @@
 /Value3DTest.class
 /Structure3DTest.class
 /BaseTest.class
+/DMatrix3$DVector3ColView.class
+/DMatrix3$DVector3RowTView.class
+/DMatrix3.class
+/DMatrix3C.class

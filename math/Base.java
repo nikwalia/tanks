@@ -236,12 +236,15 @@ public class Base extends Structure3D
     }
 
 
-    public void postCollision()
+    /**
+     * 
+     * @param other
+     */
+    public void postCollision( Structure3D other )
     {
-        Structure3D other = new Structure3D();
         if ( this.hasCollided( other ) )
         {
-            if (Math.abs( this.getAngle() - other.getAngle() ) == 90)
+            if ( Math.abs( this.getAngle() - other.getAngle() ) == 90 )
             {
                 this.setVelocity( -1 * this.getVelocity() );
             }
