@@ -30,10 +30,10 @@ public class CameraTank
 
     public void display()
     {
-        parent.camera( 0,
+        parent.camera( (float)dat.getLoc().getX(),
             parent.height / 2,
             (float)dat.getLoc().getZ(),
-            (float)dat.getLoc().getX(),
+            (float)( 200 * Math.tan( dat.getAngle() / 2 ) + parent.width / 2 ),
             parent.height / 2,
             0,
             0,

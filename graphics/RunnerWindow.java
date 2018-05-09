@@ -14,18 +14,13 @@ public class RunnerWindow extends PApplet
     GraphicsTank enemyGraphics;
     
     CameraTank sameCamera;
-    
-    TankPacket sameCurData;
-    
-    TankPacket enemyCurData;
 
-
-    public RunnerWindow( Tank s, Tank e )
+    public RunnerWindow( Tank s, Tank e, TankPacket initSame, TankPacket initEnemy )
     {
         same = s;
         enemy = e;
-        enemyGraphics = new GraphicsTank(enemy, this);
-        sameCamera = new CameraTank(same, this);
+        enemyGraphics = new GraphicsTank(enemy, this, initEnemy);
+        sameCamera = new CameraTank(same, this, initSame);
     }
 
 
@@ -34,9 +29,10 @@ public class RunnerWindow extends PApplet
         PApplet.main( "graphics.RunnerWindow" );
     }
     
-    public void update(TankPacket p)
+    public void update(TankPacket same, TankPacket enemy)
     {
-        
+        sameCamera.update( same );
+        enemyGraphics.update( enemy );
     }
 
 
@@ -55,5 +51,7 @@ public class RunnerWindow extends PApplet
     public void draw()
     {
         background( 0 );
+        enemyGraphics.display();
+        sameCamera.display();
     }
 }

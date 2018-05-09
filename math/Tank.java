@@ -24,6 +24,17 @@ public class Tank
 
     private boolean hasFired;
 
+    public int baseLength;
+
+    public int baseWidth;
+
+    public int baseHeight;
+
+    public int gunLength;
+
+    public int gunWidth;
+
+    public int gunHeight;
 
     public Tank(
         int x,
@@ -38,13 +49,19 @@ public class Tank
         int baseHeight,
         int hp )
     {
-        gun = new Gun( angle, gunLength, gunWidth, gunHeight, new Value3D(x, y, z), baseHeight );
+        gun = new Gun( angle, gunLength, gunWidth, gunHeight, new Value3D( x, y, z ), baseHeight );
         base = new Base( x, y, z, angle, baseLength, baseWidth, baseHeight );
         hitPoints = hp;
         data = new LinkedList<SystemPacket>();
         lastFireTime = System.nanoTime();
         canFire = false;
         hasFired = false;
+        this.baseLength = baseLength;
+        this.baseWidth = baseWidth;
+        this.baseHeight = baseHeight;
+        this.gunLength = gunLength;
+        this.gunWidth = gunWidth;
+        this.gunHeight = gunHeight;
     }
 
 
@@ -110,7 +127,7 @@ public class Tank
             gun.setBaseTurn( temp.calledTurn() );
         }
         base.translate();
-        gun.setBaseCenter( new Value3D(base.getX(), base.getY(), base.getZ()) );
+        gun.setBaseCenter( new Value3D( base.getX(), base.getY(), base.getZ() ) );
         gun.translate();
         gun.updateCorners();
         base.updateCorners();

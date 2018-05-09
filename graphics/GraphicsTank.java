@@ -8,7 +8,9 @@ import processing.core.PApplet;
 public class GraphicsTank
 {
     Tank myTank;
+
     PApplet parent;
+
     TankPacket dat;
 
 
@@ -18,12 +20,14 @@ public class GraphicsTank
         parent = p;
         dat = init;
     }
-    
-    public void init (TankPacket dat)
+
+
+    public void update( TankPacket dat )
     {
         this.dat = dat;
     }
-    
+
+
     public void display()
     {
         parent.pushMatrix();
@@ -31,5 +35,16 @@ public class GraphicsTank
             (float)dat.getLoc().getY(),
             (float)dat.getLoc().getZ() );
         parent.rotateY( (float)dat.getAngle() );
+        parent.box( myTank.baseLength, myTank.baseHeight, myTank.baseWidth );
+        parent.fill( 255 );
+        parent.popMatrix();
+        parent.pushMatrix();
+        parent.translate( (float)dat.getGunLoc().getX(),
+            (float)dat.getGunLoc().getY(),
+            (float)dat.getGunLoc().getZ() );
+        parent.rotateY( (float)dat.getGunAngle() );
+        parent.box( myTank.gunLength, myTank.gunHeight, myTank.gunWidth );
+        parent.fill( 255 );
+        parent.popMatrix();
     }
 }
