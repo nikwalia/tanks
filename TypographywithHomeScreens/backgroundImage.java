@@ -30,7 +30,9 @@ public class backgroundImage extends PApplet
      */
     public void settings()
     {
+
         size( 1920, 1080 );
+
     }
 
 
@@ -44,15 +46,60 @@ public class backgroundImage extends PApplet
 
     public void draw()
     {
-        // PFont font;
         background( background );
         textSize( 109 );
         text( "T-34 Tank Destroyers", width / 4, 160 );
         fill( 0 );
-        // font = createFont("LeagueGothic-Regular.otf",
+        PFont font;
+        String[] fontList = PFont.list();
+        printArray( fontList );
+        font = createFont( "Yu Gothic Bold", 205 );
+        textFont( font );
+        // font = createFont("LeagueGothic-Regular.otf",30);
         // text( "word", 10, 60 );
         // fill( 0, 102, 153, 51 );
-        // text( "word", 10, 90 );
+        // text( "word", 10, 90 );]
+    }
+
+    /**
+     *
+     * 
+     * 
+     * TEST THIS SECTION ONCE FINISHED WITH SCREEN INTEGRATION TEST THIS SECTION
+     * ONCE FINISHED WITH SCREEN INTEGRATION TEST THIS SECTION ONCE FINISHED
+     * WITH SCREEN INTEGRATION
+     * 
+     * 
+     * 
+     */
+
+    // need to test once done with screen integration
+    int x;
+
+    // need to test once done with screen integration
+    boolean[] keys = new boolean[128];
+
+
+    // need to test once done with screen integration
+    public void pressedKey()
+    {
+        if ( key == ' ' )
+        {
+            x++;
+        }
+    }
+
+
+    // need to test once done with screen integration
+    public void keyPressed()
+    {
+        keys[key] = true;
+    }
+
+
+    public void keyReleased()
+    {
+        keys[key] = false;
 
     }
 }
