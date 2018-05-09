@@ -48,18 +48,25 @@ public class backgroundImage extends PApplet
     {
         background( background );
         textSize( 109 );
-        text( "T-34 Tank Destroyers", width / 4, 160 );
-        fill( 0 );
+        text( "T-34", width / 6, 155 );
+        fill( 11, 57, 198 );
+        text( "        Tank Destroyers", width / 6, 155 );
+        fill( 56, 114, 5 );
         PFont font;
-        String[] fontList = PFont.list();
-        printArray( fontList );
-        font = createFont( "Yu Gothic Bold", 205 );
+        // String[] fontList = PFont.list();
+        // printArray( fontList );
+        font = createFont( "Verdana Bold", 196 );
         textFont( font );
         // font = createFont("LeagueGothic-Regular.otf",30);
         // text( "word", 10, 60 );
         // fill( 0, 102, 153, 51 );
         // text( "word", 10, 90 );]
     }
+
+    // public void textColor()
+    // {
+    // empty
+    // }
 
     /**
      *
@@ -74,32 +81,29 @@ public class backgroundImage extends PApplet
      */
 
     // need to test once done with screen integration
-    int x;
+    // int x;
 
     // need to test once done with screen integration
-    boolean[] keys = new boolean[128];
-
-
-    // need to test once done with screen integration
-    public void pressedKey()
-    {
-        if ( key == ' ' )
-        {
-            x++;
-        }
-    }
-
+    // boolean[] keys = new boolean[128];
 
     // need to test once done with screen integration
-    public void keyPressed()
-    {
-        keys[key] = true;
-    }
+    // public void pressedKey()
+    // {
+    // if ( key == ' ' )
+    // {
+    // x++;
+    // }
+    // }
 
+    // need to test once done with screen integration
+    // public void keyPressed()
+    // {
+    // keys[key] = true;
+    // }
 
-    public void keyReleased()
-    {
-        keys[key] = false;
-
-    }
+    // public void keyReleased()
+    // {
+    // keys[key] = false;
+    //
+    // }
 }
