@@ -1,15 +1,43 @@
 package graphics;
 
+import io.TankPacket;
 import math.Tank;
+import processing.core.PApplet;
 
 
 public class CameraTank
 {
     Tank myTank;
 
+    PApplet parent;
 
-    public CameraTank( Tank t )
+    TankPacket dat;
+
+
+    public CameraTank( Tank t, PApplet p, TankPacket init )
     {
         myTank = t;
+        parent = p;
+        dat = init;
+    }
+
+
+    public void update( TankPacket dat )
+    {
+        this.dat = dat;
+    }
+
+
+    public void display()
+    {
+        parent.camera( (float)dat.getLoc().getX(),
+            parent.height / 2,
+            (float)dat.getLoc().getZ(),
+            (float)( 200 * Math.tan( dat.getAngle() / 2 ) + parent.width / 2 ),
+            parent.height / 2,
+            0,
+            0,
+            1,
+            0 );
     }
 }

@@ -113,7 +113,7 @@ public abstract class Structure3D extends Value3D
      * Gets the length of the structure
      * @return length
      */
-    protected double getLength()
+    public double getLength()
     {
         return length;
     }
@@ -124,7 +124,7 @@ public abstract class Structure3D extends Value3D
      * Gets the width of the structure
      * @return width
      */
-    protected double getWidth()
+    public double getWidth()
     {
         return width;
     }
@@ -135,7 +135,7 @@ public abstract class Structure3D extends Value3D
      * Gets the height of the structure
      * @return height
      */
-    protected double getHeight()
+    public double getHeight()
     {
         return height;
     }

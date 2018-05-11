@@ -32,21 +32,13 @@ public class Main extends PApplet
 
     private Tank playerTwoTank;
 
-    private static GraphicsTank playerOneGraphicsTank;
-
-    private static GraphicsTank playerTwoGraphicsTank;
-
-    private static CameraTank playerOneCameraTank;
-
-    private static CameraTank playerTwoCameraTank;
-
     private Bullet playerOneBullet;
 
     private Bullet playerTwoBullet;
 
-    private static RunnerWindow w1;
+    private static RunnerWindow playerOneWindow;
 
-    private static RunnerWindow w2;
+    private static RunnerWindow playerTwoWindow;
 
 
     public Main()
@@ -56,22 +48,28 @@ public class Main extends PApplet
         playerTwoData = new int[7];
         playerOneTank = new Tank( 0, 0, 0, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
         playerTwoTank = new Tank( 100, 0, 100, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
-        playerOneGraphicsTank = new GraphicsTank( playerOneTank );
-        playerTwoGraphicsTank = new GraphicsTank( playerTwoTank );
-        playerOneCameraTank = new CameraTank( playerOneTank );
-        playerTwoCameraTank = new CameraTank( playerTwoTank );
         playerOneBullet = null;
         playerTwoBullet = null;
+        data.add( playerOneTank.sendData() );
+        data.add( playerTwoTank.sendData() );
+        TankPacket playerOneInit = data.remove();
+        TankPacket playerTwoInit = data.remove();
+        playerOneWindow = new RunnerWindow( playerOneTank,
+            playerTwoTank,
+            playerOneInit,
+            playerTwoInit );
+        playerTwoWindow = new RunnerWindow( playerTwoTank,
+            playerOneTank,
+            playerTwoInit,
+            playerOneInit );
     }
 
 
     public static void main( String[] args )
     {
         PApplet.main( "graphics.Main" );
-        w1 = new RunnerWindow( playerTwoGraphicsTank, playerOneCameraTank );
-        w2 = new RunnerWindow( playerOneGraphicsTank, playerTwoCameraTank );
-        w1.main( args );
-        w2.main( args );
+        playerOneWindow.main( args );
+        playerTwoWindow.main( args );
     }
 
 
@@ -109,6 +107,10 @@ public class Main extends PApplet
         data.add( playerTwoTank.sendData() );
         TankPacket p1 = data.remove();
         TankPacket p2 = data.remove();
+        
+        playerOneWindow.update( p1,  p2 );
+        playerTwoWindow.update( p2, p1 );
+        
         if ( p1.checkIfFired() && playerOneBullet == null )
         {
             playerOneBullet = new Bullet( p1.getGunLoc().getX(),
@@ -146,14 +148,10 @@ public class Main extends PApplet
 
         if ( p1.getHitpoints() <= 0 )
         {
-            w1 = null;
-            w2 = null;
             gameOver( 2 );
         }
         else if ( p2.getHitpoints() <= 0 )
         {
-            w1 = null;
-            w2 = null;
             gameOver( 1 );
         }
     }
@@ -161,7 +159,8 @@ public class Main extends PApplet
 
     public void gameOver( int winningPlayer )
     {
-
+        playerOneWindow = null;
+        playerTwoWindow = null;
     }
 
 
