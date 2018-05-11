@@ -82,7 +82,7 @@ public class backgroundImage extends PApplet
 
     // need to test once done with screen integration
     // int x;
-
+    // include if key ! not coded - space bar is ascii (white space)
     // need to test once done with screen integration
     // boolean[] keys = new boolean[128];
 
