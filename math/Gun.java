@@ -245,6 +245,13 @@ public class Gun extends Structure3D
         setZ( baseCenter.getZ() + ( getX() - baseCenter.getX() ) * Math.sin( getAngle() )
             + ( getZ() - baseCenter.getZ() ) * Math.cos( getAngle() ) );
 
+        normalizeAngle();
         curTime = newTime;
+    }
+    
+    public int collisionSide(Structure3D other)
+    {
+        //TODO
+        return -1;
     }
 }

@@ -93,4 +93,15 @@ public class Bullet extends Structure3D
     {
         baseRectangle[0] = new Value3D( getX(), getY(), getZ() );
     }
+    
+    /**
+     * 
+     * Stub method
+     * @param other Structure3D collided with
+     * @return status update
+     */
+    public int collisionSide(Structure3D other)
+    {
+        return 0;
+    }
 }

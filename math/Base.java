@@ -89,13 +89,13 @@ public class Base extends Structure3D
 
     /**
      * 
-     * Checks if this has collided with another Collidable
+     * Checks if this has collided with another Structure3D
      * 
      * @param other
-     *            Collidable to check against for collision
-     * @return whether or not the two have collided
+     *            Structure3D to check against for collision
+     * @return corner that has collided, or -1 if no collision
      */
-    public boolean hasCollided( Structure3D other )
+    public int hasCollided( Structure3D other )
     {
         double otherX;
         double otherZ;
@@ -164,13 +164,17 @@ public class Base extends Structure3D
             totalTriangleArea += Math.sqrt( s * ( s - centerToFourthCorner )
                 * ( s - centerToFirstCorner ) * ( s - fourthCornerToFirstCorner ) );
 
-            if ( Math.abs( totalTriangleArea - areaOfBase ) < 0.01 )
+            if ( Math.abs( totalTriangleArea - areaOfBase ) < 0.01 && max == 4 )
             {
-                return true;
+                return i;
+            }
+            else if ( Math.abs( totalTriangleArea - areaOfBase ) < 0.01 )
+            {
+                return 10;
             }
         }
 
-        return false;
+        return -1;
     }
 
 
@@ -236,13 +240,71 @@ public class Base extends Structure3D
     }
 
 
+    public int collisionSide( Structure3D other, int corner )
+    {
+        double otherCornerX = other.baseRectangle[corner].getX();
+        double otherCornerZ = other.baseRectangle[corner].getZ();
+        double areaOfTriangle;
+        for ( int i = 0; i < 2; i++ )
+        {
+            areaOfTriangle = sideAreas[i];
+            double areaOfTriangles = 0;
+
+            double firstTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[i].getX() - otherCornerX, 2 )
+                    + Math.pow( baseRectangle[i].getZ() - otherCornerZ, 2 ) );
+            double secondTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[i + 1].getX() - otherCornerX, 2 )
+                    + Math.pow( baseRectangle[i + 1].getZ() - otherCornerZ, 2 ) );
+            double thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[i].getX() - baseRectangle[i + 1].getX(), 2 )
+                    + Math.pow( baseRectangle[i].getZ() - baseRectangle[i + 1].getZ(), 2 ) );
+            double semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide )
+                / 2;
+            areaOfTriangles += Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+
+            firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[i].getX() - otherCornerX, 2 )
+                + Math.pow( baseRectangle[i].getZ() - otherCornerZ, 2 ) );
+            secondTriangleSide = Math.sqrt(
+                Math.pow( getX() - otherCornerX, 2 ) + Math.pow( getZ() - otherCornerZ, 2 ) );
+            thirdTriangleSide = Math.sqrt( Math.pow( baseRectangle[i].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[i].getZ() - getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
+            areaOfTriangles += Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+
+            firstTriangleSide = Math
+                .sqrt( Math.pow( getX() - otherCornerX, 2 )
+                    + Math.pow( getZ() - otherCornerZ, 2 ) );
+            secondTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[i + 1].getX() - otherCornerX, 2 )
+                    + Math.pow( baseRectangle[i + 1].getZ() - otherCornerZ, 2 ) );
+            thirdTriangleSide = Math
+                .sqrt( Math.pow( getX() - baseRectangle[i + 1].getX(), 2 )
+                    + Math.pow( getZ() - baseRectangle[i + 1].getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide )
+                / 2;
+            areaOfTriangles += Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+            
+            if (Math.abs( areaOfTriangles - areaOfTriangle) < 0.01)
+            {
+                return i;
+            }
+        }
+
+        return 3;
+    }
+
+
     /**
      * 
      * @param other
      */
     public void postCollision( Structure3D other )
     {
-        if ( this.hasCollided( other ) )
+        if ( this.hasCollided( other ) >= 0 )
         {
             if ( Math.abs( this.getAngle() - other.getAngle() ) == 90 )
             {
