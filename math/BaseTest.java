@@ -4,9 +4,48 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 
-
+/**
+ * 
+ *  Testing class for Base
+ *
+ *  @author  Nikash Walia
+ *  @version May 12, 2018
+ *  @author  Period: 2
+ *  @author  Assignment: Tanks
+ *
+ *  @author  Sources: None
+ */
 public class BaseTest
 {
+    
+    /**
+     * Tests for Base class
+     * 
+     * BasicConstructorTest- checks that all values are initialized correctly
+     * CornersTest- a non-uniform, translated, rotated base has the correct corners
+     * AccelerationOneSecondTest- correct velocity after one second of positive motion
+     * AccelerationThreeSecondTest- maximum velocity after three seconds of positive motion
+     * AccelerationNegativeOneSecondTest- correct velocity after one second of negative motion
+     * AccelerationNegativeThreeSecondTest- minimum velocity after three seconds of negative motion
+     * DecelerateOneSecondTest- correct velocity after one second of deceleration from max positive
+     * DecelerateThreeSecondsTest- 0 velocity after three seconds of deceleration from max positive
+     * DeclerateNegativeOneSecondTest- correct velocity after one second of deceleration from max
+     * negative
+     * DecelerateNegativeThreeSecondsTest- 0 velocity after three seconds of deceleration from max
+     * negative
+     * RotateTest- correct angular velocity for various different settings
+     * LinearDisplacementTest- correct change in position for change in time
+     * AngularDisplacementTest- correct change in angle for change in time
+     * SimpleBulletCollisionTest- a bullet correctly registers as collided with a regular base
+     * TranslatedBaseCollisionTest- a bullet correctly registers as collided with a non-uniform,
+     * translated, rotated base
+     * BaseToBaseCollisionTest- overlapping bases register as collided; non-overlapping bases do
+     * not register as collided
+     * OnCollisionTest- correct status update, correctly zeroes velocities for different states
+     * CollisionCornerTest- correct corner registered for when two bases collide
+     * CollisionSideTest- correct side registered for when two bases collide
+     */
+    
     @Test
     public void BasicConstructorTest()
     {
@@ -215,7 +254,7 @@ public class BaseTest
         b.setTurnDirection( -1 );
         b.translate();
         assertEquals( b.minAngularVelocity, b.angularVelocity, 0.1 );
-        b.setAngularVelocity( Math.PI / 4 );
+        b.setAngularVelocity( Math.PI / 8 );
         assertEquals( b.maxAngularVelocity, b.angularVelocity, 0.1 );
     }
 
@@ -260,7 +299,7 @@ public class BaseTest
     {
         Base base = new Base( 0, 0, 0, 0, 10, 10, 10 );
         Bullet bullet = new Bullet( 0, 0, 0, 0 );
-        assert ( base.hasCollided( bullet ) );
+        assert ( base.hasCollided( bullet ) == 10 );
     }
 
 
@@ -269,9 +308,9 @@ public class BaseTest
     {
         Base base = new Base( 30, 0, 25, Math.PI / 4, 20, 10, 0 );
         Bullet b1 = new Bullet( 34, 0, 32, Math.PI / 4 );
-        assert ( base.hasCollided( b1 ) );
+        assert ( base.hasCollided( b1 ) == 10 );
         Bullet b2 = new Bullet( 29, 0, 32, Math.PI / 4 );
-        assert ( !base.hasCollided( b2 ) );
+        assert ( base.hasCollided( b2 ) == -1 );
     }
 
 
@@ -281,8 +320,8 @@ public class BaseTest
         Base b1 = new Base( 0, 0, 0, 0, 10, 10, 10 );
         Base b2 = new Base( 0, 0, 10, 0, 10, 10, 10 );
         Base b3 = new Base( 0, 0, 12, 0, 10, 10, 10 );
-        assert ( b1.hasCollided( b2 ) );
-        assert ( !b1.hasCollided( b3 ) );
+        assert ( b1.hasCollided( b2 ) >= 0 );
+        assert ( b1.hasCollided( b3 ) < 0 );
     }
 
 
@@ -292,8 +331,57 @@ public class BaseTest
         Base base = new Base( 0, 0, 0, 0, 10, 10, 10 );
         Bullet bullet = new Bullet( 0, 0, 0, 0 );
         assert ( base.onCollision( bullet ) == -1 );
-        Base b2 = new Base( 0, 0, 10, 0, 10, 10, 10 );
-        assert ( base.onCollision( b2 ) == 1 );
+        
+        Base b2 = new Base( 0, 0, 10, Math.PI / 4, 10, 10, 10 );
+        base.setVelocity( base.MAXVELOCITY );
+        base.setAngularVelocity( base.maxAngularVelocity );
+        assert( base.onCollision( b2 ) == 1 );
+        assert( base.getAngularVelocity() == 0 );
+        assert( base.getVelocity() == 0 );
+        
+        b2 = new Base( -10, 0, 0, Math.PI / 4, 10, 10, 10 );
+        base.setVelocity( base.MAXVELOCITY );
+        base.setAngularVelocity( base.maxAngularVelocity );
+        assert( base.onCollision( b2 ) == 1 );
+        assert( base.getAngularVelocity() == 0 );
+        assert( base.getVelocity() == base.MAXVELOCITY );
+        
+        b2 = new Base( 0, 0, -10, Math.PI / 4, 10, 10, 10 );
+        base.setVelocity( base.MINVELOCITY );
+        base.setAngularVelocity( base.maxAngularVelocity );
+        assert( base.onCollision( b2 ) == 1 );
+        assert( base.getAngularVelocity() == 0 );
+        assert( base.getVelocity() == 0 );
+    }
+    
+    
+    @Test
+    public void CollisionCornerTest()
+    {
+        Base base = new Base( 0, 0, 0, 0, 10, 10, 10 );
+        Base b2 = new Base( 0, 0, -10, Math.PI / 4, 10, 10, 10 );
+        assert(base.hasCollided( b2 ) == 0);
+        b2 = new Base( 10, 0, 0, Math.PI / 4, 10, 10, 10 );
+        assert(base.hasCollided( b2 ) == 1);
+        b2 = new Base( 0, 0, 10, Math.PI / 4, 10, 10, 10 );
+        assert(base.hasCollided( b2 ) == 2);
+        b2 = new Base( -10, 0, 0, Math.PI / 4, 10, 10, 10 );
+        assert(base.hasCollided( b2 ) == 3);
+    }
+
+
+    @Test
+    public void CollisionSideTest()
+    {
+        Base base = new Base( 0, 0, 0, 0, 10, 10, 10 );
+        Base b2 = new Base( 0, 0, 10, Math.PI / 4, 10, 10, 10 );
+        assert ( base.collisionSide( b2, base.hasCollided( b2 ) ) == 0 );
+        b2 = new Base( -10, 0, 0, Math.PI / 4, 10, 10, 10 );
+        assert ( base.collisionSide( b2, base.hasCollided( b2 ) ) == 1 );
+        b2 = new Base( 0, 0, -10, Math.PI / 4, 10, 10, 10 );
+        assert(base.collisionSide( b2, base.hasCollided( b2 ) ) == 2);
+        b2 = new Base( 10, 0, 0, Math.PI / 4, 10, 10, 10 );
+        assert ( base.collisionSide( b2, base.hasCollided( b2 ) ) == 3 );
     }
 
 }

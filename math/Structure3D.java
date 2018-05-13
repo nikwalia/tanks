@@ -98,49 +98,53 @@ public abstract class Structure3D extends Value3D
         sideAreas = new double[4];
         updateCorners();
 
-        double firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[0].getX() - getX(), 2 )
-            + Math.pow( baseRectangle[0].getZ() - getZ(), 2 ) );
-        double secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[1].getX() - getX(), 2 )
-            + Math.pow( baseRectangle[1].getZ() - getZ(), 2 ) );
-        double thirdTriangleSide = Math
-            .sqrt( Math.pow( baseRectangle[0].getX() - baseRectangle[1].getX(), 2 )
-                + Math.pow( baseRectangle[0].getZ() - baseRectangle[1].getZ(), 2 ) );
-        double semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
-        sideAreas[0] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
-            * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+        if ( baseRectangle[1] != null )
+        {
+            double firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[0].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[0].getZ() - getZ(), 2 ) );
+            double secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[1].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[1].getZ() - getZ(), 2 ) );
+            double thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[0].getX() - baseRectangle[1].getX(), 2 )
+                    + Math.pow( baseRectangle[0].getZ() - baseRectangle[1].getZ(), 2 ) );
+            double semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide )
+                / 2;
+            sideAreas[0] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
 
-        firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[1].getX() - getX(), 2 )
-            + Math.pow( baseRectangle[1].getZ() - getZ(), 2 ) );
-        secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[2].getX() - getX(), 2 )
-            + Math.pow( baseRectangle[2].getZ() - getZ(), 2 ) );
-        thirdTriangleSide = Math
-            .sqrt( Math.pow( baseRectangle[1].getX() - baseRectangle[2].getX(), 2 )
-                + Math.pow( baseRectangle[1].getZ() - baseRectangle[2].getZ(), 2 ) );
-        semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
-        sideAreas[1] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
-            * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+            firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[1].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[1].getZ() - getZ(), 2 ) );
+            secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[2].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[2].getZ() - getZ(), 2 ) );
+            thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[1].getX() - baseRectangle[2].getX(), 2 )
+                    + Math.pow( baseRectangle[1].getZ() - baseRectangle[2].getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
+            sideAreas[1] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
 
-        firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[2].getX() - getX(), 2 )
-            + Math.pow( baseRectangle[2].getZ() - getZ(), 2 ) );
-        secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[3].getX() - getX(), 2 )
-            + Math.pow( baseRectangle[3].getZ() - getZ(), 2 ) );
-        thirdTriangleSide = Math
-            .sqrt( Math.pow( baseRectangle[2].getX() - baseRectangle[3].getX(), 2 )
-                + Math.pow( baseRectangle[2].getZ() - baseRectangle[3].getZ(), 2 ) );
-        semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
-        sideAreas[2] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
-            * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+            firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[2].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[2].getZ() - getZ(), 2 ) );
+            secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[3].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[3].getZ() - getZ(), 2 ) );
+            thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[2].getX() - baseRectangle[3].getX(), 2 )
+                    + Math.pow( baseRectangle[2].getZ() - baseRectangle[3].getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
+            sideAreas[2] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
 
-        firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[0].getX() - getX(), 2 )
-            + Math.pow( baseRectangle[0].getZ() - getZ(), 2 ) );
-        secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[3].getX() - getX(), 2 )
-            + Math.pow( baseRectangle[3].getZ() - getZ(), 2 ) );
-        thirdTriangleSide = Math
-            .sqrt( Math.pow( baseRectangle[0].getX() - baseRectangle[3].getX(), 2 )
-                + Math.pow( baseRectangle[0].getZ() - baseRectangle[3].getZ(), 2 ) );
-        semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
-        sideAreas[3] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
-            * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+            firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[0].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[0].getZ() - getZ(), 2 ) );
+            secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[3].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[3].getZ() - getZ(), 2 ) );
+            thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[0].getX() - baseRectangle[3].getX(), 2 )
+                    + Math.pow( baseRectangle[0].getZ() - baseRectangle[3].getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
+            sideAreas[3] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+        }
     }
 
 
@@ -328,7 +332,7 @@ public abstract class Structure3D extends Value3D
 
     /**
      * 
-     * method for updating the coordinates of the 4 corners in the base
+     * method for updating the coordinates of the 4 corners in baseRectangle
      */
     public abstract void updateCorners();
 
