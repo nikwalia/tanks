@@ -5,8 +5,39 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 
+/**
+ * Testing class for gun
+ * 
+ * @author Nikash Walia
+ * @version 5/12/18
+ * @author Period: 2
+ * @author Assignment: Tanks
+ * 
+ * @author Sources: None
+ */
 public class GunTest
 {
+    
+    /**
+     * 
+     * Unit tests for Gun
+     * 
+     * ConstructorTest- all values are initialized correctly
+     * LinearTranslationTest- the gun's position changes correctly based on the base's
+     * PositiveAngularRotationTest- correct increase in angle
+     * NegativeAngularRotationTest- correct decrease in angle
+     * BasePositiveTurnZeroAngularVelocityTest- correct velocity and increase in angle
+     * BaseNegativeTurnZeroAngularVelocityTest- correct velocity and decrease in angle
+     * BasePositiveTurnPositiveAngularVelocityTest- correct velocity and increase in angle
+     * BasePositiveTurnNegativeAngularVelocityTest- correct velocity and decrease in angle
+     * BaseNegativeTurnPositiveAngularVelocityTest- correct velocity and increase in angle
+     * BaseNegativeTurnNegativeAngularVelocityTest- correct velocity and decrease in angle
+     * SimpleBulletCollisionTest- bullet correctly registers as collided / not collided
+     * GunToGunCollisionTest- collision with gun correctly registers
+     * OnCollisionTest- collision results in correct behavior
+     * CollisionSideTest- collision registers on correct side
+     */
+    
     @Test
     public void ConstructorTest()
     {
@@ -283,18 +314,19 @@ public class GunTest
         assert ( g.onCollision( g2 ) == 1 );
         assert ( g.angularVelocity == 0 );
     }
-    
+
+
     @Test
     public void CollisionSideTest()
     {
         Gun g = new Gun( 0, 10, 10, 10, new Value3D( 0, 0, 0 ), 10 );
         Gun g2 = new Gun( 3 * Math.PI / 2, 10, 2, 10, new Value3D( 0, 0, 15 ), 10 );
-        assert( g.collisionSide( g2, g.hasCollided( g2 ) )  == 0);
-        g2 = new Gun(0, 10, 2, 10, new Value3D(-10, 0, 0), 10);
-        assert(g.collisionSide( g2, g.hasCollided( g2 ) ) == 1);
-        g2 = new Gun(Math.PI / 2, 10, 2, 10, new Value3D(5, 0, -15), 10);
-        assert(g.collisionSide( g2, g.hasCollided( g2 ) ) == 2);        
-        g2 = new Gun(Math.PI, 10, 2, 10, new Value3D(20, 0, 0), 10);
-       assert(g.collisionSide( g2,  g.hasCollided( g2 ) ) == 3);
+        assert ( g.collisionSide( g2, g.hasCollided( g2 ) ) == 0 );
+        g2 = new Gun( 0, 10, 2, 10, new Value3D( -10, 0, 0 ), 10 );
+        assert ( g.collisionSide( g2, g.hasCollided( g2 ) ) == 1 );
+        g2 = new Gun( Math.PI / 2, 10, 2, 10, new Value3D( 5, 0, -15 ), 10 );
+        assert ( g.collisionSide( g2, g.hasCollided( g2 ) ) == 2 );
+        g2 = new Gun( Math.PI, 10, 2, 10, new Value3D( 20, 0, 0 ), 10 );
+        assert ( g.collisionSide( g2, g.hasCollided( g2 ) ) == 3 );
     }
 }
