@@ -46,8 +46,10 @@ public abstract class Structure3D extends Value3D
     private int turnDirection;
 
     private int moveDirection;
-    
+
     protected Value3D[] baseRectangle;
+
+    protected double[] sideAreas;
 
 
     /**
@@ -93,13 +95,63 @@ public abstract class Structure3D extends Value3D
         maxAngularVelocity = maxangularvel;
         minAngularVelocity = -maxangularvel;
         baseRectangle = new Value3D[4];
-        
+        sideAreas = new double[4];
+        updateCorners();
+
+        if ( baseRectangle[1] != null )
+        {
+            double firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[0].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[0].getZ() - getZ(), 2 ) );
+            double secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[1].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[1].getZ() - getZ(), 2 ) );
+            double thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[0].getX() - baseRectangle[1].getX(), 2 )
+                    + Math.pow( baseRectangle[0].getZ() - baseRectangle[1].getZ(), 2 ) );
+            double semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide )
+                / 2;
+            sideAreas[0] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+
+            firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[1].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[1].getZ() - getZ(), 2 ) );
+            secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[2].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[2].getZ() - getZ(), 2 ) );
+            thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[1].getX() - baseRectangle[2].getX(), 2 )
+                    + Math.pow( baseRectangle[1].getZ() - baseRectangle[2].getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
+            sideAreas[1] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+
+            firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[2].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[2].getZ() - getZ(), 2 ) );
+            secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[3].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[3].getZ() - getZ(), 2 ) );
+            thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[2].getX() - baseRectangle[3].getX(), 2 )
+                    + Math.pow( baseRectangle[2].getZ() - baseRectangle[3].getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
+            sideAreas[2] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+
+            firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[0].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[0].getZ() - getZ(), 2 ) );
+            secondTriangleSide = Math.sqrt( Math.pow( baseRectangle[3].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[3].getZ() - getZ(), 2 ) );
+            thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[0].getX() - baseRectangle[3].getX(), 2 )
+                    + Math.pow( baseRectangle[0].getZ() - baseRectangle[3].getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
+            sideAreas[3] = Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+        }
     }
 
 
     /**
      * 
      * Gets the last time at which the structure's location was updated
+     * 
      * @return time in seconds
      */
     protected double getTime()
@@ -111,6 +163,7 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Gets the length of the structure
+     * 
      * @return length
      */
     public double getLength()
@@ -122,6 +175,7 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Gets the width of the structure
+     * 
      * @return width
      */
     public double getWidth()
@@ -133,6 +187,7 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Gets the height of the structure
+     * 
      * @return height
      */
     public double getHeight()
@@ -144,6 +199,7 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Gets the angle of the structure
+     * 
      * @return angle
      */
     protected double getAngle()
@@ -155,7 +211,9 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Rotates the structure by the given angle
-     * @param deltaAngle change in angle
+     * 
+     * @param deltaAngle
+     *            change in angle
      */
     protected void changeAngle( double deltaAngle )
     {
@@ -165,11 +223,11 @@ public abstract class Structure3D extends Value3D
 
     /**
      * 
-     * Sets the turn direction variable
-     * -1 = clockwise
-     * 0 = not turning
-     * 1 = counter-clockwise
-     * @param t direction to turn
+     * Sets the turn direction variable -1 = clockwise 0 = not turning 1 =
+     * counter-clockwise
+     * 
+     * @param t
+     *            direction to turn
      */
     protected void setTurnDirection( int t )
     {
@@ -179,11 +237,11 @@ public abstract class Structure3D extends Value3D
 
     /**
      * 
-     * Sets the move direction variable
-     * -1 = backward
-     * 0 = no movement
-     * 1 = forward
-     * @param m direction to move
+     * Sets the move direction variable -1 = backward 0 = no movement 1 =
+     * forward
+     * 
+     * @param m
+     *            direction to move
      */
     protected void setMoveDirection( int m )
     {
@@ -194,7 +252,9 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Sets the velocity of the structure
-     * @param v velocity
+     * 
+     * @param v
+     *            velocity
      */
     protected void setVelocity( double v )
     {
@@ -205,7 +265,9 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Sets the angular velocity of the structure
-     * @param a angular velocity
+     * 
+     * @param a
+     *            angular velocity
      */
     protected void setAngularVelocity( double a )
     {
@@ -216,6 +278,7 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Gets the velocity of the structure
+     * 
      * @return velocity
      */
     protected double getVelocity()
@@ -227,6 +290,7 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Gets the angular velocity of the structure
+     * 
      * @return angular velocity
      */
     protected double getAngularVelocity()
@@ -238,6 +302,7 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Gets the turn direction of the structure
+     * 
      * @return turn direction
      */
     public double getTurnDirection()
@@ -249,6 +314,7 @@ public abstract class Structure3D extends Value3D
     /**
      * 
      * Gets the move direction of the structure
+     * 
      * @return move direction
      */
     public double getMoveDirection()
@@ -262,26 +328,47 @@ public abstract class Structure3D extends Value3D
      * Stub method- translates the system according to its various properties
      */
     public abstract void translate();
-    
+
+
     /**
      * 
-     * method for updating the coordinates of the 4 corners in the base
+     * method for updating the coordinates of the 4 corners in baseRectangle
      */
     public abstract void updateCorners();
-    
+
+
     /**
      * 
-     * method for checking whether or not the structure has collided with another
-     * @param other structure to check against
-     * @return whether it has collided or not
+     * method for checking whether or not the structure has collided with
+     * another
+     * 
+     * @param other
+     *            structure to check against
+     * @return corner that has collided, or -1 if no collision
      */
-    public abstract boolean hasCollided(Structure3D other);
-    
+    public abstract int hasCollided( Structure3D other );
+
+
     /**
      * 
      * method for action after collision
-     * @param other structure to interact with
+     * 
+     * @param other
+     *            structure to interact with
      * @return status update to system
      */
-    public abstract int onCollision(Structure3D other);
+    public abstract int onCollision( Structure3D other );
+
+
+    /**
+     * 
+     * method for finding which side the other collided with
+     * 
+     * @param other
+     *            structure to check side against
+     * @param corner
+     *            the corner that has collided with this
+     * @return side of collision- starts from 0, increases counter-clockwise
+     */
+    public abstract int collisionSide( Structure3D other, int corner );
 }

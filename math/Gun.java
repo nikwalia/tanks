@@ -34,34 +34,50 @@ public class Gun extends Structure3D
      * @param baseHeight
      *            height of the base
      */
-    public Gun( int angle, int l, int w, int h, Value3D b, int baseHeight )
+    public Gun( double angle, int l, int w, int h, Value3D b, int baseHeight )
     {
-        super( b.getX(), b.getY() + h / 2 + baseHeight / 2, b.getZ(), angle, l, w, h, Math.PI / 4 );
+        super( b.getX(),
+            -( b.getY() + h / 2 + baseHeight / 2 ),
+            b.getZ(),
+            angle,
+            l,
+            w,
+            h,
+            Math.PI / 4 );
         baseTurnState = 0;
         baseCenter = b;
         updateCenter();
+        updateCorners();
     }
 
 
     /**
      * 
-     * Determines the end behavior of the gun
-     * 
-     * @param other
-     *            Structure3D to interact with
-     * @return status update to the system
+     * Translates the gun
      */
-    public int onCollision( Structure3D other )
+    public void translate()
     {
-        if ( other instanceof Bullet )
+        double newTime = System.nanoTime() / 1e+9;
+        double deltaTime = newTime - curTime;
+
+        if ( getTurnDirection() == 0 )
         {
-            other.onCollision( this );
-            return -1;
+            angularVelocity = ZEROANGULARVELOCITY;
+        }
+        else if ( getTurnDirection() == -1 )
+        {
+            angularVelocity = minAngularVelocity;
         }
         else
         {
-            return 1;
+            angularVelocity = maxAngularVelocity;
         }
+        angularVelocity += baseTurnState * Math.PI / 8;
+        changeAngle( angularVelocity * deltaTime );
+
+        updateCenter();
+        updateCorners();
+        curTime = newTime;
     }
 
 
@@ -92,13 +108,13 @@ public class Gun extends Structure3D
 
     /**
      * 
-     * Checks if the gun has collided with another Structure3D
+     * Checks if this has collided with another Structure3D
      * 
      * @param other
-     *            Structure3D to check collision with
-     * @return whether or not the two structures have collided
+     *            Structure3D to check against for collision
+     * @return corner that has collided, or -1 if no collision
      */
-    public boolean hasCollided( Structure3D other )
+    public int hasCollided( Structure3D other )
     {
         double otherX;
         double otherZ;
@@ -119,7 +135,7 @@ public class Gun extends Structure3D
             otherZ = other.baseRectangle[i].getZ();
 
             if ( Math.sqrt( Math.pow( otherX - getX(), 2 ) + Math.pow( otherZ - getZ(), 2 ) ) > Math
-                .sqrt( Math.pow( width / 2, 2 ) + Math.pow( length / 2, 2 ) ) )
+                .sqrt( Math.pow( width / 2, 2 ) + Math.pow( length / 2, 2 ) ) + 0.5 )
             {
                 continue;
             }
@@ -169,11 +185,105 @@ public class Gun extends Structure3D
 
             if ( Math.abs( totalTriangleArea - areaOfBase ) < 0.01 )
             {
-                return true;
+                if ( max == 4 )
+                {
+                    return i;
+                }
+                else
+                {
+                    return 10;
+                }
             }
         }
 
-        return false;
+        return -1;
+    }
+
+
+    /**
+     * 
+     * Determines the end behavior of the gun
+     * 
+     * @param other
+     *            Structure3D to interact with
+     * @return status update to the system
+     */
+    public int onCollision( Structure3D other )
+    {
+        if ( other instanceof Bullet )
+        {
+            other.onCollision( this );
+            return -1;
+        }
+        else
+        {
+            setAngularVelocity( ZEROANGULARVELOCITY );
+            return 1;
+        }
+    }
+
+
+    /**
+     * 
+     * method for finding which side the other collided with
+     * 
+     * @param other
+     *            structure to check side against
+     * @param corner
+     *            the corner that has collided with this
+     * @return side of collision- starts from 0, increases counter-clockwise
+     */
+    public int collisionSide( Structure3D other, int corner )
+    {
+        double otherCornerX = other.baseRectangle[corner].getX();
+        double otherCornerZ = other.baseRectangle[corner].getZ();
+        double areaOfTriangle;
+        for ( int i = 0; i < 3; i++ )
+        {
+            areaOfTriangle = sideAreas[i];
+            double areaOfTriangles = 0;
+
+            double firstTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[i].getX() - otherCornerX, 2 )
+                    + Math.pow( baseRectangle[i].getZ() - otherCornerZ, 2 ) );
+            double secondTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[i + 1].getX() - otherCornerX, 2 )
+                    + Math.pow( baseRectangle[i + 1].getZ() - otherCornerZ, 2 ) );
+            double thirdTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[i].getX() - baseRectangle[i + 1].getX(), 2 )
+                    + Math.pow( baseRectangle[i].getZ() - baseRectangle[i + 1].getZ(), 2 ) );
+            double semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide )
+                / 2;
+            areaOfTriangles += Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+
+            firstTriangleSide = Math.sqrt( Math.pow( baseRectangle[i].getX() - otherCornerX, 2 )
+                + Math.pow( baseRectangle[i].getZ() - otherCornerZ, 2 ) );
+            secondTriangleSide = Math.sqrt(
+                Math.pow( getX() - otherCornerX, 2 ) + Math.pow( getZ() - otherCornerZ, 2 ) );
+            thirdTriangleSide = Math.sqrt( Math.pow( baseRectangle[i].getX() - getX(), 2 )
+                + Math.pow( baseRectangle[i].getZ() - getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
+            areaOfTriangles += Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+
+            firstTriangleSide = Math.sqrt(
+                Math.pow( getX() - otherCornerX, 2 ) + Math.pow( getZ() - otherCornerZ, 2 ) );
+            secondTriangleSide = Math
+                .sqrt( Math.pow( baseRectangle[i + 1].getX() - otherCornerX, 2 )
+                    + Math.pow( baseRectangle[i + 1].getZ() - otherCornerZ, 2 ) );
+            thirdTriangleSide = Math.sqrt( Math.pow( getX() - baseRectangle[i + 1].getX(), 2 )
+                + Math.pow( getZ() - baseRectangle[i + 1].getZ(), 2 ) );
+            semiPerimeter = ( firstTriangleSide + secondTriangleSide + thirdTriangleSide ) / 2;
+            areaOfTriangles += Math.sqrt( semiPerimeter * ( semiPerimeter - firstTriangleSide )
+                * ( semiPerimeter - secondTriangleSide ) * ( semiPerimeter - thirdTriangleSide ) );
+            if ( Math.abs( areaOfTriangles - areaOfTriangle ) < 0.01 )
+            {
+                return i;
+            }
+        }
+
+        return 3;
     }
 
 
@@ -212,39 +322,5 @@ public class Gun extends Structure3D
     {
         this.setX( baseCenter.getX() + getLength() / 2 * Math.cos( getAngle() ) );
         this.setZ( baseCenter.getZ() + getLength() / 2 * Math.sin( getAngle() ) );
-    }
-
-
-    /**
-     * 
-     * Translates the gun
-     */
-    public void translate()
-    {
-        double newTime = System.nanoTime() / 1e+9;
-        double deltaTime = newTime - curTime;
-
-        if ( getTurnDirection() == 0 )
-        {
-            angularVelocity = ZEROANGULARVELOCITY;
-        }
-        else if ( getTurnDirection() == -1 )
-        {
-            angularVelocity = minAngularVelocity;
-        }
-        else
-        {
-            angularVelocity = maxAngularVelocity;
-        }
-        angularVelocity += baseTurnState * Math.PI / 8;
-        changeAngle( angularVelocity * deltaTime );
-
-        updateCenter();
-        setX( baseCenter.getX() + ( getX() - baseCenter.getX() ) * Math.cos( getAngle() )
-            - ( getZ() - baseCenter.getZ() ) * Math.sin( getAngle() ) );
-        setZ( baseCenter.getZ() + ( getX() - baseCenter.getX() ) * Math.sin( getAngle() )
-            + ( getZ() - baseCenter.getZ() ) * Math.cos( getAngle() ) );
-
-        curTime = newTime;
     }
 }

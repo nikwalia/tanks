@@ -2,28 +2,29 @@ package math;
 
 import org.junit.*;
 
+
 /**
  * 
- *  Tester class for the Value3D class
+ * Tester class for the Value3D class
  *
- *  @author  Nikash Walia
- *  @version May 5, 2018
- *  @author  Period: 2
- *  @author  Assignment: Tanks
+ * @author Nikash Walia
+ * @version May 5, 2018
+ * @author Period: 2
+ * @author Assignment: Tanks
  *
- *  @author  Sources: None
+ * @author Sources: None
  */
 public class Value3DTest
 {
-    
+
     /**
      * 
      * Value3D Tests
      * 
-     * TestTranslate- giving a distance to translate by results in correct coordinate
-     * TestSet- giving a new coordinate results in correct coordinate
+     * TestTranslate- giving a distance to translate by results in correct
+     * coordinate TestSet- giving a new coordinate results in correct coordinate
      */
-    
+
     @Test
     public void TestTranslate()
     {

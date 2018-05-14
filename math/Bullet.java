@@ -14,6 +14,9 @@ package math;
 public class Bullet extends Structure3D
 {
 
+    private static final double FALL_ACCELERATION = 9.8;
+    
+    private double fallVelocity = 0;
     /**
      * Constructor for bullet
      * 
@@ -37,6 +40,32 @@ public class Bullet extends Structure3D
         baseRectangle[3] = null;
     }
 
+    /**
+     * 
+     * Translates the bullet
+     */
+    public void translate()
+    {
+        double newTime = System.nanoTime() / 1e+9;
+        double deltaTime = newTime - curTime;
+        changeX( velocity * deltaTime * Math.cos( getAngle() ) );
+        fallVelocity += FALL_ACCELERATION * deltaTime;
+        changeY(fallVelocity * deltaTime);
+        changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
+        updateCorners();
+        curTime = newTime;
+    }
+    
+
+    /**
+     * 
+     * Updates the location of the bullet
+     */
+    public void updateCorners()
+    {
+        baseRectangle[0] = new Value3D( getX(), getY(), getZ() );
+    }
+
 
     /**
      * 
@@ -46,7 +75,7 @@ public class Bullet extends Structure3D
      *            the Structure3D to check against
      * @return whether or not the two have collided
      */
-    public boolean hasCollided( Structure3D other )
+    public int hasCollided( Structure3D other )
     {
         return other.hasCollided( this );
     }
@@ -63,34 +92,33 @@ public class Bullet extends Structure3D
     public int onCollision( Structure3D other )
     {
         setVelocity( 0 );
-        super.changeX( -getX() );
-        super.changeY( -getY() );
-        super.changeZ( -getZ() );
-        super.changeAngle( -getAngle() );
+        changeX( -getX() );
+        changeY( -getY() );
+        changeZ( -getZ() );
+        changeAngle( -getAngle() );
+        setMoveDirection(0);
         return 0;
     }
-
-
+    
     /**
      * 
-     * Translates the bullet
+     * Stub method
+     * @param other Structure3D collided with
+     * @param corner index of corner of other
+     * @return status update
      */
-    public void translate()
+    public int collisionSide(Structure3D other, int corner)
     {
-        double newTime = System.nanoTime() / 1e+9;
-        double deltaTime = newTime - curTime;
-        changeX( velocity * deltaTime * Math.cos( getAngle() ) );
-        changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
-        curTime = newTime;
+        return 0;
     }
-
-
+    
     /**
      * 
-     * Updates the location of the bullet
+     * Getter method for the fall velocity
+     * @return fall velocity
      */
-    public void updateCorners()
+    protected double getFallVelocity()
     {
-        baseRectangle[0] = new Value3D( getX(), getY(), getZ() );
+        return fallVelocity;
     }
 }

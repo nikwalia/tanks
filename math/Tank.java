@@ -91,14 +91,14 @@ public class Tank
 
     public boolean hasCollided( Structure3D other )
     {
-        return gun.hasCollided( other ) || base.hasCollided( other );
+        return gun.hasCollided( other ) >= 0 || base.hasCollided( other ) >= 0;
     }
 
 
     public void onCollision( Structure3D other )
     {
-        if ( ( gun.hasCollided( other ) && gun.onCollision( other ) == -1 )
-            || ( base.hasCollided( other ) && base.onCollision( other ) == -1 ) )
+        if ( ( gun.hasCollided( other ) >= 0 && gun.onCollision( other ) == -1 )
+            || ( base.hasCollided( other ) >= 0 && base.onCollision( other ) == -1 ) )
         {
             changeHitPoints();
         }
