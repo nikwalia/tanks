@@ -79,35 +79,45 @@ public class Value3D
         z_coordinate += dz;
     }
 
+
     /**
      * 
      * Setter method for x-coordinate
-     * @param x new x-coordinate
+     * 
+     * @param x
+     *            new x-coordinate
      */
-    protected void setX (double x)
+    protected void setX( double x )
     {
         x_coordinate = x;
     }
-    
+
+
     /**
      * 
      * Setter method for y-coordinate
-     * @param y new y-coordinate
+     * 
+     * @param y
+     *            new y-coordinate
      */
-    protected void setY (double y)
+    protected void setY( double y )
     {
         y_coordinate = y;
     }
-    
+
+
     /**
      * 
      * Setter method for z-coordinate
-     * @param z new z-coordinate
+     * 
+     * @param z
+     *            new z-coordinate
      */
-    protected void setZ (double z)
+    protected void setZ( double z )
     {
         z_coordinate = z;
     }
+
 
     /**
      * 
