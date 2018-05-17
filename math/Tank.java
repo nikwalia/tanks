@@ -6,6 +6,17 @@ import java.util.Queue;
 import io.*;
 
 
+/**
+ * Class that mathematically represents an entire tank
+ * 
+ * @author Nikash Walia
+ * @version 5/17/18
+ * @author Period: 2
+ * @author Assignment- Tanks
+ * 
+ * @author Sources: None
+ *
+ */
 public class Tank
 {
     private Gun gun;
@@ -36,6 +47,33 @@ public class Tank
 
     public int gunHeight;
 
+
+    /**
+     * Constructor for Tank
+     * 
+     * @param x
+     *            starting x-coordinate of base
+     * @param y
+     *            starting y-coordinate of base
+     * @param z
+     *            starting z-coordinate of base
+     * @param angle
+     *            starting angle of base and gun
+     * @param gunLength
+     *            length of gun
+     * @param gunWidth
+     *            width of gun
+     * @param gunHeight
+     *            height of gun
+     * @param baseLength
+     *            length of base
+     * @param baseWidth
+     *            width of base
+     * @param baseHeight
+     *            height of base
+     * @param hp
+     *            hitpoints of base
+     */
     public Tank(
         int x,
         int y,
@@ -65,36 +103,75 @@ public class Tank
     }
 
 
+    /**
+     * 
+     * Returns the remaining hitpoints of the tank
+     * 
+     * @return hitpoints
+     */
     protected int getHitPoints()
     {
         return hitPoints;
     }
 
 
+    /**
+     * 
+     * Reduces the number of hitpoints of the tank
+     */
     public void changeHitPoints()
     {
         hitPoints -= 250;
     }
 
 
+    /**
+     * 
+     * Checks if the tank has lost all hitpoints
+     * 
+     * @return whether or not the tank is dead
+     */
     protected boolean isDead()
     {
-        return hitPoints == 0;
+        return hitPoints <= 0;
     }
 
 
+    /**
+     * 
+     * Adds data from the system regarding user input
+     * 
+     * @param p
+     *            SystemPacket containing user input
+     */
     public void receiveData( SystemPacket p )
     {
         data.add( p );
     }
 
 
+    /**
+     * 
+     * Checks if the tank has collided with something else
+     * 
+     * @param other
+     *            Structure3D to check against
+     * @return whether collision has happened
+     */
     public boolean hasCollided( Structure3D other )
     {
         return gun.hasCollided( other ) >= 0 || base.hasCollided( other ) >= 0;
     }
 
 
+    /**
+     * 
+     * Changes appropriate behavior of the tank based on what it has collided
+     * with
+     * 
+     * @param other
+     *            Structure3D to interact with
+     */
     public void onCollision( Structure3D other )
     {
         if ( ( gun.hasCollided( other ) >= 0 && gun.onCollision( other ) == -1 )
@@ -105,6 +182,10 @@ public class Tank
     }
 
 
+    /**
+     * 
+     * Updates the position and data of the tank
+     */
     public void update()
     {
         double curTime = System.nanoTime();
@@ -134,6 +215,13 @@ public class Tank
     }
 
 
+    /**
+     * 
+     * On-demand method, called by the system to update information on the
+     * tank's position
+     * 
+     * @return TankPacket containing data
+     */
     public TankPacket sendData()
     {
         TankPacket temp = new TankPacket( new Value3D( base.getX(), base.getY(), base.getZ() ),
