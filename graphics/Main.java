@@ -67,9 +67,7 @@ public class Main extends PApplet
         data.add( playerOneTank.sendData() );
         data.add( playerTwoTank.sendData() );
         TankPacket playerOneInit = data.remove();
-        System.out.println( "player one init: " + playerOneInit );
         TankPacket playerTwoInit = data.remove();
-        System.out.println( "player two init: " + playerTwoInit );
         playerOneWindow = new RunnerWindow();
         playerOneWindow.init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit );
         playerTwoWindow = new RunnerWindow();
