@@ -17,7 +17,7 @@ public class Main extends PApplet
     // private static Base tank;
 
     PImage background;
-    
+
     private Queue<TankPacket> data;
 
     // indices
@@ -45,30 +45,6 @@ public class Main extends PApplet
     private static RunnerWindow playerTwoWindow;
 
 
-    public Main()
-    {
-        data = new LinkedList<TankPacket>();
-        playerOneData = new int[7];
-        playerTwoData = new int[7];
-        playerOneTank = new Tank( 0, 0, 0, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
-        playerTwoTank = new Tank( 100, 0, 100, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
-        playerOneBullet = null;
-        playerTwoBullet = null;
-        data.add( playerOneTank.sendData() );
-        data.add( playerTwoTank.sendData() );
-        TankPacket playerOneInit = data.remove();
-        TankPacket playerTwoInit = data.remove();
-        playerOneWindow = new RunnerWindow( playerOneTank,
-            playerTwoTank,
-            playerOneInit,
-            playerTwoInit );
-        playerTwoWindow = new RunnerWindow( playerTwoTank,
-            playerOneTank,
-            playerTwoInit,
-            playerOneInit );
-    }
-
-
     public static void main( String[] args )
     {
         PApplet.main( "graphics.Main" );
@@ -81,6 +57,23 @@ public class Main extends PApplet
     {
         background = loadImage( "\\tanksactualforproject.jpg" );
         noTint();
+        data = new LinkedList<TankPacket>();
+        playerOneData = new int[7];
+        playerTwoData = new int[7];
+        playerOneTank = new Tank( 0, 0, 0, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
+        playerTwoTank = new Tank( 100, 0, 100, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
+        playerOneBullet = null;
+        playerTwoBullet = null;
+        data.add( playerOneTank.sendData() );
+        data.add( playerTwoTank.sendData() );
+        TankPacket playerOneInit = data.remove();
+        System.out.println( "player one init: " + playerOneInit );
+        TankPacket playerTwoInit = data.remove();
+        System.out.println( "player two init: " + playerTwoInit );
+        playerOneWindow = new RunnerWindow();
+        playerOneWindow.init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit );
+        playerTwoWindow = new RunnerWindow();
+        playerTwoWindow.init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit );
     }
 
 
@@ -107,7 +100,11 @@ public class Main extends PApplet
         // text( "word", 10, 60 );
         // fill( 0, 102, 153, 51 );
         // text( "word", 10, 90 );]
-        update();
+        if ( playerOneWindow.initCalled && playerTwoWindow.initCalled && playerOneWindow.setupCalled
+            && playerTwoWindow.setupCalled )
+        {
+            update();
+        }
     }
 
 
@@ -127,10 +124,10 @@ public class Main extends PApplet
         data.add( playerTwoTank.sendData() );
         TankPacket p1 = data.remove();
         TankPacket p2 = data.remove();
-        
-        playerOneWindow.update( p1,  p2 );
+
+        playerOneWindow.update( p1, p2 );
         playerTwoWindow.update( p2, p1 );
-        
+
         if ( p1.checkIfFired() && playerOneBullet == null )
         {
             playerOneBullet = new Bullet( p1.getGunLoc().getX(),
@@ -317,8 +314,8 @@ public class Main extends PApplet
             }
         }
     }
-    
- // public void textColor()
+
+    // public void textColor()
     // {
     // empty
     // }
