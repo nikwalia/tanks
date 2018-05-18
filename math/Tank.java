@@ -19,19 +19,19 @@ import io.*;
  */
 public class Tank
 {
-    private Gun gun;
+    protected Gun gun;
 
-    private Base base;
+    protected Base base;
 
     private int hitPoints;
 
-    private Queue<SystemPacket> data;
+    protected Queue<SystemPacket> data;
 
     private boolean canFire;
 
     private double lastFireTime;
 
-    private final static double RELOADTIME = 5e+9;
+    private final static double RELOADTIME = 5;
 
     private boolean hasFired;
 
@@ -91,7 +91,7 @@ public class Tank
         base = new Base( x, y, z, angle, baseLength, baseWidth, baseHeight );
         hitPoints = hp;
         data = new LinkedList<SystemPacket>();
-        lastFireTime = System.nanoTime();
+        lastFireTime = System.nanoTime() / 1e+9;
         canFire = false;
         hasFired = false;
         this.baseLength = baseLength;
@@ -152,15 +152,29 @@ public class Tank
 
     /**
      * 
-     * Checks if the tank has collided with something else
+     * Checks if the tank has collided with a bullet
      * 
      * @param other
-     *            Structure3D to check against
+     *            Bullet to check against
      * @return whether collision has happened
      */
-    public boolean hasCollided( Structure3D other )
+    public boolean hasCollided( Bullet other )
     {
-        return gun.hasCollided( other ) >= 0 || base.hasCollided( other ) >= 0;
+        return gun.hasCollided( other ) >= 0 || base.hasCollided( other ) == 10;
+    }
+
+
+    /**
+     * 
+     * Checks if the tank has collided with another tank
+     * 
+     * @param other
+     *            Tank to check against
+     * @return whether collision has happened
+     */
+    public boolean hasCollided( Tank other )
+    {
+        return gun.hasCollided( other.gun ) >= 0 || base.hasCollided( other.base ) >= 0;
     }
 
 
@@ -172,12 +186,26 @@ public class Tank
      * @param other
      *            Structure3D to interact with
      */
-    public void onCollision( Structure3D other )
+    public void onCollision( Object other )
     {
-        if ( ( gun.hasCollided( other ) >= 0 && gun.onCollision( other ) == -1 )
-            || ( base.hasCollided( other ) >= 0 && base.onCollision( other ) == -1 ) )
+        if ( other instanceof Bullet )
         {
-            changeHitPoints();
+            if ( hasCollided( (Bullet)other ) )
+            {
+                changeHitPoints();
+                ( (Bullet)other ).onCollision( base );
+            }
+        }
+        else if ( other instanceof Tank )
+        {
+            if ( gun.hasCollided( ( (Tank)other ).gun ) >= 0 )
+            {
+                gun.onCollision( ( (Tank)other ).gun );
+            }
+            if ( base.hasCollided( ( (Tank)other ).base ) >= 0 )
+            {
+                base.onCollision( ( (Tank)other ).base );
+            }
         }
     }
 
@@ -188,7 +216,7 @@ public class Tank
      */
     public void update()
     {
-        double curTime = System.nanoTime();
+        double curTime = System.nanoTime() / 1e+9;
         if ( curTime - lastFireTime > RELOADTIME )
         {
             canFire = true;
