@@ -153,9 +153,4 @@ public class Value3D
     {
         return z_coordinate;
     }
-    
-    public String toString()
-    {
-        return "(" + x_coordinate + ", " + y_coordinate + ", " + z_coordinate + ")";
-    }
 }

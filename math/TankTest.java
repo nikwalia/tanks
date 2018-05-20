@@ -67,8 +67,53 @@ public class TankTest
         Tank t2 = new Tank( 8, 0, 0, 0, 10, 10, 10, 10, 10, 10, 100 );
         assert ( tank.hasCollided( t2 ) );
         tank.onCollision( t2 );
-        assert(tank.base.getAngularVelocity() == 0);
-        assert(tank.base.getVelocity() == 0);
-        assert(tank.gun.getAngularVelocity() == 0);
+        assert ( tank.base.getAngularVelocity() == 0 );
+        assert ( tank.base.getVelocity() == 0 );
+        assert ( tank.gun.getAngularVelocity() == 0 );
+        t2 = new Tank( 15, 0, 0, 0, 10, 10, 10, 10, 10, 10, 100 );
+        assert ( !tank.hasCollided( t2 ) );
+        t2 = new Tank(-15, 0, 0, 0, 20, 10, 10, 10, 10, 10, 100);
+    }
+
+
+    @Test
+    public void BulletCollisionTest()
+    {
+        Tank tank = new Tank( 0, 0, 0, 0, 10, 10, 10, 10, 10, 10, 1000 );
+        Bullet b = new Bullet( 5, 5, 5, 0 );
+        assert ( tank.hasCollided( b ) );
+        tank.onCollision( b );
+        assert ( tank.getHitPoints() == 750 );
+        b = new Bullet(10, 0, 0, 0);
+        assert(tank.hasCollided( b ));
+        tank.onCollision( b );
+        assert(tank.getHitPoints() == 500);
+        tank.onCollision( b );
+        tank.onCollision( b );
+        assert ( tank.isDead() );
+    }
+
+
+    @Test
+    public void FireTest()
+    {
+        Tank tank = new Tank( 0, 0, 0, 0, 10, 10, 10, 10, 10, 10, 100 );
+        SystemPacket sys = new SystemPacket( true, 0, 0, 0 );
+        tank.receiveData( sys );
+        tank.update();
+        TankPacket t = tank.sendData();
+        assert ( !t.checkIfFired() );
+        try
+        {
+            Thread.sleep( 5000 );
+        }
+        catch ( InterruptedException e )
+        {
+            e.printStackTrace();
+        }
+        tank.receiveData( sys );
+        tank.update();
+        t = tank.sendData();
+        assert ( t.checkIfFired() );
     }
 }
