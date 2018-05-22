@@ -18,19 +18,24 @@ public class RunnerWindow extends PApplet
     TankPacket initE;
 
     TankPacket initS;
-    
+
     public boolean initCalled = false;
-    
+
     public boolean setupCalled = false;
 
+    public double initTime = System.nanoTime() / 1e+9;
 
-    public void init( Tank s, Tank e, TankPacket initSame, TankPacket initEnemy )
+    int playerNumber;
+
+
+    public void init( Tank s, Tank e, TankPacket initSame, TankPacket initEnemy, int playerNumber )
     {
         same = s;
         enemy = e;
         initE = initEnemy;
         initS = initSame;
         initCalled = true;
+        this.playerNumber = playerNumber;
     }
 
 
@@ -57,17 +62,31 @@ public class RunnerWindow extends PApplet
 
     public void settings()
     {
-        size( 500, 500 );
+        size( 500, 500, P3D );
     }
 
 
     public void draw()
     {
         background( 0 );
-        if ( initCalled )
+        if ( initCalled && setupCalled && System.nanoTime() / 1e+9 - initTime > 20 )
         {
             enemyGraphics.display();
             sameCamera.display();
         }
+        else
+        {
+            textSize( 50 );
+            text( "Player " + playerNumber, width / 2 - 50, height / 2 );
+            text( (int)( 20 - ( System.nanoTime() / 1e+9 - initTime ) ),
+                width / 2,
+                height / 2 + 50 );
+        }
+    }
+
+
+    public void close()
+    {
+        dispose();
     }
 }
