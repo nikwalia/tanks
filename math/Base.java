@@ -23,7 +23,7 @@ public class Base extends Structure3D
      *            y-coordinate of center
      * @param z
      *            z-coordinate of center
-     * @param d
+     * @param angle
      *            angle of structure
      * @param l
      *            length of base
@@ -311,5 +311,10 @@ public class Base extends Structure3D
         }
 
         return 3;
+    }
+    
+    public void updateTime()
+    {
+        curTime = System.nanoTime() / 1e+9;
     }
 }

@@ -47,6 +47,11 @@ public class Tank
 
     public int gunHeight;
 
+    public final int originalHP;
+
+    public final Value3D originalPosition;
+
+
 
     /**
      * Constructor for Tank
@@ -100,6 +105,8 @@ public class Tank
         this.gunLength = gunLength;
         this.gunWidth = gunWidth;
         this.gunHeight = gunHeight;
+        originalHP = hp;
+        originalPosition = new Value3D( x, y, z );
     }
 
 
@@ -260,5 +267,31 @@ public class Tank
             hasFired );
         hasFired = false;
         return temp;
+    }
+
+
+    public void reset()
+    {
+        hitPoints = originalHP;
+        base.setX( originalPosition.getX() );
+        base.setY( originalPosition.getY() );
+        base.setZ( originalPosition.getZ() );
+        base.changeAngle( -base.getAngle() );
+        base.setVelocity( 0 );
+        base.setAngularVelocity( 0 );
+
+        base.setMoveDirection( 0 );
+        base.setTurnDirection( 0 );
+
+        gun.setAngularVelocity( 0 );
+        gun.setTurnDirection( 0 );
+
+        gun.changeAngle( -base.getAngle() );
+    }
+    
+    public void resume()
+    {
+        gun.updateTime();
+        base.updateTime();
     }
 }
