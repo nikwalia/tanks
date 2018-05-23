@@ -40,72 +40,175 @@ public class Main extends PApplet
 
     private Bullet playerTwoBullet;
 
-    private static RunnerWindow playerOneWindow;
+    private RunnerWindow playerOneWindow;
 
-    private static RunnerWindow playerTwoWindow;
+    private RunnerWindow playerTwoWindow;
+
+    private int gameState;
 
 
+    // finished
     public static void main( String[] args )
     {
         PApplet.main( "graphics.Main" );
-        playerOneWindow.main( args );
-        playerTwoWindow.main( args );
     }
 
 
+    // TODO finish
     public void setup()
     {
         background = loadImage( "\\tanksactualforproject.jpg" );
         noTint();
         data = new LinkedList<TankPacket>();
+
         playerOneData = new int[7];
         playerTwoData = new int[7];
-        playerOneTank = new Tank( 0, 0, 0, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
-        playerTwoTank = new Tank( 100, 0, 100, 0, 500, 50, 50, 5000, 3000, 1500, 1000 );
+
+        gameState = 0;
+
+        playerOneWindow = new RunnerWindow();
+        playerTwoWindow = new RunnerWindow();
+
+        playerOneTank = new Tank( 0, 0, 0, 0, 50, 5, 5, 500, 300, 150, 1000 );
+        playerTwoTank = new Tank( 100, 0, 100, 0, 50, 5, 5, 500, 300, 150, 1000 );
+
         playerOneBullet = null;
         playerTwoBullet = null;
+
         data.add( playerOneTank.sendData() );
         data.add( playerTwoTank.sendData() );
         TankPacket playerOneInit = data.remove();
         TankPacket playerTwoInit = data.remove();
-        playerOneWindow = new RunnerWindow();
-        playerOneWindow.init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit );
-        playerTwoWindow = new RunnerWindow();
-        playerTwoWindow.init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit );
+
+        playerOneWindow.init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit, 1 );
+        playerTwoWindow.init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit, 2 );
+
+        String[] args = { "" };
+        PApplet.runSketch( args, playerOneWindow );
+        PApplet.runSketch( args, playerTwoWindow );
     }
 
 
     public void settings()
     {
-        size( 1920, 1080 );
+        size( 960, 540 );
     }
 
 
+    // TODO finish
     public void draw()
     {
+        // font = createFont("LeagueGothic-Regular.otf",30);
+        // text( "word", 10, 60 );
+        // fill( 0, 102, 153, 51 );
+        // text( "word", 10, 90 );]
+
+        switch ( gameState )
+        {
+            case 0:
+            {
+                homeScreen();
+                break;
+            }
+            case 1:
+            {
+                if ( playerOneWindow.initCalled && playerTwoWindow.initCalled
+                    && playerOneWindow.setupCalled && playerTwoWindow.setupCalled )
+                {
+                    update();
+                    compassView();
+                }
+                break;
+            }
+            case 2:
+            {
+                break;
+            }
+        }
+    }
+
+
+    // finished
+    public void homeScreen()
+    {
         background( background );
-        textSize( 109 );
-        text( "T-34", width / 6, 155 );
+        textSize( 58 );
+        text( "T-34", width / 6, 75 );
         fill( 11, 57, 198 );
-        text( "        Tank Destroyers", width / 6, 155 );
+        text( "        Tank Destroyers", width / 6, 75 );
         fill( 56, 114, 5 );
         PFont font;
         // String[] fontList = PFont.list();
         // printArray( fontList );
         font = createFont( "Verdana Bold", 196 );
         textFont( font );
-        // font = createFont("LeagueGothic-Regular.otf",30);
-        // text( "word", 10, 60 );
-        // fill( 0, 102, 153, 51 );
-        // text( "word", 10, 90 );]
-        if ( playerOneWindow.initCalled && playerTwoWindow.initCalled && playerOneWindow.setupCalled
-            && playerTwoWindow.setupCalled )
-        {
-            update();
-        }
+        textSize( 30 );
+        fill( 0 );
+        text( "Press space to begin or pause", 250, height / 4 );
+        controls();
     }
 
 
+    public void controls()
+    {
+        textSize( 20 );
+        text( "Player One Controls", width / 2 - 100, height / 3 );
+        text( "Forward: UP Backward: DOWN Left: LEFT Right: RIGHT", width / 6, 2 * height / 5 );
+        text( "Turret Left: [ Turret Right: ] Turret Fire: \\", width / 4, 10 * height / 21 );
+        text( "Player Two Controls", width / 2 - 100, 10 * height / 17 );
+        text( "Forward: W Backward: S Left: A Right: D", 2 * width / 7, 2 * height / 3 );
+        text( "Turret Left: ` Turret Left: 1 Turret Right: 2", width / 4, 5 * height / 7 );
+        text( "Press Q to quit game", width / 2 - 50, 5 * height / 6 );
+    }
+
+
+    // TODO finish
+    public void compassView()
+    {
+        background( 255 );
+    }
+
+
+    // finished
+    public void startGame()
+    {
+        playerOneTank.reset();
+        playerTwoTank.reset();
+        playerOneWindow.setGameMode( 1 );
+        playerTwoWindow.setGameMode( 1 );
+    }
+
+
+    public void pauseGame()
+    {
+        playerOneWindow.noLoop();
+        playerTwoWindow.noLoop();
+    }
+
+
+    public void resumeGame()
+    {
+        playerOneWindow.loop();
+        playerTwoWindow.loop();
+    }
+
+
+    public void resetGame()
+    {
+        playerOneTank.reset();
+        playerTwoTank.reset();
+        data.add( playerOneTank.sendData() );
+        data.add( playerTwoTank.sendData() );
+        TankPacket one = data.remove();
+        TankPacket two = data.remove();
+        playerOneWindow.update( one, two );
+        playerTwoWindow.update( two, one );
+        playerOneWindow.setGameMode( 0 );
+        playerTwoWindow.setGameMode( 0 );
+    }
+
+
+    // finished
     public void update()
     {
         playerOneTank.receiveData( new SystemPacket( playerOneData[6] == 1,
@@ -170,12 +273,20 @@ public class Main extends PApplet
             gameOver( 1 );
         }
     }
+    
+    
+    //TODO finish
+    public void checkBulletState()
+    {
+       
+    }
 
 
+    // TODO finish
     public void gameOver( int winningPlayer )
     {
-        playerOneWindow = null;
-        playerTwoWindow = null;
+        playerOneTank.reset();
+        playerTwoTank.reset();
     }
 
 
@@ -242,11 +353,31 @@ public class Main extends PApplet
             {
                 playerTwoData[6] = 1;
             }
+            else if ( key == ' ' && gameState == 0 )
+            {
+                gameState = 1;
+                startGame();
+            }
+            else if ( key == ' ' && gameState == 1 )
+            {
+                gameState = 2;
+                pauseGame();
+            }
+            else if ( key == ' ' && gameState == 2 )
+            {
+                gameState = 1;
+                resumeGame();
+            }
+            else if ( key == 'q')
+            {
+                exit();
+            }
 
         }
     }
 
 
+    // finished
     public void keyReleased()
     {
         if ( key == CODED )
@@ -312,49 +443,4 @@ public class Main extends PApplet
             }
         }
     }
-
-    // public void textColor()
-    // {
-    // empty
-    // }
-
-    /**
-     *
-     * 
-     * 
-     * TEST THIS SECTION ONCE FINISHED WITH SCREEN INTEGRATION TEST THIS SECTION
-     * ONCE FINISHED WITH SCREEN INTEGRATION TEST THIS SECTION ONCE FINISHED
-     * WITH SCREEN INTEGRATION
-     * 
-     * 
-     * 
-     */
-
-    // need to test once done with screen integration
-    // int x;
-    // include if key ! not coded - space bar is ascii (white space)
-    // need to test once done with screen integration
-    // boolean[] keys = new boolean[128];
-
-    // need to test once done with screen integration
-    // public void pressedKey()
-    // {
-    // if ( key == ' ' )
-    // {
-    // x++;
-    // }
-    // }
-
-    // need to test once done with screen integration
-    // public void keyPressed()
-    // {
-    // keys[key] = true;
-    // }
-
-    // public void keyReleased()
-    // {
-    // keys[key] = false;
-    //
-    // }
-
 }
