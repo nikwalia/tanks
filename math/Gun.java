@@ -323,4 +323,10 @@ public class Gun extends Structure3D
         this.setX( baseCenter.getX() + getLength() / 2 * Math.cos( getAngle() ) );
         this.setZ( baseCenter.getZ() + getLength() / 2 * Math.sin( getAngle() ) );
     }
+
+
+    public void updateTime()
+    {
+        curTime = System.nanoTime() / 1e+9;
+    }
 }

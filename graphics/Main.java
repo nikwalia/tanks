@@ -68,6 +68,24 @@ public class Main extends PApplet
 
         playerOneWindow = new RunnerWindow();
         playerTwoWindow = new RunnerWindow();
+
+        playerOneTank = new Tank( 0, 0, 0, 0, 50, 5, 5, 500, 300, 150, 1000 );
+        playerTwoTank = new Tank( 100, 0, 100, 0, 50, 5, 5, 500, 300, 150, 1000 );
+
+        playerOneBullet = null;
+        playerTwoBullet = null;
+
+        data.add( playerOneTank.sendData() );
+        data.add( playerTwoTank.sendData() );
+        TankPacket playerOneInit = data.remove();
+        TankPacket playerTwoInit = data.remove();
+
+        playerOneWindow.init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit, 1 );
+        playerTwoWindow.init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit, 2 );
+
+        String[] args = { "" };
+        PApplet.runSketch( args, playerOneWindow );
+        PApplet.runSketch( args, playerTwoWindow );
     }
 
 
@@ -154,23 +172,10 @@ public class Main extends PApplet
     // finished
     public void startGame()
     {
-        playerOneTank = new Tank( 0, 0, 0, 0, 50, 5, 5, 500, 300, 150, 1000 );
-        playerTwoTank = new Tank( 100, 0, 100, 0, 50, 5, 5, 500, 300, 150, 1000 );
-
-        playerOneBullet = null;
-        playerTwoBullet = null;
-
-        data.add( playerOneTank.sendData() );
-        data.add( playerTwoTank.sendData() );
-        TankPacket playerOneInit = data.remove();
-        TankPacket playerTwoInit = data.remove();
-
-        playerOneWindow.init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit, 1 );
-        playerTwoWindow.init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit, 2 );
-
-        String[] args = { "" };
-        PApplet.runSketch( args, playerOneWindow );
-        PApplet.runSketch( args, playerTwoWindow );
+        playerOneTank.reset();
+        playerTwoTank.reset();
+        playerOneWindow.setGameMode( 1 );
+        playerTwoWindow.setGameMode( 1 );
     }
 
 
@@ -190,8 +195,16 @@ public class Main extends PApplet
 
     public void resetGame()
     {
-        playerOneWindow.dispose();
-        playerTwoWindow.dispose();
+        playerOneTank.reset();
+        playerTwoTank.reset();
+        data.add( playerOneTank.sendData() );
+        data.add( playerTwoTank.sendData() );
+        TankPacket one = data.remove();
+        TankPacket two = data.remove();
+        playerOneWindow.update( one, two );
+        playerTwoWindow.update( two, one );
+        playerOneWindow.setGameMode( 0 );
+        playerTwoWindow.setGameMode( 0 );
     }
 
 
@@ -260,13 +273,20 @@ public class Main extends PApplet
             gameOver( 1 );
         }
     }
+    
+    
+    //TODO finish
+    public void checkBulletState()
+    {
+       
+    }
 
 
     // TODO finish
     public void gameOver( int winningPlayer )
     {
-        playerOneWindow.close();
-        playerTwoWindow.close();
+        playerOneTank.reset();
+        playerTwoTank.reset();
     }
 
 
@@ -343,17 +363,12 @@ public class Main extends PApplet
                 gameState = 2;
                 pauseGame();
             }
-            else if ( key == 'q' && ( gameState == 1 || gameState == 2 ) )
-            {
-                gameState = 0;
-                resetGame();
-            }
             else if ( key == ' ' && gameState == 2 )
             {
                 gameState = 1;
                 resumeGame();
             }
-            else if ( key == 'q' && gameState == 0 )
+            else if ( key == 'q')
             {
                 exit();
             }

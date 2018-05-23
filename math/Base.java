@@ -312,4 +312,9 @@ public class Base extends Structure3D
 
         return 3;
     }
+    
+    public void updateTime()
+    {
+        curTime = System.nanoTime() / 1e+9;
+    }
 }
