@@ -57,7 +57,7 @@ public class Main extends PApplet
     // TODO finish
     public void setup()
     {
-        background = loadImage( "\\tanksactualforproject.jpg" );
+        background = loadImage( "tanksactualforproject.jpg" );
         noTint();
         data = new LinkedList<TankPacket>();
 
@@ -116,7 +116,6 @@ public class Main extends PApplet
                     && playerOneWindow.setupCalled && playerTwoWindow.setupCalled )
                 {
                     update();
-                    compassView();
                 }
                 break;
             }
@@ -160,7 +159,6 @@ public class Main extends PApplet
         text( "Turret Left: ` Turret Left: 1 Turret Right: 2", width / 4, 5 * height / 7 );
         text( "Press Q to quit game", width / 2 - 50, 5 * height / 6 );
     }
-
 
 
     // finished
@@ -222,6 +220,7 @@ public class Main extends PApplet
 
         playerOneWindow.update( p1, p2 );
         playerTwoWindow.update( p2, p1 );
+        compassView( p1, p2 );
 
         if ( p1.checkIfFired() && playerOneBullet == null )
         {
@@ -267,12 +266,12 @@ public class Main extends PApplet
             gameOver( 1 );
         }
     }
-    
-    
-    //TODO finish
+
+
+    // TODO finish
     public void checkBulletState()
     {
-       
+
     }
 
 
@@ -362,7 +361,7 @@ public class Main extends PApplet
                 gameState = 1;
                 resumeGame();
             }
-            else if ( key == 'q')
+            else if ( key == 'q' )
             {
                 exit();
             }
@@ -482,19 +481,27 @@ public class Main extends PApplet
     // keys[key] = false;
     //
     // }
-    public void compassView()
+    public void compassView( TankPacket p1, TankPacket p2 )
     {
-        while ( playerOneWindow.isLooping() && playerTwoWindow.isLooping() )
+        while ( gameState != 0 )
         {
-            background( 0 );
+            background( 255 );
             pushMatrix();
             translate( width / 2, height / 2 );
             fill( 150 );
-            rotate( (float)data.peek().getAngle() );
+            rotate( (float)p1.getAngle() );
             rectMode( CENTER );
             rect( 0, 0, 40, 40 );
             fill( 10 );
             popMatrix();
+//            pushMatrix();
+//            translate( width / 2, height / 2 );
+//            fill( 150 );
+//            rotate( (float)p2.getAngle() );
+//            rectMode( CENTER );
+//            rect( 0, 0, 40, 40 );
+//            fill( 10 );
+//            popMatrix();
         }
     }
 }
