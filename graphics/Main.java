@@ -46,6 +46,8 @@ public class Main extends PApplet
 
     private int gameState;
 
+    private int bottom = 100;
+
 
     // finished
     public static void main( String[] args )
@@ -57,7 +59,7 @@ public class Main extends PApplet
     // TODO finish
     public void setup()
     {
-        background = loadImage( "\\tanksactualforproject.jpg" );
+        background = loadImage( "tanksactualforproject.jpg" );
         noTint();
         data = new LinkedList<TankPacket>();
 
@@ -103,26 +105,17 @@ public class Main extends PApplet
         // fill( 0, 102, 153, 51 );
         // text( "word", 10, 90 );]
 
-        switch ( gameState )
+        if ( gameState == 0 )
         {
-            case 0:
+            homeScreen();
+        }
+        else
+        {
+            if ( playerOneWindow.initCalled && playerTwoWindow.initCalled
+                && playerOneWindow.setupCalled && playerTwoWindow.setupCalled )
             {
-                homeScreen();
-                break;
-            }
-            case 1:
-            {
-                if ( playerOneWindow.initCalled && playerTwoWindow.initCalled
-                    && playerOneWindow.setupCalled && playerTwoWindow.setupCalled )
-                {
-                    update();
-                    compassView();
-                }
-                break;
-            }
-            case 2:
-            {
-                break;
+                update();
+                compassView();
             }
         }
     }
@@ -149,6 +142,7 @@ public class Main extends PApplet
     }
 
 
+    // finished
     public void controls()
     {
         textSize( 20 );
@@ -229,40 +223,7 @@ public class Main extends PApplet
         playerOneWindow.update( p1, p2 );
         playerTwoWindow.update( p2, p1 );
 
-        if ( p1.checkIfFired() && playerOneBullet == null )
-        {
-            playerOneBullet = new Bullet( p1.getGunLoc().getX(),
-                p1.getGunLoc().getY(),
-                p1.getGunLoc().getZ(),
-                p1.getGunAngle() );
-        }
-        if ( p2.checkIfFired() && playerTwoBullet == null )
-        {
-            playerTwoBullet = new Bullet( p2.getGunLoc().getX(),
-                p2.getGunLoc().getY(),
-                p2.getGunLoc().getZ(),
-                p2.getGunAngle() );
-        }
-        if ( playerOneBullet != null )
-        {
-            playerOneBullet.translate();
-            if ( playerTwoTank.hasCollided( playerOneBullet ) )
-            {
-                playerTwoTank.onCollision( playerOneBullet );
-                playerOneBullet = null;
-            }
-
-        }
-        if ( playerTwoBullet != null )
-        {
-            playerTwoBullet.translate();
-            if ( playerOneTank.hasCollided( playerTwoBullet ) )
-            {
-                playerOneTank.onCollision( playerTwoBullet );
-                playerTwoBullet = null;
-            }
-
-        }
+        checkBulletState( p1, p2 );
 
         if ( p1.getHitpoints() <= 0 )
         {
@@ -273,12 +234,57 @@ public class Main extends PApplet
             gameOver( 1 );
         }
     }
-    
-    
-    //TODO finish
-    public void checkBulletState()
+
+
+    // TODO finish
+    public void checkBulletState( TankPacket one, TankPacket two )
     {
-       
+        if ( one.checkIfFired() && playerOneBullet == null )
+        {
+            playerOneBullet = new Bullet( one.getGunLoc().getX(),
+                one.getGunLoc().getY(),
+                one.getGunLoc().getZ(),
+                one.getGunAngle() );
+        }
+        if ( two.checkIfFired() && playerTwoBullet == null )
+        {
+            playerTwoBullet = new Bullet( two.getGunLoc().getX(),
+                two.getGunLoc().getY(),
+                two.getGunLoc().getZ(),
+                two.getGunAngle() );
+        }
+        if ( playerOneBullet != null )
+        {
+            playerOneBullet.translate();
+
+            if ( playerOneBullet.getY() > bottom )
+            {
+                playerOneBullet = null;
+            }
+
+            if ( playerTwoTank.hasCollided( playerOneBullet ) )
+            {
+                playerTwoTank.onCollision( playerOneBullet );
+                playerOneBullet = null;
+            }
+
+        }
+        if ( playerTwoBullet != null )
+        {
+            playerTwoBullet.translate();
+
+            if ( playerTwoBullet.getY() > bottom )
+            {
+                playerTwoBullet = null;
+            }
+
+            if ( playerOneTank.hasCollided( playerTwoBullet ) )
+            {
+                playerOneTank.onCollision( playerTwoBullet );
+                playerTwoBullet = null;
+            }
+
+        }
     }
 
 
@@ -368,7 +374,7 @@ public class Main extends PApplet
                 gameState = 1;
                 resumeGame();
             }
-            else if ( key == 'q')
+            else if ( key == 'q' )
             {
                 exit();
             }
