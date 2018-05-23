@@ -313,6 +313,7 @@ public class Main extends PApplet
         }
     }
 
+
     // public void textColor()
     // {
     // empty
@@ -356,5 +357,19 @@ public class Main extends PApplet
     // keys[key] = false;
     //
     // }
-
+    public void compassView()
+    {
+        while ( playerOneWindow.isLooping() && playerTwoWindow.isLooping() )
+        {
+            background( 0 );
+            pushMatrix();
+            translate( width / 2, height / 2 );
+            fill( 150 );
+            rotate( (float)data.peek().getAngle() );
+            rectMode( CENTER );
+            rect( 0, 0, 40, 40 );
+            fill( 10 );
+            popMatrix();
+        }
+    }
 }
