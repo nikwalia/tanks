@@ -483,25 +483,22 @@ public class Main extends PApplet
     // }
     public void compassView( TankPacket p1, TankPacket p2 )
     {
-        while ( gameState != 0 )
-        {
-            background( 255 );
-            pushMatrix();
-            translate( width / 2, height / 2 );
-            fill( 150 );
-            rotate( (float)p1.getAngle() );
-            rectMode( CENTER );
-            rect( 0, 0, 40, 40 );
-            fill( 10 );
-            popMatrix();
-            // pushMatrix();
-            // translate( width / 2, height / 2 );
-            // fill( 150 );
-            // rotate( (float)p2.getAngle() );
-            // rectMode( CENTER );
-            // rect( 0, 0, 40, 40 );
-            // fill( 10 );
-            // popMatrix();
-        }
+        background( 255 );
+        pushMatrix();
+        translate( width / 2, height / 2 );
+        fill( 150 );
+        rotate( (float)p1.getAngle() );
+        rectMode( CENTER );
+        rect( 0, 0, 40, 40 );
+        fill( 10 );
+        popMatrix();
+        // pushMatrix();
+        // translate( width / 2, height / 2 );
+        // fill( 150 );
+        // rotate( (float)p2.getAngle() );
+        // rectMode( CENTER );
+        // rect( 0, 0, 40, 40 );
+        // fill( 10 );
+        // popMatrix();
     }
 }
