@@ -1,6 +1,7 @@
 package graphics;
 
 import io.TankPacket;
+import math.Bullet;
 import math.Tank;
 import processing.core.PApplet;
 
@@ -28,6 +29,10 @@ public class RunnerWindow extends PApplet
     private int playerNumber;
 
     private int gameMode;
+
+    Bullet sameBullet;
+
+    Bullet enemyBullet;
 
 
     public void init( Tank s, Tank e, TankPacket initSame, TankPacket initEnemy, int playerNumber )
@@ -60,6 +65,7 @@ public class RunnerWindow extends PApplet
         enemyGraphics = new GraphicsTank( enemy, this, initE );
         sameCamera = new CameraTank( same, this, initE );
         setupCalled = true;
+        surface.setTitle( "PLAYER " + playerNumber );
     }
 
 
@@ -76,8 +82,31 @@ public class RunnerWindow extends PApplet
         {
             if ( initCalled && setupCalled && System.nanoTime() / 1e+9 - initTime > 20 )
             {
+                stroke( 10 );
                 enemyGraphics.display();
                 sameCamera.display();
+                noStroke();
+                if ( sameBullet != null )
+                {
+                    pushMatrix();
+                    translate( (float)sameBullet.getX(),
+                        (float)sameBullet.getY(),
+                        (float)sameBullet.getZ() );
+                    sphere( 10 );
+                    fill( 255 );
+                    popMatrix();
+                }
+                if ( enemyBullet != null )
+                {
+                    pushMatrix();
+                    translate( (float)enemyBullet.getX(),
+                        (float)enemyBullet.getY(),
+                        (float)enemyBullet.getZ() );
+                    sphere( 10 );
+                    fill( 255 );
+                    popMatrix();
+                }
+                lights();
             }
             else
             {
@@ -85,12 +114,13 @@ public class RunnerWindow extends PApplet
                 text( "Player " + playerNumber, width / 2 - 50, height / 2, 0 );
                 text( (int)( 20 - ( System.nanoTime() / 1e+9 - initTime ) ),
                     width / 2,
-                    height / 2 + 50, 0 );
+                    height / 2 + 50,
+                    0 );
             }
         }
         else
         {
-            text( "Player " + playerNumber, width / 2 - 50, height / 2 , 0);
+            text( "Player " + playerNumber, width / 2 - 50, height / 2, 0 );
         }
     }
 

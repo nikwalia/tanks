@@ -83,7 +83,7 @@ public class Tank
         int x,
         int y,
         int z,
-        int angle,
+        double angle,
         int gunLength,
         int gunWidth,
         int gunHeight,
