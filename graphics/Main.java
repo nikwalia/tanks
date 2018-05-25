@@ -50,7 +50,6 @@ public class Main extends PApplet
 
     private int bottom = 425;
 
-    FileWriter writer;
 
 
     // finished
@@ -92,20 +91,6 @@ public class Main extends PApplet
         String[] args = { "" };
         PApplet.runSketch( args, playerOneWindow );
         PApplet.runSketch( args, playerTwoWindow );
-
-        try
-        {
-            writer = new FileWriter( "dat.csv" );
-            writer.append( "x" );
-            writer.append( ',' );
-            writer.append( "z" );
-            writer.append( ',' );
-            writer.append( '\n' );
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-        }
     }
 
 
@@ -238,19 +223,6 @@ public class Main extends PApplet
         else if ( p2.getHitpoints() <= 0 )
         {
             gameOver( 1 );
-        }
-
-        try
-        {
-            writer.append( p1.getGunLoc().getX() + "" );
-            writer.append( ',' );
-            writer.append( p1.getGunLoc().getZ() + "" );
-            writer.append( ',' );
-            writer.append( '\n' );
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
         }
     }
 
@@ -424,15 +396,6 @@ public class Main extends PApplet
             {
                 playerOneWindow.exit();
                 playerTwoWindow.exit();
-                try
-                {
-                    writer.flush();
-                    writer.close();
-                }
-                catch ( IOException e )
-                {
-                    e.printStackTrace();
-                }
                 exit();
             }
 
