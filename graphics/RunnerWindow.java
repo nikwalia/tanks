@@ -80,11 +80,9 @@ public class RunnerWindow extends PApplet
         background( 0 );
         if ( gameMode != 0 )
         {
-            if ( initCalled && setupCalled 
-//                            && System.nanoTime() / 1e+9 - initTime > 20 
-                            )
+            if ( initCalled && setupCalled && System.nanoTime() / 1e+9 - initTime > 20 )
             {
-                stroke(10);
+                stroke( 10 );
                 enemyGraphics.display();
                 sameCamera.display();
                 noStroke();
