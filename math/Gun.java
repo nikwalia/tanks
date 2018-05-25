@@ -36,14 +36,7 @@ public class Gun extends Structure3D
      */
     public Gun( double angle, int l, int w, int h, Value3D b, int baseHeight )
     {
-        super( b.getX(),
-            -( b.getY() + h / 2 + baseHeight / 2 ),
-            b.getZ(),
-            angle,
-            l,
-            w,
-            h,
-            Math.PI / 4 );
+        super( b.getX(), b.getY() - h / 2 - baseHeight / 2, b.getZ(), angle, l, w, h, Math.PI / 4 );
         baseTurnState = 0;
         baseCenter = b;
         updateCenter();
@@ -76,7 +69,6 @@ public class Gun extends Structure3D
         changeAngle( angularVelocity * deltaTime );
 
         updateCenter();
-        updateCorners();
         curTime = newTime;
     }
 
@@ -296,7 +288,7 @@ public class Gun extends Structure3D
      */
     public void setBaseTurn( int state )
     {
-        baseTurnState = state;
+        baseTurnState = -state;
     }
 
 

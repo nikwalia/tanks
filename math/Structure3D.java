@@ -27,11 +27,11 @@ public abstract class Structure3D extends Value3D
 
     protected double velocity;
 
-    protected final double ACCELERATION = 8;
+    protected final double ACCELERATION = 20;
 
-    protected final double MAXVELOCITY = 20;
+    protected final double MAXVELOCITY = 100;
 
-    protected final double MINVELOCITY = -20;
+    protected final double MINVELOCITY = -100;
 
     protected final double ZEROVELOCITY = 0;
 
@@ -202,7 +202,7 @@ public abstract class Structure3D extends Value3D
      * 
      * @return angle
      */
-    protected double getAngle()
+    public double getAngle()
     {
         return angle;
     }

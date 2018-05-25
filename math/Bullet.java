@@ -33,7 +33,7 @@ public class Bullet extends Structure3D
     {
         super( x, y, z, angle, 1, 1, 1, 0 );
         baseRectangle[0] = new Value3D( x, y, z );
-        setVelocity( 100 );
+        setVelocity( 500 );
         setMoveDirection( 1 );
         baseRectangle[1] = null;
         baseRectangle[2] = null;
