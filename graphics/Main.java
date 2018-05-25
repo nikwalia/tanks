@@ -1,5 +1,7 @@
 package graphics;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -46,6 +48,8 @@ public class Main extends PApplet
 
     private int gameState;
 
+    private int bottom = 425;
+
 
     // finished
     public static void main( String[] args )
@@ -54,7 +58,7 @@ public class Main extends PApplet
     }
 
 
-    // TODO finish
+    // finished
     public void setup()
     {
         background = loadImage( "tanksactualforproject.jpg" );
@@ -69,8 +73,8 @@ public class Main extends PApplet
         playerOneWindow = new RunnerWindow();
         playerTwoWindow = new RunnerWindow();
 
-        playerOneTank = new Tank( 0, 0, 0, 0, 50, 5, 5, 500, 300, 150, 1000 );
-        playerTwoTank = new Tank( 100, 0, 100, 0, 50, 5, 5, 500, 300, 150, 1000 );
+        playerOneTank = new Tank( 0, 350, 0, 0, 500, 50, 50, 500, 300, 150, 1000 );
+        playerTwoTank = new Tank( 1000, 350, 0, Math.PI, 500, 50, 50, 500, 300, 150, 1000 );
 
         playerOneBullet = null;
         playerTwoBullet = null;
@@ -89,39 +93,30 @@ public class Main extends PApplet
     }
 
 
+    // finished
     public void settings()
     {
         size( 960, 540 );
     }
 
 
-    // TODO finish
+    // finished
     public void draw()
     {
-        // font = createFont("LeagueGothic-Regular.otf",30);
-        // text( "word", 10, 60 );
-        // fill( 0, 102, 153, 51 );
-        // text( "word", 10, 90 );]
-
-        switch ( gameState )
+        if ( gameState == 0 )
         {
-            case 0:
+            homeScreen();
+        }
+        else
+        {
+            if ( playerOneWindow.initCalled && playerTwoWindow.initCalled
+                && playerOneWindow.setupCalled && playerTwoWindow.setupCalled )
             {
-                homeScreen();
-                break;
-            }
-            case 1:
-            {
-                if ( playerOneWindow.initCalled && playerTwoWindow.initCalled
-                    && playerOneWindow.setupCalled && playerTwoWindow.setupCalled )
+                update();
+                if ( gameState != -1 )
                 {
                     update();
                 }
-                break;
-            }
-            case 2:
-            {
-                break;
             }
         }
     }
@@ -148,6 +143,7 @@ public class Main extends PApplet
     }
 
 
+    // finished
     public void controls()
     {
         textSize( 20 );
@@ -164,13 +160,12 @@ public class Main extends PApplet
     // finished
     public void startGame()
     {
-        playerOneTank.reset();
-        playerTwoTank.reset();
         playerOneWindow.setGameMode( 1 );
         playerTwoWindow.setGameMode( 1 );
     }
 
 
+    // finished
     public void pauseGame()
     {
         playerOneWindow.noLoop();
@@ -178,25 +173,13 @@ public class Main extends PApplet
     }
 
 
+    // finished
     public void resumeGame()
     {
         playerOneWindow.loop();
         playerTwoWindow.loop();
-    }
-
-
-    public void resetGame()
-    {
-        playerOneTank.reset();
-        playerTwoTank.reset();
-        data.add( playerOneTank.sendData() );
-        data.add( playerTwoTank.sendData() );
-        TankPacket one = data.remove();
-        TankPacket two = data.remove();
-        playerOneWindow.update( one, two );
-        playerTwoWindow.update( two, one );
-        playerOneWindow.setGameMode( 0 );
-        playerTwoWindow.setGameMode( 0 );
+        playerOneTank.resume();
+        playerTwoTank.resume();
     }
 
 
@@ -206,11 +189,11 @@ public class Main extends PApplet
         playerOneTank.receiveData( new SystemPacket( playerOneData[6] == 1,
             playerOneData[2] - playerOneData[3],
             playerOneData[0] - playerOneData[1],
-            playerOneData[4] - playerOneData[5] ) );
+            playerOneData[5] - playerOneData[4] ) );
         playerTwoTank.receiveData( new SystemPacket( playerTwoData[6] == 1,
             playerTwoData[2] - playerTwoData[3],
             playerTwoData[0] - playerTwoData[1],
-            playerTwoData[4] - playerTwoData[5] ) );
+            playerTwoData[5] - playerTwoData[4] ) );
         playerOneTank.update();
         playerTwoTank.update();
         data.add( playerOneTank.sendData() );
@@ -222,40 +205,9 @@ public class Main extends PApplet
         playerTwoWindow.update( p2, p1 );
         compassView( p1, p2 );
 
-        if ( p1.checkIfFired() && playerOneBullet == null )
-        {
-            playerOneBullet = new Bullet( p1.getGunLoc().getX(),
-                p1.getGunLoc().getY(),
-                p1.getGunLoc().getZ(),
-                p1.getGunAngle() );
-        }
-        if ( p2.checkIfFired() && playerTwoBullet == null )
-        {
-            playerTwoBullet = new Bullet( p2.getGunLoc().getX(),
-                p2.getGunLoc().getY(),
-                p2.getGunLoc().getZ(),
-                p2.getGunAngle() );
-        }
-        if ( playerOneBullet != null )
-        {
-            playerOneBullet.translate();
-            if ( playerTwoTank.hasCollided( playerOneBullet ) )
-            {
-                playerTwoTank.onCollision( playerOneBullet );
-                playerOneBullet = null;
-            }
+        checkBulletState( p1, p2 );
 
-        }
-        if ( playerTwoBullet != null )
-        {
-            playerTwoBullet.translate();
-            if ( playerOneTank.hasCollided( playerTwoBullet ) )
-            {
-                playerOneTank.onCollision( playerTwoBullet );
-                playerTwoBullet = null;
-            }
-
-        }
+        checkTankState();
 
         if ( p1.getHitpoints() <= 0 )
         {
@@ -269,20 +221,101 @@ public class Main extends PApplet
 
 
     // TODO finish
-    public void checkBulletState()
+    public void checkTankState()
     {
-
+        if ( playerOneTank.hasCollided( playerTwoTank ) )
+        {
+            playerOneTank.onCollision( playerTwoTank );
+            playerTwoTank.onCollision( playerOneTank );
+        }
     }
 
 
-    // TODO finish
+    // finished
+    public void checkBulletState( TankPacket one, TankPacket two )
+    {
+        if ( one.checkIfFired() && playerOneBullet == null )
+        {
+            playerOneBullet = new Bullet( one.getGunLoc().getX(),
+                one.getGunLoc().getY(),
+                one.getGunLoc().getZ(),
+                one.getGunAngle() );
+            playerOneWindow.sameBullet = playerOneBullet;
+            playerTwoWindow.enemyBullet = playerOneBullet;
+        }
+        if ( two.checkIfFired() && playerTwoBullet == null )
+        {
+            playerTwoBullet = new Bullet( two.getGunLoc().getX(),
+                two.getGunLoc().getY(),
+                two.getGunLoc().getZ(),
+                two.getGunAngle() );
+            playerOneWindow.enemyBullet = playerTwoBullet;
+            playerTwoWindow.sameBullet = playerTwoBullet;
+        }
+        if ( playerOneBullet != null )
+        {
+            playerOneBullet.translate();
+
+            if ( playerOneBullet.getY() > bottom )
+            {
+                playerOneBullet = null;
+                playerOneWindow.sameBullet = null;
+                playerTwoWindow.enemyBullet = null;
+            }
+            else if ( playerTwoTank.hasCollided( playerOneBullet ) )
+            {
+                playerTwoTank.onCollision( playerOneBullet );
+                playerOneBullet = null;
+                playerOneWindow.sameBullet = null;
+                playerTwoWindow.enemyBullet = null;
+            }
+
+        }
+        if ( playerTwoBullet != null )
+        {
+            playerTwoBullet.translate();
+
+            if ( playerTwoBullet.getY() > bottom )
+            {
+                playerTwoBullet = null;
+                playerOneWindow.enemyBullet = null;
+                playerTwoWindow.sameBullet = null;
+            }
+            else if ( playerOneTank.hasCollided( playerTwoBullet ) )
+            {
+                playerOneTank.onCollision( playerTwoBullet );
+                playerTwoBullet = null;
+                playerOneWindow.enemyBullet = null;
+                playerTwoWindow.sameBullet = null;
+            }
+
+        }
+
+        if ( one.getHitpoints() <= 0 )
+        {
+            gameOver( 2 );
+        }
+        else if ( two.getHitpoints() <= 0 )
+        {
+            gameOver( 1 );
+        }
+    }
+
+
+    // finished
     public void gameOver( int winningPlayer )
     {
-        playerOneTank.reset();
-        playerTwoTank.reset();
+        gameState = -1;
+        background( 255 );
+        textSize( 50 );
+        text( "Player " + winningPlayer + " wins!", width / 3, height / 2 );
+        playerOneWindow.setGameMode( 0 );
+        playerTwoWindow.setGameMode( 0 );
+        pauseGame();
     }
 
 
+    // finished
     public void keyPressed()
     {
         if ( key == CODED )
@@ -363,6 +396,8 @@ public class Main extends PApplet
             }
             else if ( key == 'q' )
             {
+                playerOneWindow.exit();
+                playerTwoWindow.exit();
                 exit();
             }
 
@@ -484,21 +519,34 @@ public class Main extends PApplet
     public void compassView( TankPacket p1, TankPacket p2 )
     {
         background( 255 );
+        // tank1
         pushMatrix();
         translate( width / 2, height / 2 );
         fill( 150 );
-        rotate( (float)p1.getAngle() );
+        rotate( (float)p1.getAngle() - 90 );
         rectMode( CENTER );
         rect( 0, 0, 40, 40 );
         fill( 10 );
         popMatrix();
-        // pushMatrix();
-        // translate( width / 2, height / 2 );
-        // fill( 150 );
-        // rotate( (float)p2.getAngle() );
-        // rectMode( CENTER );
-        // rect( 0, 0, 40, 40 );
-        // fill( 10 );
-        // popMatrix();
+        pushMatrix();
+        translate( width / 2, height / 2 );
+        rotate( (float)p1.getGunAngle() );
+        line( 0, 0, width / 24, height / 24 );
+        popMatrix();
+
+        // tank2
+        pushMatrix();
+        translate( width / 2, height / 4 );
+        fill( 150 );
+        rotate( (float)p2.getAngle() );
+        rectMode( CENTER );
+        rect( 0, 0, 40, 40 );
+        fill( 10 );
+        popMatrix();
+        pushMatrix();
+        translate( width / 2, height / 4 );
+        rotate( (float)p2.getGunAngle() );
+        line( 0, 0, width / 24, height / 24 );
+        popMatrix();
     }
 }
