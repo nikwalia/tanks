@@ -33,9 +33,9 @@ public class CameraTank
         parent.camera( (float)dat.getGunLoc().getX(),
             (float)dat.getGunLoc().getY(),
             (float)dat.getGunLoc().getZ(),
-            (float)( 200 * Math.cos( dat.getGunAngle() ) + dat.getGunLoc().getX() ),
+            (float)( 5000 * Math.cos( dat.getGunAngle() ) + dat.getGunLoc().getX() ),
             parent.height / 2,
-            (float)( 200 * Math.sin( dat.getGunAngle() ) + dat.getGunLoc().getZ() ),
+            (float)( 5000 * Math.sin( dat.getGunAngle() ) + dat.getGunLoc().getZ() ),
             0,
             1,
             0 );
