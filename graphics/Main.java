@@ -591,7 +591,7 @@ public class Main extends PApplet
         fill( 150 );
         rotate( (float)p1.getAngle() );
         rectMode( CENTER );
-        rect( 0, 0, 40, 40 );
+        rect( (float)p1.getLoc().getX(), (float)p1.getLoc().getY(), 40, 40 );
         fill( 10 );
         popMatrix();
         pushMatrix();
@@ -606,7 +606,7 @@ public class Main extends PApplet
         fill( 150 );
         rotate( (float)p2.getAngle() );
         rectMode( CENTER );
-        rect( 0, 0, 40, 40 );
+        rect( (float)p2.getLoc().getX(), (float)p2.getLoc().getY(), 40, 40 );
         fill( 10 );
         popMatrix();
         pushMatrix();
