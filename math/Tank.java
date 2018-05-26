@@ -47,10 +47,6 @@ public class Tank
 
     public int gunHeight;
 
-    public final int originalHP;
-
-    public final Value3D originalPosition;
-
 
     /**
      * Constructor for Tank
@@ -104,8 +100,6 @@ public class Tank
         this.gunLength = gunLength;
         this.gunWidth = gunWidth;
         this.gunHeight = gunHeight;
-        originalHP = hp;
-        originalPosition = new Value3D( x, y, z );
     }
 
 
@@ -190,93 +184,33 @@ public class Tank
      * with
      * 
      * @param other
-     *            Structure3D to interact with
+     *            Object to interact with
      */
-    public void onCollision( Object other )
+    public int onCollision( Object other )
     {
         if ( other instanceof Bullet )
         {
             if ( hasCollided( (Bullet)other ) )
             {
                 changeHitPoints();
-                ( (Bullet)other ).onCollision( base );
+                return 1;
             }
         }
         else if ( other instanceof Tank )
         {
-            if ( base.hasCollided( ( (Tank)other ).base ) >= 0 )
+            if ( hasCollided( (Tank)other ) )
             {
-                base.hasCollidedWithTank = true;
-                base.collisionSideWithBase = base.collisionSide( ( (Tank)other ).base,
-                    base.hasCollided( ( (Tank)other ).base ) );
-                if ( gun.hasCollided( ( (Tank)other ).gun ) >= 0 )
-                {
-                    gun.hasCollidedWithGun = true;
-                    base.hasCollidedWithGun = true;
-                    base.gunCollisionSide = gun.collisionSide( ( (Tank)other ).gun,
-                        gun.hasCollided( ( (Tank)other ).gun ) );
-                }
-                else
-                {
-                    gun.hasCollidedWithGun = false;
-                    base.hasCollidedWithGun = false;
-                    base.gunCollisionSide = -1;
-                }
-            }
-            else
-            {
-                base.hasCollidedWithTank = false;
-                base.collisionSideWithBase = -1;
-                if ( gun.hasCollided( ( (Tank)other ).gun ) >= 0 )
-                {
-                    gun.hasCollidedWithGun = true;
-                    base.hasCollidedWithGun = true;
-                    base.gunCollisionSide = gun.collisionSide( ( (Tank)other ).gun,
-                        gun.hasCollided( ( (Tank)other ).gun ) );
-                }
-                else
-                {
-                    base.hasCollidedWithGun = false;
-                    gun.hasCollidedWithGun = false;
-                    base.gunCollisionSide = -1;
-                }
+                return -1;
             }
         }
-        else if (other instanceof Building)
+        else if ( other instanceof Mine )
         {
-            if ( base.hasCollided( ( Building)other ) >= 0 )
+            if ( base.hasCollided( (Mine)other ) == 1 )
             {
-                base.hasCollidedWithTank = true;
-                if ( gun.hasCollided( ( Building)other ) >= 0 )
-                {
-                    gun.hasCollidedWithGun = true;
-                    base.hasCollidedWithGun = true;
-                    base.gunCollisionSide = gun.collisionSide( (Building)other,
-                        gun.hasCollided( (Building)other ) );
-                }
-                else
-                {
-                    gun.hasCollidedWithGun = false;
-                    base.hasCollidedWithGun = false;
-                }
-            }
-            else
-            {
-                base.hasCollidedWithTank = false;
-                if ( gun.hasCollided( (Building)other ) >= 0 )
-                {
-                    gun.hasCollidedWithGun = true;
-                    base.hasCollidedWithGun = true;
-                    base.gunCollisionSide = gun.collisionSide( (Building)other,
-                        gun.hasCollided( (Building)other ) );
-                }
-                else
-                {
-                    base.hasCollidedWithGun = false;
-                    gun.hasCollidedWithGun = false;
-                }
+                return -1;
             }
         }
+        return 1;
     }
 
 
@@ -308,8 +242,6 @@ public class Tank
         base.translate();
         gun.setBaseCenter( new Value3D( base.getX(), base.getY(), base.getZ() ) );
         gun.translate();
-        gun.updateCorners();
-        base.updateCorners();
     }
 
 
@@ -330,26 +262,6 @@ public class Tank
             hasFired );
         hasFired = false;
         return temp;
-    }
-
-
-    public void reset()
-    {
-        hitPoints = originalHP;
-        base.setX( originalPosition.getX() );
-        base.setY( originalPosition.getY() );
-        base.setZ( originalPosition.getZ() );
-        base.changeAngle( -base.getAngle() );
-        base.setVelocity( 0 );
-        base.setAngularVelocity( 0 );
-
-        base.setMoveDirection( 0 );
-        base.setTurnDirection( 0 );
-
-        gun.setAngularVelocity( 0 );
-        gun.setTurnDirection( 0 );
-
-        gun.changeAngle( -base.getAngle() );
     }
 
 

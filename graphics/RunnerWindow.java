@@ -1,17 +1,14 @@
 package graphics;
 
 import io.TankPacket;
-import math.Building;
+import math.Mine;
 import math.Bullet;
 import math.Tank;
 import processing.core.PApplet;
-import processing.core.PImage;
 
 
 public class RunnerWindow extends PApplet
 {
-    PImage background;
-
     Tank same;
 
     Tank enemy;
@@ -46,7 +43,7 @@ public class RunnerWindow extends PApplet
 
     double worldAngle;
 
-    private Building[] buildings;
+    private Mine[] buildings;
 
 
     public void init(
@@ -55,7 +52,7 @@ public class RunnerWindow extends PApplet
         TankPacket initSame,
         TankPacket initEnemy,
         int playerNumber,
-        Building[] b )
+        Mine[] b )
     {
         same = s;
         enemy = e;
@@ -89,7 +86,6 @@ public class RunnerWindow extends PApplet
 
     public void setup()
     {
-        background = loadImage( "background.png" );
         enemyGraphics = new GraphicsTank( enemy, this, initE );
         sameCamera = new CameraTank( same, this, initE );
         setupCalled = true;
@@ -101,75 +97,88 @@ public class RunnerWindow extends PApplet
     {
         size( 500, 500, P3D );
     }
+    
+    public void drawGround()
+    {
+        pushMatrix();
+        rectMode( CENTER );
+        translate( -100 + (float)worldCenterX, 425, -100 + (float)worldCenterZ );
+        fill( 139, 69, 19 );
+        noStroke();
+        rotateX( (float)Math.PI / 2 );
+        rotateZ( (float)worldAngle );
+        rect( 0, 0, 1000000, 1000000 );
+        popMatrix();
+    }
+    
+    public void drawBullets()
+    {
+        noStroke();
+        if ( sameBullet != null )
+        {
+            pushMatrix();
+            translate( (float)sameBullet.getX(),
+                (float)sameBullet.getY(),
+                (float)sameBullet.getZ() );
+            sphere( 10 );
+            fill( 255 );
+            popMatrix();
+        }
+        if ( enemyBullet != null )
+        {
+            pushMatrix();
+            translate( (float)enemyBullet.getX(),
+                (float)enemyBullet.getY(),
+                (float)enemyBullet.getZ() );
+            sphere( 10 );
+            fill( 255 );
+            popMatrix();
+        }
+    }
+    
+    public void drawBuildings()
+    {
+        for ( int i = 0; i < buildings.length; i++ )
+        {
+            pushMatrix();
+            translate( (float)buildings[i].getX(),
+                (float)buildings[i].getY(),
+                (float)buildings[i].getZ() );
+            fill( 255, 0, 0 );
+            stroke( 10 );
+            sphere( (float)buildings[i].getLength() );
+            popMatrix();
+        }
+    }
+    
+    public void countdown()
+    {
+        textSize( 50 );
+        text( "Player " + playerNumber, width / 2 - 50, height / 2, 0 );
+        text( (int)( 20 - ( System.nanoTime() / 1e+9 - initTime ) ),
+            width / 2,
+            height / 2 + 50,
+            0 );
+    }
 
 
     public void draw()
     {
-        // background( background );
         background( 135, 206, 235 );
         if ( gameMode != 0 )
         {
-            if ( initCalled && setupCalled
-            // && System.nanoTime() / 1e+9 - initTime > 20
-            )
+            if ( initCalled && setupCalled && System.nanoTime() / 1e+9 - initTime > 20 )
             {
-                pushMatrix();
-                rectMode( CENTER );
-                translate( -100 + (float)worldCenterX, 425, -100 + (float)worldCenterZ );
-                fill( 139, 69, 19 );
-                noStroke();
-                rotateX( (float)Math.PI / 2 );
-                rotateZ( (float)worldAngle );
-                rect( 0, 0, 1000000, 1000000 );
-                popMatrix();
+                drawGround();
                 stroke( 10 );
                 enemyGraphics.display();
                 sameCamera.display();
-                noStroke();
-                if ( sameBullet != null )
-                {
-                    pushMatrix();
-                    translate( (float)sameBullet.getX(),
-                        (float)sameBullet.getY(),
-                        (float)sameBullet.getZ() );
-                    sphere( 10 );
-                    fill( 255 );
-                    popMatrix();
-                }
-                if ( enemyBullet != null )
-                {
-                    pushMatrix();
-                    translate( (float)enemyBullet.getX(),
-                        (float)enemyBullet.getY(),
-                        (float)enemyBullet.getZ() );
-                    sphere( 10 );
-                    fill( 255 );
-                    popMatrix();
-                }
-
-                for ( int i = 0; i < buildings.length; i++ )
-                {
-                    pushMatrix();
-                    translate( (float)buildings[i].getX(),
-                        (float)buildings[i].getY(),
-                        (float)buildings[i].getZ() );
-                    rotateY( -(float)buildings[i].getAngle() );
-                    fill( 255 );
-                    stroke( 10 );
-                    box( (float)buildings[i].getLength(),
-                        (float)buildings[i].getHeight(),
-                        (float)buildings[i].getWidth() );
-                    popMatrix();
-                }
+                drawBullets();
+                drawBuildings();
             }
             else
             {
-                textSize( 50 );
-                text( "Player " + playerNumber, width / 2 - 50, height / 2, 0 );
-                text( (int)( 20 - ( System.nanoTime() / 1e+9 - initTime ) ),
-                    width / 2,
-                    height / 2 + 50,
-                    0 );
+                countdown();
             }
         }
         else

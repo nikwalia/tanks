@@ -14,9 +14,11 @@ package math;
 public class Bullet extends Structure3D
 {
 
-    private static final double FALL_ACCELERATION = 9.8;
-    
+    private static final double FALL_ACCELERATION = 20;
+
     private double fallVelocity = 0;
+
+
     /**
      * Constructor for bullet
      * 
@@ -32,13 +34,10 @@ public class Bullet extends Structure3D
     public Bullet( double x, double y, double z, double angle )
     {
         super( x, y, z, angle, 1, 1, 1, 0 );
-        baseRectangle[0] = new Value3D( x, y, z );
-        setVelocity( 500 );
+        setVelocity( 1000 );
         setMoveDirection( 1 );
-        baseRectangle[1] = null;
-        baseRectangle[2] = null;
-        baseRectangle[3] = null;
     }
+
 
     /**
      * 
@@ -50,20 +49,9 @@ public class Bullet extends Structure3D
         double deltaTime = newTime - curTime;
         changeX( velocity * deltaTime * Math.cos( getAngle() ) );
         fallVelocity += FALL_ACCELERATION * deltaTime;
-        changeY(fallVelocity * deltaTime);
+        changeY( fallVelocity * deltaTime );
         changeZ( velocity * deltaTime * Math.sin( getAngle() ) );
-        updateCorners();
         curTime = newTime;
-    }
-    
-
-    /**
-     * 
-     * Updates the location of the bullet
-     */
-    public void updateCorners()
-    {
-        baseRectangle[0] = new Value3D( getX(), getY(), getZ() );
     }
 
 
@@ -83,38 +71,8 @@ public class Bullet extends Structure3D
 
     /**
      * 
-     * End behavior after collision
-     * 
-     * @param other
-     *            Structure3D to interact with
-     * @return update to system
-     */
-    public int onCollision( Structure3D other )
-    {
-        setVelocity( 0 );
-        changeX( -getX() );
-        changeY( -getY() );
-        changeZ( -getZ() );
-        changeAngle( -getAngle() );
-        setMoveDirection(0);
-        return 0;
-    }
-    
-    /**
-     * 
-     * Stub method
-     * @param other Structure3D collided with
-     * @param corner index of corner of other
-     * @return status update
-     */
-    public int collisionSide(Structure3D other, int corner)
-    {
-        return 0;
-    }
-    
-    /**
-     * 
      * Getter method for the fall velocity
+     * 
      * @return fall velocity
      */
     protected double getFallVelocity()
