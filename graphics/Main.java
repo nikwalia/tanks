@@ -521,9 +521,9 @@ public class Main extends PApplet
         background( 255 );
         // tank1
         pushMatrix();
-        translate( (float)p1.getLoc().getX(), (float)p1.getLoc().getY() );
+        translate( width / 2, height / 2 );
         fill( 150 );
-        rotate( (float)p1.getAngle() - 90 );
+        rotate( (float)p1.getAngle() );
         rectMode( CENTER );
         rect( 0, 0, 40, 40 );
         fill( 10 );
@@ -536,7 +536,7 @@ public class Main extends PApplet
 
         // tank2
         pushMatrix();
-        translate( (float)p2.getLoc().getX(), (float)p2.getLoc().getY() );
+        translate( width / 2, height / 4 );
         fill( 150 );
         rotate( (float)p2.getAngle() );
         rectMode( CENTER );
