@@ -1,12 +1,11 @@
 package graphics;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import io.SystemPacket;
 import io.TankPacket;
+import math.Mine;
 import math.Bullet;
 import math.Tank;
 import processing.core.PApplet;
@@ -50,6 +49,9 @@ public class Main extends PApplet
 
     private int bottom = 425;
 
+    private Mine[] mines = new Mine[10];
+
+    private final int distanceConstant = 5000;
 
 
     // finished
@@ -74,9 +76,41 @@ public class Main extends PApplet
         playerOneWindow = new RunnerWindow();
         playerTwoWindow = new RunnerWindow();
 
-        playerOneTank = new Tank( 0, 350, 0, 0, 500, 50, 50, 500, 300, 150, 1000 );
-        playerTwoTank = new Tank( 1000, 350, 0, Math.PI, 500, 50, 50, 500, 300, 150, 1000 );
+         playerOneTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) *
+         1000 ),
+         350,
+         (int)( ( ( Math.random() * 2 ) - 1 ) * 2500 ),
+         Math.random() * Math.PI * 2,
+         500,
+         50,
+         50,
+         500,
+         300,
+         150,
+         1000 );
+         playerTwoTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) *
+         1000 ),
+         350,
+         (int)( ( ( Math.random() * 2 ) - 1 ) * 2500 ),
+         Math.random() * Math.PI * 2,
+         500,
+         50,
+         50,
+         500,
+         300,
+         150,
+         1000 );
 
+//        playerOneTank = new Tank( 0, 350, 0, 0, 500, 50, 50, 500, 300, 150, 1000 );
+//        playerTwoTank = new Tank( 1000, 350, 0, -Math.PI / 2, 500, 50, 50, 500, 300, 150, 1000 );
+
+        for ( int i = 0; i < mines.length; i++ )
+        {
+            mines[i] = new Mine( (int)( ( ( Math.random() * 2 ) - 1 ) * distanceConstant ),
+                bottom,
+                (int)( ( ( Math.random() * 2 ) - 1 ) * distanceConstant ),
+                100);
+        }
         playerOneBullet = null;
         playerTwoBullet = null;
 
@@ -85,8 +119,10 @@ public class Main extends PApplet
         TankPacket playerOneInit = data.remove();
         TankPacket playerTwoInit = data.remove();
 
-        playerOneWindow.init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit, 1 );
-        playerTwoWindow.init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit, 2 );
+        playerOneWindow
+            .init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit, 1, mines );
+        playerTwoWindow
+            .init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit, 2, mines );
 
         String[] args = { "" };
         PApplet.runSketch( args, playerOneWindow );
@@ -114,10 +150,6 @@ public class Main extends PApplet
                 && playerOneWindow.setupCalled && playerTwoWindow.setupCalled )
             {
                 update();
-                if ( gameState != -1 )
-                {
-                    compassView();
-                }
             }
         }
     }
@@ -159,9 +191,25 @@ public class Main extends PApplet
 
 
     // TODO finish
-    public void compassView()
+    public void compassView( TankPacket p1, TankPacket p2 )
     {
         background( 255 );
+        pushMatrix();
+        translate( width / 2, height / 2 );
+        fill( 150 );
+        rotate( (float)p1.getAngle() );
+        rectMode( CENTER );
+        rect( 0, 0, 40, 40 );
+        fill( 10 );
+        popMatrix();
+        // pushMatrix();
+        // translate( width / 2, height / 2 );
+        // fill( 150 );
+        // rotate( (float)p2.getAngle() );
+        // rectMode( CENTER );
+        // rect( 0, 0, 40, 40 );
+        // fill( 10 );
+        // popMatrix();
     }
 
 
@@ -195,11 +243,11 @@ public class Main extends PApplet
     public void update()
     {
         playerOneTank.receiveData( new SystemPacket( playerOneData[6] == 1,
-            playerOneData[2] - playerOneData[3],
+            playerOneData[3] - playerOneData[2],
             playerOneData[0] - playerOneData[1],
             playerOneData[5] - playerOneData[4] ) );
         playerTwoTank.receiveData( new SystemPacket( playerTwoData[6] == 1,
-            playerTwoData[2] - playerTwoData[3],
+            playerTwoData[3] - playerTwoData[2],
             playerTwoData[0] - playerTwoData[1],
             playerTwoData[5] - playerTwoData[4] ) );
         playerOneTank.update();
@@ -212,9 +260,16 @@ public class Main extends PApplet
         playerOneWindow.update( p1, p2 );
         playerTwoWindow.update( p2, p1 );
 
+        if ( gameState != -1 )
+        {
+            compassView( p1, p2 );
+        }
+
         checkBulletState( p1, p2 );
 
         checkTankState();
+
+        checkBuildingState();
 
         if ( p1.getHitpoints() <= 0 )
         {
@@ -227,13 +282,29 @@ public class Main extends PApplet
     }
 
 
-    // TODO finish
+    //finished
     public void checkTankState()
     {
-        if ( playerOneTank.hasCollided( playerTwoTank ) )
+        if ( playerOneTank.onCollision( playerTwoTank ) == -1 )
         {
-            playerOneTank.onCollision( playerTwoTank );
-            playerTwoTank.onCollision( playerOneTank );
+            gameOver( 0 );
+        }
+    }
+
+
+    //finished
+    public void checkBuildingState()
+    {
+        for ( int i = 0; i < mines.length; i++ )
+        {
+            if ( playerOneTank.onCollision( mines[i] ) == -1 )
+            {
+                gameOver( 2 );
+            }
+            if ( playerTwoTank.onCollision( mines[i] ) == -1 )
+            {
+                gameOver( 1 );
+            }
         }
     }
 
@@ -306,7 +377,14 @@ public class Main extends PApplet
         gameState = -1;
         background( 255 );
         textSize( 50 );
-        text( "Player " + winningPlayer + " wins!", width / 3, height / 2 );
+        if ( winningPlayer != 0 )
+        {
+            text( "Player " + winningPlayer + " wins!", width / 3, height / 2 );
+        }
+        else
+        {
+            text( "Both players exploded, game over", width / 3, height / 2 );
+        }
         playerOneWindow.setGameMode( 0 );
         playerTwoWindow.setGameMode( 0 );
         pauseGame();
