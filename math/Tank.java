@@ -52,7 +52,6 @@ public class Tank
     public final Value3D originalPosition;
 
 
-
     /**
      * Constructor for Tank
      * 
@@ -288,7 +287,8 @@ public class Tank
 
         gun.changeAngle( -base.getAngle() );
     }
-    
+
+
     public void resume()
     {
         gun.updateTime();

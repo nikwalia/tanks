@@ -1,7 +1,5 @@
 package graphics;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -49,7 +47,6 @@ public class Main extends PApplet
     private int gameState;
 
     private int bottom = 425;
-
 
 
     // finished
@@ -114,10 +111,6 @@ public class Main extends PApplet
                 && playerOneWindow.setupCalled && playerTwoWindow.setupCalled )
             {
                 update();
-                if ( gameState != -1 )
-                {
-                    compassView();
-                }
             }
         }
     }
@@ -159,9 +152,25 @@ public class Main extends PApplet
 
 
     // TODO finish
-    public void compassView()
+    public void compassView( TankPacket p1, TankPacket p2 )
     {
         background( 255 );
+        pushMatrix();
+        translate( width / 2, height / 2 );
+        fill( 150 );
+        rotate( (float)p1.getAngle() );
+        rectMode( CENTER );
+        rect( 0, 0, 40, 40 );
+        fill( 10 );
+        popMatrix();
+        // pushMatrix();
+        // translate( width / 2, height / 2 );
+        // fill( 150 );
+        // rotate( (float)p2.getAngle() );
+        // rectMode( CENTER );
+        // rect( 0, 0, 40, 40 );
+        // fill( 10 );
+        // popMatrix();
     }
 
 
@@ -211,6 +220,11 @@ public class Main extends PApplet
 
         playerOneWindow.update( p1, p2 );
         playerTwoWindow.update( p2, p1 );
+
+        if ( gameState != -1 )
+        {
+            compassView( p1, p2 );
+        }
 
         checkBulletState( p1, p2 );
 
