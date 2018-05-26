@@ -177,7 +177,7 @@ public class Gun extends Structure3D
             totalTriangleArea += Math.sqrt( s * ( s - centerToFourthCorner )
                 * ( s - centerToFirstCorner ) * ( s - fourthCornerToFirstCorner ) );
 
-            if ( Math.abs( totalTriangleArea - areaOfBase ) < 0.01 )
+            if ( Math.abs( totalTriangleArea - areaOfBase ) < 10 )
             {
                 if ( max == 4 )
                 {
@@ -289,7 +289,7 @@ public class Gun extends Structure3D
      */
     public void setBaseTurn( int state )
     {
-        baseTurnState = -state;
+        baseTurnState = state;
     }
 
 

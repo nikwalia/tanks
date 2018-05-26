@@ -20,7 +20,7 @@ public class Base extends Structure3D
     
     int gunCollisionSide = -1;
 
-    private int collisionSideWithBase = -1;
+    int collisionSideWithBase = -1;
     
     /**
      * Constructor for Base
@@ -68,7 +68,7 @@ public class Base extends Structure3D
         {
             angularVelocity = maxAngularVelocity;
         }
-
+        
         if (hasCollidedWithGun && gunCollisionSide ==  0)
         {
             velocity = 0;
@@ -169,6 +169,9 @@ public class Base extends Structure3D
             max = 4;
         }
 
+        System.out.println( this );
+        System.out.println( hasCollidedWithTank );
+        System.out.println( collisionSideWithBase );
         for ( int i = 0; i < max; i++ )
         {
             otherX = other.baseRectangle[i].getX();
@@ -177,6 +180,7 @@ public class Base extends Structure3D
             if ( Math.sqrt( Math.pow( otherX - getX(), 2 ) + Math.pow( otherZ - getZ(), 2 ) ) > Math
                 .sqrt( Math.pow( width / 2, 2 ) + Math.pow( length / 2, 2 ) ) )
             {
+                System.out.println( "outside circle" );
                 continue;
             }
             double totalTriangleArea = 0;
@@ -223,11 +227,13 @@ public class Base extends Structure3D
             totalTriangleArea += Math.sqrt( s * ( s - centerToFourthCorner )
                 * ( s - centerToFirstCorner ) * ( s - fourthCornerToFirstCorner ) );
 
+            System.out.println( "total triangle area: " + totalTriangleArea );
+            System.out.println( "area of base:" + areaOfBase );
             if ( Math.abs( totalTriangleArea - areaOfBase ) < 0.01 && max == 4 )
             {
                 return i;
             }
-            else if ( Math.abs( totalTriangleArea - areaOfBase ) < 0.01 )
+            else if ( Math.abs( totalTriangleArea - areaOfBase ) < 10 )
             {
                 return 10;
             }

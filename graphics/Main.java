@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import io.SystemPacket;
 import io.TankPacket;
+import math.Building;
 import math.Bullet;
 import math.Tank;
 import processing.core.PApplet;
@@ -48,6 +49,10 @@ public class Main extends PApplet
 
     private int bottom = 425;
 
+    private Building[] buildings = new Building[0];
+
+    private final int distanceConstant = 2500;
+
 
     // finished
     public static void main( String[] args )
@@ -71,29 +76,45 @@ public class Main extends PApplet
         playerOneWindow = new RunnerWindow();
         playerTwoWindow = new RunnerWindow();
 
-        playerOneTank = new Tank( (int)( Math.random() * 5000 ),
-            350,
-            (int)( Math.random() * 5000 ),
-            Math.random() * Math.PI * 2,
-            500,
-            50,
-            50,
-            500,
-            300,
-            150,
-            1000 );
-        playerTwoTank = new Tank( (int)( Math.random() * 5000 ),
-            350,
-            (int)( Math.random() * 5000 ),
-            Math.random() * Math.PI * 2,
-            500,
-            50,
-            50,
-            500,
-            300,
-            150,
-            1000 );
+        // playerOneTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) *
+        // distanceConstant ),
+        // 350,
+        // (int)( ( ( Math.random() * 2 ) - 1 ) * distanceConstant ),
+        // Math.random() * Math.PI * 2,
+        // 500,
+        // 50,
+        // 50,
+        // 500,
+        // 300,
+        // 150,
+        // 1000 );
+        // playerTwoTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) *
+        // distanceConstant ),
+        // 350,
+        // (int)( ( ( Math.random() * 2 ) - 1 ) * distanceConstant ),
+        // Math.random() * Math.PI * 2,
+        // 500,
+        // 50,
+        // 50,
+        // 500,
+        // 300,
+        // 150,
+        // 1000 );
 
+        playerOneTank = new Tank( 0, 350, 0, 0, 500, 50, 50, 500, 300, 150, 1000 );
+        playerTwoTank = new Tank( 1000, 350, 0, Math.PI / 2, 500, 50, 50, 500, 300, 150, 1000 );
+
+        for ( int i = 0; i < buildings.length; i++ )
+        {
+            buildings[i] = new Building( (int)( ( ( Math.random() * 2 ) - 1 ) * distanceConstant ),
+                300,
+                (int)( ( ( Math.random() * 2 ) - 1 ) * 5000 ),
+                Math.random() * Math.PI * 2,
+                1000,
+                400,
+                300,
+                0 );
+        }
         playerOneBullet = null;
         playerTwoBullet = null;
 
@@ -102,8 +123,10 @@ public class Main extends PApplet
         TankPacket playerOneInit = data.remove();
         TankPacket playerTwoInit = data.remove();
 
-        playerOneWindow.init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit, 1 );
-        playerTwoWindow.init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit, 2 );
+        playerOneWindow
+            .init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit, 1, buildings );
+        playerTwoWindow
+            .init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit, 2, buildings );
 
         String[] args = { "" };
         PApplet.runSketch( args, playerOneWindow );
@@ -224,11 +247,11 @@ public class Main extends PApplet
     public void update()
     {
         playerOneTank.receiveData( new SystemPacket( playerOneData[6] == 1,
-            playerOneData[2] - playerOneData[3],
+            playerOneData[3] - playerOneData[2],
             playerOneData[0] - playerOneData[1],
             playerOneData[5] - playerOneData[4] ) );
         playerTwoTank.receiveData( new SystemPacket( playerTwoData[6] == 1,
-            playerTwoData[2] - playerTwoData[3],
+            playerTwoData[3] - playerTwoData[2],
             playerTwoData[0] - playerTwoData[1],
             playerTwoData[5] - playerTwoData[4] ) );
         playerOneTank.update();
@@ -250,6 +273,8 @@ public class Main extends PApplet
 
         checkTankState();
 
+        checkBuildingState();
+
         if ( p1.getHitpoints() <= 0 )
         {
             gameOver( 2 );
@@ -265,7 +290,20 @@ public class Main extends PApplet
     public void checkTankState()
     {
         playerOneTank.onCollision( playerTwoTank );
+        System.out.println( "-----------" );
         playerTwoTank.onCollision( playerOneTank );
+        System.out.println( "-----------" );
+    }
+
+
+    // TODO finish
+    public void checkBuildingState()
+    {
+        for ( int i = 0; i < buildings.length; i++ )
+        {
+            playerOneTank.onCollision( buildings[i] );
+            playerTwoTank.onCollision( buildings[i] );
+        }
     }
 
 

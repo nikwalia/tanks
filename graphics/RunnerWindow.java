@@ -1,6 +1,7 @@
 package graphics;
 
 import io.TankPacket;
+import math.Building;
 import math.Bullet;
 import math.Tank;
 import processing.core.PApplet;
@@ -43,8 +44,18 @@ public class RunnerWindow extends PApplet
 
     double worldCenterZ;
 
+    double worldAngle;
 
-    public void init( Tank s, Tank e, TankPacket initSame, TankPacket initEnemy, int playerNumber )
+    private Building[] buildings;
+
+
+    public void init(
+        Tank s,
+        Tank e,
+        TankPacket initSame,
+        TankPacket initEnemy,
+        int playerNumber,
+        Building[] b )
     {
         same = s;
         enemy = e;
@@ -55,6 +66,8 @@ public class RunnerWindow extends PApplet
         gameMode = 0;
         worldCenterX = initSame.getLoc().getX();
         worldCenterZ = initSame.getLoc().getZ();
+        worldAngle = initSame.getGunAngle();
+        buildings = b;
     }
 
 
@@ -70,6 +83,7 @@ public class RunnerWindow extends PApplet
         enemyGraphics.update( enemy );
         worldCenterX = same.getLoc().getX();
         worldCenterZ = same.getLoc().getZ();
+        worldAngle = same.getGunAngle();
     }
 
 
@@ -99,7 +113,15 @@ public class RunnerWindow extends PApplet
             // && System.nanoTime() / 1e+9 - initTime > 20
             )
             {
-
+                pushMatrix();
+                rectMode( CENTER );
+                translate( -100 + (float)worldCenterX, 425, -100 + (float)worldCenterZ );
+                fill( 139, 69, 19 );
+                noStroke();
+                rotateX( (float)Math.PI / 2 );
+                rotateZ( (float)worldAngle );
+                rect( 0, 0, 1000000, 1000000 );
+                popMatrix();
                 stroke( 10 );
                 enemyGraphics.display();
                 sameCamera.display();
@@ -124,11 +146,21 @@ public class RunnerWindow extends PApplet
                     fill( 255 );
                     popMatrix();
                 }
-                pushMatrix();
-                translate( (float)worldCenterX, 425, (float)worldCenterZ );
-                rect( -1000, -1000, 1000, 10000 );
-                fill( 139, 69, 19 );
-                popMatrix();
+
+                for ( int i = 0; i < buildings.length; i++ )
+                {
+                    pushMatrix();
+                    translate( (float)buildings[i].getX(),
+                        (float)buildings[i].getY(),
+                        (float)buildings[i].getZ() );
+                    rotateY( -(float)buildings[i].getAngle() );
+                    fill( 255 );
+                    stroke( 10 );
+                    box( (float)buildings[i].getLength(),
+                        (float)buildings[i].getHeight(),
+                        (float)buildings[i].getWidth() );
+                    popMatrix();
+                }
             }
             else
             {
