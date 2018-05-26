@@ -71,8 +71,28 @@ public class Main extends PApplet
         playerOneWindow = new RunnerWindow();
         playerTwoWindow = new RunnerWindow();
 
-        playerOneTank = new Tank( 0, 350, 0, 0, 500, 50, 50, 500, 300, 150, 1000 );
-        playerTwoTank = new Tank( 1000, 350, 0, Math.PI, 500, 50, 50, 500, 300, 150, 1000 );
+        playerOneTank = new Tank( (int)( Math.random() * 5000 ),
+            350,
+            (int)( Math.random() * 5000 ),
+            Math.random() * Math.PI * 2,
+            500,
+            50,
+            50,
+            500,
+            300,
+            150,
+            1000 );
+        playerTwoTank = new Tank( (int)( Math.random() * 5000 ),
+            350,
+            (int)( Math.random() * 5000 ),
+            Math.random() * Math.PI * 2,
+            500,
+            50,
+            50,
+            500,
+            300,
+            150,
+            1000 );
 
         playerOneBullet = null;
         playerTwoBullet = null;
@@ -244,11 +264,8 @@ public class Main extends PApplet
     // TODO finish
     public void checkTankState()
     {
-        if ( playerOneTank.hasCollided( playerTwoTank ) )
-        {
-            playerOneTank.onCollision( playerTwoTank );
-            playerTwoTank.onCollision( playerOneTank );
-        }
+        playerOneTank.onCollision( playerTwoTank );
+        playerTwoTank.onCollision( playerOneTank );
     }
 
 

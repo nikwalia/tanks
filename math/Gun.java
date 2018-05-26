@@ -16,6 +16,8 @@ public class Gun extends Structure3D
     private int baseTurnState;
 
     private Value3D baseCenter;
+    
+    boolean hasCollidedWithGun = false;
 
 
     /**
@@ -53,7 +55,7 @@ public class Gun extends Structure3D
         double newTime = System.nanoTime() / 1e+9;
         double deltaTime = newTime - curTime;
 
-        if ( getTurnDirection() == 0 )
+        if ( getTurnDirection() == 0 || hasCollidedWithGun)
         {
             angularVelocity = ZEROANGULARVELOCITY;
         }
@@ -187,7 +189,6 @@ public class Gun extends Structure3D
                 }
             }
         }
-
         return -1;
     }
 
@@ -209,7 +210,7 @@ public class Gun extends Structure3D
         }
         else
         {
-            setAngularVelocity( ZEROANGULARVELOCITY );
+            hasCollidedWithGun = true;
             return 1;
         }
     }

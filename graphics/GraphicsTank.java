@@ -30,7 +30,7 @@ public class GraphicsTank
 
     public void display()
     {
-        parent.fill( 255 );
+        parent.fill( 100 );
         parent.pushMatrix();
         parent.translate( (float)dat.getLoc().getX(),
             (float)dat.getLoc().getY(),
@@ -38,6 +38,7 @@ public class GraphicsTank
         parent.rotateY( (float)dat.getAngle() );
         parent.box( myTank.baseLength, myTank.baseHeight, myTank.baseWidth );
         parent.popMatrix();
+        parent.fill(200);
         parent.pushMatrix();
         parent.translate( (float)dat.getGunLoc().getX(),
             (float)dat.getGunLoc().getY(),

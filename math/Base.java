@@ -13,7 +13,15 @@ package math;
  */
 public class Base extends Structure3D
 {
+    
+    boolean hasCollidedWithTank = false;
+    
+    boolean hasCollidedWithGun = false;
+    
+    int gunCollisionSide = -1;
 
+    private int collisionSideWithBase = -1;
+    
     /**
      * Constructor for Base
      * 
@@ -48,7 +56,7 @@ public class Base extends Structure3D
         double newTime = System.nanoTime() / 1e+9;
         double deltaTime = newTime - curTime;
 
-        if ( getTurnDirection() == 0 )
+        if ( getTurnDirection() == 0 || hasCollidedWithTank )
         {
             angularVelocity = ZEROANGULARVELOCITY;
         }
@@ -61,7 +69,19 @@ public class Base extends Structure3D
             angularVelocity = maxAngularVelocity;
         }
 
-        if ( getMoveDirection() == 0 && Math.abs( velocity - ZEROVELOCITY ) > 0.1 )
+        if (hasCollidedWithGun && gunCollisionSide ==  0)
+        {
+            velocity = 0;
+        }
+        else if (hasCollidedWithTank && collisionSideWithBase == 0 && velocity > 0)
+        {
+            velocity = 0;
+        }
+        else if (hasCollidedWithTank && collisionSideWithBase == 2 && velocity < 0)
+        {
+            velocity = 0;
+        }
+        else if ( getMoveDirection() == 0 && Math.abs( velocity - ZEROVELOCITY ) > 0.1 )
         {
             if ( velocity < ZEROVELOCITY )
             {
@@ -234,16 +254,7 @@ public class Base extends Structure3D
         }
         else
         {
-            int thisSide = collisionSide( other, hasCollided( other ) );
-            setAngularVelocity(0);
-            if (thisSide == 0 && getVelocity() > 0)
-            {
-                setVelocity(0);
-            }
-            else if (thisSide == 2 && getVelocity() < 0)
-            {
-                setVelocity(0);
-            }
+            hasCollidedWithTank = true;
             return 1;
         }
     }

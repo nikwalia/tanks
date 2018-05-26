@@ -4,10 +4,13 @@ import io.TankPacket;
 import math.Bullet;
 import math.Tank;
 import processing.core.PApplet;
+import processing.core.PImage;
 
 
 public class RunnerWindow extends PApplet
 {
+    PImage background;
+
     Tank same;
 
     Tank enemy;
@@ -24,6 +27,8 @@ public class RunnerWindow extends PApplet
 
     public boolean setupCalled = false;
 
+    boolean runningCounter = true;
+
     public double initTime = System.nanoTime() / 1e+9;
 
     private int playerNumber;
@@ -33,6 +38,10 @@ public class RunnerWindow extends PApplet
     Bullet sameBullet;
 
     Bullet enemyBullet;
+
+    double worldCenterX;
+
+    double worldCenterZ;
 
 
     public void init( Tank s, Tank e, TankPacket initSame, TankPacket initEnemy, int playerNumber )
@@ -44,6 +53,8 @@ public class RunnerWindow extends PApplet
         initCalled = true;
         this.playerNumber = playerNumber;
         gameMode = 0;
+        worldCenterX = initSame.getLoc().getX();
+        worldCenterZ = initSame.getLoc().getZ();
     }
 
 
@@ -57,11 +68,14 @@ public class RunnerWindow extends PApplet
     {
         sameCamera.update( same );
         enemyGraphics.update( enemy );
+        worldCenterX = same.getLoc().getX();
+        worldCenterZ = same.getLoc().getZ();
     }
 
 
     public void setup()
     {
+        background = loadImage( "background.png" );
         enemyGraphics = new GraphicsTank( enemy, this, initE );
         sameCamera = new CameraTank( same, this, initE );
         setupCalled = true;
@@ -77,11 +91,15 @@ public class RunnerWindow extends PApplet
 
     public void draw()
     {
-        background( 0 );
+        // background( background );
+        background( 135, 206, 235 );
         if ( gameMode != 0 )
         {
-            if ( initCalled && setupCalled && System.nanoTime() / 1e+9 - initTime > 20 )
+            if ( initCalled && setupCalled
+            // && System.nanoTime() / 1e+9 - initTime > 20
+            )
             {
+
                 stroke( 10 );
                 enemyGraphics.display();
                 sameCamera.display();
@@ -106,7 +124,11 @@ public class RunnerWindow extends PApplet
                     fill( 255 );
                     popMatrix();
                 }
-                lights();
+                pushMatrix();
+                translate( (float)worldCenterX, 425, (float)worldCenterZ );
+                rect( -1000, -1000, 1000, 10000 );
+                fill( 139, 69, 19 );
+                popMatrix();
             }
             else
             {
@@ -121,6 +143,7 @@ public class RunnerWindow extends PApplet
         else
         {
             text( "Player " + playerNumber, width / 2 - 50, height / 2, 0 );
+            initTime = System.nanoTime() / 1e+9;
         }
     }
 

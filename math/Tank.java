@@ -204,13 +204,37 @@ public class Tank
         }
         else if ( other instanceof Tank )
         {
-            if ( gun.hasCollided( ( (Tank)other ).gun ) >= 0 )
-            {
-                gun.onCollision( ( (Tank)other ).gun );
-            }
             if ( base.hasCollided( ( (Tank)other ).base ) >= 0 )
             {
-                base.onCollision( ( (Tank)other ).base );
+                base.hasCollidedWithTank = true;
+                if ( gun.hasCollided( ( (Tank)other ).gun ) >= 0 )
+                {
+                    gun.hasCollidedWithGun = true;
+                    base.hasCollidedWithGun = true;
+                    base.gunCollisionSide = gun.collisionSide( ( (Tank)other ).base,
+                        gun.hasCollided( ( (Tank)other ).gun ) );
+                }
+                else
+                {
+                    gun.hasCollidedWithGun = false;
+                    base.hasCollidedWithGun = false;
+                }
+            }
+            else
+            {
+                base.hasCollidedWithTank = false;
+                if ( gun.hasCollided( ( (Tank)other ).gun ) >= 0 )
+                {
+                    gun.hasCollidedWithGun = true;
+                    base.hasCollidedWithGun = true;
+                    base.gunCollisionSide = gun.collisionSide( ( (Tank)other ).base,
+                        gun.hasCollided( ( (Tank)other ).gun ) );
+                }
+                else
+                {
+                    base.hasCollidedWithGun = false;
+                    gun.hasCollidedWithGun = false;
+                }
             }
         }
     }
