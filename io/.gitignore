@@ -1,3 +1,6 @@
 /InfoPacket.class
 /TankPacket.class
 /SystemPacket.class
+/SystemPacketTest.class
+/SPacketandTPacketTest.class
+/STPacketTest.class
