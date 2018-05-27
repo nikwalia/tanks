@@ -212,6 +212,7 @@ public class Main extends PApplet
     private void controls()
     {
         textSize( 20 );
+        fill( 5, 22, 231 );
         text( "Player One Controls", width / 2 - 100, height / 3 );
         text( "Forward: UP Backward: DOWN Left: LEFT Right: RIGHT", width / 6, 2 * height / 5 );
         text( "Turret Left: [ Turret Right: ] Turret Fire: \\", width / 4, 10 * height / 21 );
@@ -219,6 +220,7 @@ public class Main extends PApplet
         text( "Forward: W Backward: S Left: A Right: D", 2 * width / 7, 2 * height / 3 );
         text( "Turret Left: ` Turret Left: 1 Turret Right: 2", width / 4, 5 * height / 7 );
         text( "Press Q to quit game", width / 2 - 50, 5 * height / 6 );
+
     }
 
 
@@ -329,7 +331,6 @@ public class Main extends PApplet
             gameOver( 1 );
         }
     }
-
 
     /**
      * checks whether or not either of the tanks have collided with a mine, and

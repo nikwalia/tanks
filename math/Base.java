@@ -8,8 +8,12 @@ package math;
  * @version May 5, 2018
  * @author Period: 2
  * @author Assignment: Tanks
+ * @author Sources: none
  *
- * @author Sources: None
+ *         Group members:
+ * @author Maithreyee Vatsan
+ * @author Nikash Walia
+ * @author Roopak Phatak
  */
 public class Base extends Structure3D
 {
