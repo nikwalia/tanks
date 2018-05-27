@@ -76,40 +76,40 @@ public class Main extends PApplet
         playerOneWindow = new RunnerWindow();
         playerTwoWindow = new RunnerWindow();
 
-         playerOneTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) *
-         1000 ),
-         350,
-         (int)( ( ( Math.random() * 2 ) - 1 ) * 2500 ),
-         Math.random() * Math.PI * 2,
-         500,
-         50,
-         50,
-         500,
-         300,
-         150,
-         1000 );
-         playerTwoTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) *
-         1000 ),
-         350,
-         (int)( ( ( Math.random() * 2 ) - 1 ) * 2500 ),
-         Math.random() * Math.PI * 2,
-         500,
-         50,
-         50,
-         500,
-         300,
-         150,
-         1000 );
+        playerOneTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) * 1000 ),
+            350,
+            (int)( ( ( Math.random() * 2 ) - 1 ) * 2500 ),
+            Math.random() * Math.PI * 2,
+            500,
+            50,
+            50,
+            500,
+            300,
+            150,
+            1000 );
+        playerTwoTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) * 1000 ),
+            350,
+            (int)( ( ( Math.random() * 2 ) - 1 ) * 2500 ),
+            Math.random() * Math.PI * 2,
+            500,
+            50,
+            50,
+            500,
+            300,
+            150,
+            1000 );
 
-//        playerOneTank = new Tank( 0, 350, 0, 0, 500, 50, 50, 500, 300, 150, 1000 );
-//        playerTwoTank = new Tank( 1000, 350, 0, -Math.PI / 2, 500, 50, 50, 500, 300, 150, 1000 );
+        // playerOneTank = new Tank( 0, 350, 0, 0, 500, 50, 50, 500, 300, 150,
+        // 1000 );
+        // playerTwoTank = new Tank( 1000, 350, 0, -Math.PI / 2, 500, 50, 50,
+        // 500, 300, 150, 1000 );
 
         for ( int i = 0; i < mines.length; i++ )
         {
             mines[i] = new Mine( (int)( ( ( Math.random() * 2 ) - 1 ) * distanceConstant ),
                 bottom,
                 (int)( ( ( Math.random() * 2 ) - 1 ) * distanceConstant ),
-                100);
+                100 );
         }
         playerOneBullet = null;
         playerTwoBullet = null;
@@ -181,12 +181,20 @@ public class Main extends PApplet
     {
         textSize( 20 );
         text( "Player One Controls", width / 2 - 100, height / 3 );
+        fill( 5, 22, 231 );
         text( "Forward: UP Backward: DOWN Left: LEFT Right: RIGHT", width / 6, 2 * height / 5 );
+        fill( 5, 22, 231 );
         text( "Turret Left: [ Turret Right: ] Turret Fire: \\", width / 4, 10 * height / 21 );
+        fill( 5, 22, 231 );
         text( "Player Two Controls", width / 2 - 100, 10 * height / 17 );
+        fill( 5, 22, 231 );
         text( "Forward: W Backward: S Left: A Right: D", 2 * width / 7, 2 * height / 3 );
+        fill( 5, 22, 231 );
         text( "Turret Left: ` Turret Left: 1 Turret Right: 2", width / 4, 5 * height / 7 );
+        fill( 5, 22, 231 );
         text( "Press Q to quit game", width / 2 - 50, 5 * height / 6 );
+        fill( 5, 22, 231 );
+
     }
 
 
@@ -282,7 +290,7 @@ public class Main extends PApplet
     }
 
 
-    //finished
+    // finished
     public void checkTankState()
     {
         if ( playerOneTank.onCollision( playerTwoTank ) == -1 )
@@ -292,7 +300,7 @@ public class Main extends PApplet
     }
 
 
-    //finished
+    // finished
     public void checkBuildingState()
     {
         for ( int i = 0; i < mines.length; i++ )
