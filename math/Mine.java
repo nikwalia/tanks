@@ -1,5 +1,17 @@
 package math;
 
+
+/**
+ * 
+ * Class that represents a Mine
+ *
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
+ * @version May 25, 2018
+ * @author Period: 2
+ * @author Assignment: Tanks
+ *
+ * @author Sources: None
+ */
 public class Mine extends Structure3D
 {
 
@@ -23,7 +35,7 @@ public class Mine extends Structure3D
 
     /**
      * 
-     * Stub method
+     * Stub method- required to extend abstract class Structure3D
      */
     public void translate()
     {

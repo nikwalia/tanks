@@ -7,54 +7,94 @@ import math.Tank;
 import processing.core.PApplet;
 
 
+/**
+ * 
+ * Window in which camera is placed and tank is drawn
+ *
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
+ * @version May 9, 2018
+ * @author Period: 2
+ * @author Assignment: Tanks
+ *
+ * @author Sources: None
+ */
 public class RunnerWindow extends PApplet
 {
-    Tank same;
+    private Tank enemy;
 
-    Tank enemy;
+    private GraphicsTank enemyGraphics;
 
-    GraphicsTank enemyGraphics;
+    private CameraTank sameCamera;
 
-    CameraTank sameCamera;
+    private TankPacket initE;
 
-    TankPacket initE;
+    private TankPacket initS;
 
-    TankPacket initS;
-
+    /**
+     * whether or not the init method has been called
+     */
     public boolean initCalled = false;
 
+    /**
+     * whether or not the setup method has been called
+     */
     public boolean setupCalled = false;
 
-    boolean runningCounter = true;
+    /**
+     * whether or not the countdown is running
+     */
+    public boolean countdownRunning = true;
 
-    public double initTime = System.nanoTime() / 1e+9;
+    private double initTime = System.nanoTime() / 1e+9;
 
     private int playerNumber;
 
     private int gameMode;
 
-    Bullet sameBullet;
+    /**
+     * bullet fired by same tank
+     */
+    protected Bullet sameBullet;
 
-    Bullet enemyBullet;
+    /**
+     * bullet fired by enemy tank
+     */
+    protected Bullet enemyBullet;
 
-    double worldCenterX;
+    private double worldCenterX;
 
-    double worldCenterZ;
+    private double worldCenterZ;
 
-    double worldAngle;
+    private double worldAngle;
 
     private Mine[] buildings;
 
 
+    /**
+     * 
+     * Initializes the various fields of the window from externally received
+     * data
+     * 
+     * @param e
+     *            enemy tank
+     * @param initSame
+     *            initial TankPacket of player whose view is represented by this
+     *            window
+     * @param initEnemy
+     *            initial TankPacket of player whose tank is visible in this
+     *            window
+     * @param playerNumber
+     *            which player window this is
+     * @param b
+     *            array of mines
+     */
     public void init(
-        Tank s,
         Tank e,
         TankPacket initSame,
         TankPacket initEnemy,
         int playerNumber,
         Mine[] b )
     {
-        same = s;
         enemy = e;
         initE = initEnemy;
         initS = initSame;
@@ -68,12 +108,27 @@ public class RunnerWindow extends PApplet
     }
 
 
+    /**
+     * 
+     * Opens the window
+     * 
+     * @param args
+     *            not used
+     */
     public static void main( String[] args )
     {
         PApplet.main( "graphics.RunnerWindow" );
     }
 
 
+    /**
+     * Updates the two GUI tanks, as well as relative world information
+     * 
+     * @param same
+     *            TankPacket for the tank for this player
+     * @param enemy
+     *            TankPacket for the tank for the opposite player
+     */
     public void update( TankPacket same, TankPacket enemy )
     {
         sameCamera.update( same );
@@ -84,21 +139,34 @@ public class RunnerWindow extends PApplet
     }
 
 
+    /**
+     * 
+     * Setup method- called by the environment, initializes the tanks
+     */
     public void setup()
     {
         enemyGraphics = new GraphicsTank( enemy, this, initE );
-        sameCamera = new CameraTank( same, this, initE );
+        sameCamera = new CameraTank( this, initS );
         setupCalled = true;
         surface.setTitle( "PLAYER " + playerNumber );
     }
 
 
+    /**
+     * 
+     * Defines the window's dimensions and renderer
+     */
     public void settings()
     {
         size( 500, 500, P3D );
     }
-    
-    public void drawGround()
+
+
+    /**
+     * 
+     * Draws the ground relative to the position of the camera
+     */
+    private void drawGround()
     {
         pushMatrix();
         rectMode( CENTER );
@@ -110,8 +178,13 @@ public class RunnerWindow extends PApplet
         rect( 0, 0, 1000000, 1000000 );
         popMatrix();
     }
-    
-    public void drawBullets()
+
+
+    /**
+     * 
+     * Draws the bullets, if they exist
+     */
+    private void drawBullets()
     {
         noStroke();
         if ( sameBullet != null )
@@ -135,8 +208,13 @@ public class RunnerWindow extends PApplet
             popMatrix();
         }
     }
-    
-    public void drawBuildings()
+
+
+    /**
+     * 
+     * Draws the various mines
+     */
+    private void drawMines()
     {
         for ( int i = 0; i < buildings.length; i++ )
         {
@@ -150,8 +228,13 @@ public class RunnerWindow extends PApplet
             popMatrix();
         }
     }
-    
-    public void countdown()
+
+
+    /**
+     * 
+     * Runs the countdown at the start of the game
+     */
+    private void countdown()
     {
         textSize( 50 );
         text( "Player " + playerNumber, width / 2 - 50, height / 2, 0 );
@@ -162,6 +245,11 @@ public class RunnerWindow extends PApplet
     }
 
 
+    /**
+     * 
+     * Draw method, periodically called by the environment, calls all methods
+     * that draw things
+     */
     public void draw()
     {
         background( 135, 206, 235 );
@@ -169,12 +257,13 @@ public class RunnerWindow extends PApplet
         {
             if ( initCalled && setupCalled && System.nanoTime() / 1e+9 - initTime > 20 )
             {
+                countdownRunning = false;
                 drawGround();
                 stroke( 10 );
                 enemyGraphics.display();
                 sameCamera.display();
                 drawBullets();
-                drawBuildings();
+                drawMines();
             }
             else
             {
@@ -189,18 +278,19 @@ public class RunnerWindow extends PApplet
     }
 
 
-    public void setGameMode( int g )
+    /**
+     * 
+     * Changes the game mode to run or to not run
+     * 
+     * @param g
+     *            gameMode
+     */
+    protected void setGameMode( int g )
     {
         if ( g == 1 && gameMode == 0 )
         {
             initTime = System.nanoTime() / 1e+9;
         }
         gameMode = g;
-    }
-
-
-    public void close()
-    {
-        dispose();
     }
 }

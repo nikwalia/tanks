@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
  * 
  * Testing class for Base
  *
- * @author Nikash Walia
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
  * @version May 12, 2018
  * @author Period: 2
  * @author Assignment: Tanks
@@ -23,22 +23,22 @@ public class BaseTest
      * Tests for Base class
      * 
      * BasicConstructorTest- checks that all values are initialized correctly
-     * AccelerationOneSecondTest- correct velocity after one second of positive
-     * motion
-     * AccelerationThreeSecondTest- maximum velocity after three seconds
-     * of positive motion
-     * AccelerationNegativeOneSecondTest- correct velocity
-     * after one second of negative motion
-     * AccelerationNegativeThreeSecondTest-
-     * minimum velocity after three seconds of negative motion
-     * DecelerateOneSecondTest- correct velocity after one second of
-     * deceleration from max positive
-     * DecelerateThreeSecondsTest- 0 velocity
-     * after three seconds of deceleration from max positive
-     * DeclerateNegativeOneSecondTest- correct velocity after one second of
-     * deceleration from max negative
-     * DecelerateNegativeThreeSecondsTest- 0
-     * velocity after three seconds of deceleration from max negative
+     * AccelerationOneSecondTest- correct velocity after one second of
+     * positive motion
+     * AccelerationThreeSecondTest- maximum velocity after three seconds of
+     * positive motion
+     * AccelerationNegativeOneSecondTest- correct velocity after one second of
+     * negative motion
+     * AccelerationNegativeThreeSecondTest- minimum velocity after three seconds of
+     * negative motion
+     * DecelerateOneSecondTest- correct velocity after one second of deceleration
+     * from max positive
+     * DecelerateThreeSecondsTest- 0 velocity after three seconds of deceleration
+     * from max positive
+     * DeclerateNegativeOneSecondTest- correct velocity after one second of deceleration
+     * from max negative
+     * DecelerateNegativeThreeSecondsTest- 0 velocity after three seconds of deceleration
+     * from max negative
      * RotateTest- correct angular velocity for various different settings
      * LinearDisplacementTest- correct change in position for change in time
      * AngularDisplacementTest- correct change in angle for change in time

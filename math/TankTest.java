@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * Testing class for Tank
  * 
- * @author Nikash Walia
+ * @author Nikash Walia, Maithreyee Vatsan, Roopak Phatak
  * @version 5/17/18
  * @author Period: 2
  * @author Assignment: Tanks

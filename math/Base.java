@@ -4,7 +4,7 @@ package math;
  * 
  * Class that mathematically represents the base of a tank
  *
- * @author Nikash Walia
+ * @author Nikash Walia, Maithreyee Vatsan, Roopak Phatak
  * @version May 5, 2018
  * @author Period: 2
  * @author Assignment: Tanks
@@ -40,7 +40,10 @@ public class Base extends Structure3D
 
     /**
      * 
-     * Translates the base according to its various properties
+     * Translates the base according to its various properties. Changes include
+     * setting angular velocity, updating the timestamp, accelerating or
+     * decelerating the structure, and then changing its position and angle
+     * accordingly.
      */
     public void translate()
     {
@@ -102,7 +105,9 @@ public class Base extends Structure3D
 
     /**
      * 
-     * method for checking whether or not the base has collided with another
+     * method for checking whether or not the base has collided with another.
+     * Uses an approximation of distance from center to center and compares it
+     * with half of the hypotenuse of the base's bottom rectangle
      * 
      * @param other
      *            structure to check against
@@ -120,7 +125,11 @@ public class Base extends Structure3D
     }
 
 
-    public void updateTime()
+    /**
+     * 
+     * Updates the "last time" timestamp of the class- used for pausing
+     */
+    protected void updateTime()
     {
         curTime = System.nanoTime() / 1e+9;
     }

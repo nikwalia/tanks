@@ -5,7 +5,7 @@ package math;
  * Class that represents a structure in 3D space- has properties for motion, and
  * also has dimension
  *
- * @author Nikash Walia
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
  * @version May 5, 2018
  * @author Period: 2
  * @author Assignment: Tanks
@@ -250,7 +250,7 @@ public abstract class Structure3D extends Value3D
      * 
      * @return turn direction
      */
-    public double getTurnDirection()
+    protected double getTurnDirection()
     {
         return turnDirection;
     }
@@ -262,7 +262,7 @@ public abstract class Structure3D extends Value3D
      * 
      * @return move direction
      */
-    public double getMoveDirection()
+    protected double getMoveDirection()
     {
         return moveDirection;
     }

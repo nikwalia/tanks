@@ -9,7 +9,7 @@ import io.*;
 /**
  * Class that mathematically represents an entire tank
  * 
- * @author Nikash Walia
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
  * @version 5/17/18
  * @author Period: 2
  * @author Assignment- Tanks
@@ -265,6 +265,10 @@ public class Tank
     }
 
 
+    /**
+     * 
+     * Method used to update the timestamp of the gun and the base- important for pausing
+     */
     public void resume()
     {
         gun.updateTime();
