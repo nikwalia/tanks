@@ -17,47 +17,61 @@ import static org.junit.Assert.*;
  */
 public class GunTest
 {
-    
+
     /**
      * 
      * Unit tests for Gun
      * 
      * ConstructorTest- all values are initialized correctly
-     * LinearTranslationTest- the gun's position changes correctly based on the base's
+     * LinearTranslationTest- the gun's position changes correctly based on the
+     * base's
      * PositiveAngularRotationTest- correct increase in angle
      * NegativeAngularRotationTest- correct decrease in angle
-     * BasePositiveTurnZeroAngularVelocityTest- correct velocity and increase in angle
-     * BaseNegativeTurnZeroAngularVelocityTest- correct velocity and decrease in angle
-     * BasePositiveTurnPositiveAngularVelocityTest- correct velocity and increase in angle
-     * BasePositiveTurnNegativeAngularVelocityTest- correct velocity and decrease in angle
-     * BaseNegativeTurnPositiveAngularVelocityTest- correct velocity and increase in angle
-     * BaseNegativeTurnNegativeAngularVelocityTest- correct velocity and decrease in angle
-     * SimpleBulletCollisionTest- bullet correctly registers as collided / not collided
-     * GunToGunCollisionTest- collision with gun correctly registers
-     * OnCollisionTest- collision results in correct behavior
+     * BasePositiveTurnZeroAngularVelocityTest- correct velocity and increase in
+     * angle
+     * BaseNegativeTurnZeroAngularVelocityTest- correct velocity and
+     * decrease in angle
+     * BasePositiveTurnPositiveAngularVelocityTest- correct
+     * velocity and increase in angle
+     * BasePositiveTurnNegativeAngularVelocityTest- correct velocity and
+     * decrease in angle
+     * BaseNegativeTurnPositiveAngularVelocityTest- correct
+     * velocity and increase in angle
+     * BaseNegativeTurnNegativeAngularVelocityTest- correct velocity and
+     * decrease in angle
+     * SimpleBulletCollisionTest- bullet correctly registers
+     * as collided / not collided
+     * GunToGunCollisionTest- collision with gun
+     * correctly registers
+     * OnCollisionTest- collision results in correct
+     * behavior
      * CollisionSideTest- collision registers on correct side
      */
-    
+
     @Test
     public void ConstructorTest()
     {
         Gun g = new Gun( 0, 10, 10, 10, new Value3D( 0, 0, 0 ), 10 );
+        assertEquals( g.curTime, System.nanoTime() / 1e+9, 0.1 );
+        double oldTime = System.nanoTime() / 1e+9;
+        try
+        {
+            Thread.sleep( 1000 );
+        }
+        catch ( InterruptedException e )
+        {
+            e.printStackTrace();
+        }
+        g.updateTime();
+        assertEquals( g.curTime, oldTime + 1, 0.1 );
         assert ( g.getX() == 5 );
         assert ( g.getY() == -10 );
         assert ( g.getZ() == 0 );
         assert ( g.getAngle() == 0 );
         Gun g2 = new Gun( Math.PI / 4, 10, 10, 10, new Value3D( 0, 0, 0 ), 10 );
         assertEquals( g2.getX(), 5 * Math.cos( Math.PI / 4 ), 0.1 );
-        assert ( g.getY() == -10 );
+        assert ( g2.getY() == -10 );
         assertEquals( g2.getZ(), 5 * Math.sin( Math.PI / 4 ), 0.1 );
-        assert ( g.baseRectangle[0].getX() == 10 );
-        assert ( g.baseRectangle[0].getZ() == 5 );
-        assert ( g.baseRectangle[1].getX() == 0 );
-        assert ( g.baseRectangle[1].getZ() == 5 );
-        assert ( g.baseRectangle[2].getX() == 0 );
-        assert ( g.baseRectangle[2].getZ() == -5 );
-        assert ( g.baseRectangle[3].getX() == 10 );
-        assert ( g.baseRectangle[3].getZ() == -5 );
     }
 
 
@@ -76,10 +90,11 @@ public class GunTest
             g.setBaseCenter( new Value3D( b.getX(), b.getY(), b.getZ() ) );
             g.translate();
         }
-        assertEquals( 4 * ( newTime - curTime ) + 5 * Math.cos( Math.PI / 4 ), g.getX(), 0.1 );
-        assertEquals( b.getX() + 5 * Math.cos( Math.PI / 4 ), g.getX(), 0.1 );
+        assertEquals( b.ACCELERATION / 2 * ( newTime - curTime )
+            + g.getLength() / 2 * Math.cos( Math.PI / 4 ), g.getX(), 0.1 );
+        assertEquals( b.getX() + g.getLength() / 2 * Math.cos( Math.PI / 4 ), g.getX(), 0.1 );
         assertEquals( -10, g.getY(), 0.1 );
-        assertEquals( 5 * Math.sin( Math.PI / 4 ), g.getZ(), 0.1 );
+        assertEquals( g.getLength() / 2 * Math.sin( Math.PI / 4 ), g.getZ(), 0.1 );
     }
 
 
@@ -100,10 +115,14 @@ public class GunTest
         double newTime = System.nanoTime() / 1e+9;
         g.translate();
         assertEquals( g.maxAngularVelocity, g.getAngle(), 0.1 );
-        assertEquals( Math.PI / 4 * ( newTime - curTime ), g.getAngle(), 0.1 );
-        assertEquals( 5 * Math.cos( Math.PI / 4 * ( newTime - curTime ) ), g.getX(), 0.1 );
+        assertEquals( g.maxAngularVelocity * ( newTime - curTime ), g.getAngle(), 0.1 );
+        assertEquals( g.getLength() / 2 * Math.cos( g.maxAngularVelocity * ( newTime - curTime ) ),
+            g.getX(),
+            0.1 );
         assertEquals( -10, g.getY(), 0.1 );
-        assertEquals( 5 * Math.sin( Math.PI / 4 * ( newTime - curTime ) ), g.getZ(), 0.1 );
+        assertEquals( g.getLength() / 2 * Math.sin( g.maxAngularVelocity * ( newTime - curTime ) ),
+            g.getZ(),
+            0.1 );
     }
 
 
@@ -124,10 +143,14 @@ public class GunTest
         double newTime = System.nanoTime() / 1e+9;
         g.translate();
         assertEquals( g.minAngularVelocity, g.getAngularVelocity(), 0.1 );
-        assertEquals( -Math.PI / 4 * ( newTime - curTime ), g.getAngle(), 0.1 );
-        assertEquals( 5 * Math.cos( -Math.PI / 4 * ( newTime - curTime ) ), g.getX(), 0.1 );
+        assertEquals( g.minAngularVelocity * ( newTime - curTime ), g.getAngle(), 0.1 );
+        assertEquals( g.getLength() / 2 * Math.cos( g.minAngularVelocity * ( newTime - curTime ) ),
+            g.getX(),
+            0.1 );
         assertEquals( -10, g.getY(), 0.1 );
-        assertEquals( 5 * Math.sin( -Math.PI / 4 * ( newTime - curTime ) ), g.getZ(), 0.1 );
+        assertEquals( g.getLength() / 2 * Math.sin( g.minAngularVelocity * ( newTime - curTime ) ),
+            g.getZ(),
+            0.1 );
     }
 
 
@@ -284,7 +307,7 @@ public class GunTest
     {
         Gun g = new Gun( 0, 10, 10, 10, new Value3D( 0, 0, 0 ), 10 );
         Bullet bullet = new Bullet( 0, 0, 0, 0 );
-        assert ( g.hasCollided( bullet ) == 10 );
+        assert ( g.hasCollided( bullet ) == 1 );
         bullet = new Bullet( 20, 20, 20, 0 );
         assert ( g.hasCollided( bullet ) == -1 );
     }
@@ -295,38 +318,8 @@ public class GunTest
     {
         Gun g1 = new Gun( 0, 10, 10, 10, new Value3D( 0, 0, 0 ), 10 );
         Gun g2 = new Gun( Math.PI, 10, 10, 10, new Value3D( 10, 0, 0 ), 10 );
-        assert ( g1.hasCollided( g2 ) >= 0 );
+        assert ( g1.hasCollided( g2 ) == 1 );
         g2 = new Gun( 0, 10, 10, 10, new Value3D( 20, 20, 20 ), 10 );
-        assert ( g1.hasCollided( g2 ) < 0 );
-    }
-
-
-    @Test
-    public void OnCollisionTest()
-    {
-        Gun g = new Gun( 0, 10, 10, 10, new Value3D( 0, 0, 0 ), 10 );
-        g.setAngularVelocity( g.maxAngularVelocity );
-        Bullet bullet = new Bullet( 0, 0, 0, 0 );
-        assert ( g.onCollision( bullet ) == -1 );
-        assert ( g.angularVelocity == g.maxAngularVelocity );
-
-        Gun g2 = new Gun( Math.PI, 10, 10, 10, new Value3D( 10, 0, 0 ), 10 );
-        assert ( g.onCollision( g2 ) == 1 );
-        assert ( g.angularVelocity == 0 );
-    }
-
-
-    @Test
-    public void CollisionSideTest()
-    {
-        Gun g = new Gun( 0, 10, 10, 10, new Value3D( 0, 0, 0 ), 10 );
-        Gun g2 = new Gun( 3 * Math.PI / 2, 10, 2, 10, new Value3D( 0, 0, 15 ), 10 );
-        assert ( g.collisionSide( g2, g.hasCollided( g2 ) ) == 0 );
-        g2 = new Gun( 0, 10, 2, 10, new Value3D( -10, 0, 0 ), 10 );
-        assert ( g.collisionSide( g2, g.hasCollided( g2 ) ) == 1 );
-        g2 = new Gun( Math.PI / 2, 10, 2, 10, new Value3D( 5, 0, -15 ), 10 );
-        assert ( g.collisionSide( g2, g.hasCollided( g2 ) ) == 2 );
-        g2 = new Gun( Math.PI, 10, 2, 10, new Value3D( 20, 0, 0 ), 10 );
-        assert ( g.collisionSide( g2, g.hasCollided( g2 ) ) == 3 );
+        assert ( g1.hasCollided( g2 ) == -1 );
     }
 }

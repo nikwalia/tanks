@@ -30,12 +30,12 @@ public class CameraTank
 
     public void display()
     {
-        parent.camera( (float)dat.getLoc().getX(),
+        parent.camera( (float)dat.getGunLoc().getX(),
+            (float)dat.getGunLoc().getY(),
+            (float)dat.getGunLoc().getZ(),
+            (float)( 5000 * Math.cos( dat.getGunAngle() ) + dat.getGunLoc().getX() ),
             parent.height / 2,
-            (float)dat.getLoc().getZ(),
-            (float)( 200 * Math.tan( dat.getAngle() / 2 ) + parent.width / 2 ),
-            parent.height / 2,
-            0,
+            (float)( 5000 * Math.sin( dat.getGunAngle() ) + dat.getGunLoc().getZ() ),
             0,
             1,
             0 );
