@@ -7,7 +7,7 @@ import org.junit.*;
  * 
  * Tester class for the Value3D class
  *
- * @author Nikash Walia
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
  * @version May 5, 2018
  * @author Period: 2
  * @author Assignment: Tanks

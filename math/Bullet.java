@@ -4,12 +4,12 @@ package math;
  * 
  * Class that mathematically represents a bullet
  *
- * @author Nikash Walia
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
  * @version May 9, 2018
  * @author Period: 2
  * @author Assignment: Tanks
  *
- * @author Sources: 2
+ * @author Sources: None
  */
 public class Bullet extends Structure3D
 {
@@ -41,7 +41,8 @@ public class Bullet extends Structure3D
 
     /**
      * 
-     * Translates the bullet
+     * Translates the bullet. The bullet always moves in a straight line through
+     * the XZ plane, however, it falls through the Y plane due to gravity.
      */
     public void translate()
     {
@@ -71,7 +72,7 @@ public class Bullet extends Structure3D
 
     /**
      * 
-     * Getter method for the fall velocity
+     * Getter method for the fall velocity, used only for testing
      * 
      * @return fall velocity
      */

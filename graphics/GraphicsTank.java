@@ -5,15 +5,37 @@ import math.Tank;
 import processing.core.PApplet;
 
 
+/**
+ * 
+ * Class that draws a tank in the graphics environment
+ *
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
+ * @version May 9, 2018
+ * @author Period: 2
+ * @author Assignment: Tanks
+ *
+ * @author Sources: None
+ */
 public class GraphicsTank
 {
-    Tank myTank;
+    private Tank myTank;
 
-    PApplet parent;
+    private PApplet parent;
 
-    TankPacket dat;
+    private TankPacket dat;
 
 
+    /**
+     * 
+     * Constructor for GraphicsTank
+     * 
+     * @param t
+     *            tank to be drawn
+     * @param p
+     *            graphics environment to draw tank in
+     * @param init
+     *            initial data about tank
+     */
     public GraphicsTank( Tank t, PApplet p, TankPacket init )
     {
         myTank = t;
@@ -22,13 +44,24 @@ public class GraphicsTank
     }
 
 
-    public void update( TankPacket dat )
+    /**
+     * 
+     * Updates to the latest tank data
+     * 
+     * @param dat
+     *            latest TankPacket
+     */
+    protected void update( TankPacket dat )
     {
         this.dat = dat;
     }
 
 
-    public void display()
+    /**
+     * 
+     * Draws the tank in the graphics environment
+     */
+    protected void display()
     {
         parent.fill( 100 );
         parent.pushMatrix();

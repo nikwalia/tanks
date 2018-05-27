@@ -1,46 +1,61 @@
 package graphics;
 
 import io.TankPacket;
-import math.Tank;
 import processing.core.PApplet;
+
 
 /**
  * 
- *  TODO Write a one-sentence summary of your class here.
- *  TODO Follow it with additional details about its purpose, what abstraction
- *  it represents, and how to use it.
+ * Class that places a camera in the graphics environment
  *
- *  @author  mvats
- *  @version May 26, 2018
- *  @author  Period: TODO
- *  @author  Assignment: Tanks
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
+ * @version May 9, 2018
+ * @author Period: 2
+ * @author Assignment: Tanks
  *
- *  @author  Sources: TODO
+ * @author Sources: None
  */
 public class CameraTank
 {
-    Tank myTank;
+    private PApplet parent;
 
-    PApplet parent;
-
-    TankPacket dat;
+    private TankPacket dat;
 
 
-    public CameraTank( Tank t, PApplet p, TankPacket init )
+    /**
+     * 
+     * Constructor for CameraTank class
+     * 
+     * @param p
+     *            environment to place camera in
+     * @param init
+     *            initial data of tank
+     */
+    public CameraTank( PApplet p, TankPacket init )
     {
-        myTank = t;
         parent = p;
         dat = init;
     }
 
 
-    public void update( TankPacket dat )
+    /**
+     * 
+     * Updates to the latest data
+     * 
+     * @param dat
+     *            new TankPacket
+     */
+    protected void update( TankPacket dat )
     {
         this.dat = dat;
     }
 
 
-    public void display()
+    /**
+     * 
+     * Method called by environment to place the camera
+     */
+    protected void display()
     {
         parent.camera( (float)dat.getGunLoc().getX(),
             (float)dat.getGunLoc().getY(),

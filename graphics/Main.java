@@ -13,15 +13,27 @@ import processing.core.PFont;
 import processing.core.PImage;
 
 
+/**
+ * 
+ * Runner class- responsible for creation of all objects and responsible for all
+ * communications
+ *
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
+ * @version May 9, 2018
+ * @author Period: 2
+ * @author Assignment: Tanks
+ *
+ * @author Sources: None
+ */
 public class Main extends PApplet
 {
     // private static Base tank;
 
-    PImage background;
+    private PImage background;
 
     private Queue<TankPacket> data;
 
-    // indices
+    // indices for player data
     // 0- forward pressed
     // 1- backward pressed
     // 2- left pressed
@@ -51,17 +63,28 @@ public class Main extends PApplet
 
     private Mine[] mines = new Mine[10];
 
+    // the ratio of how far apart all the game objects are placed
     private final int distanceConstant = 5000;
 
 
-    // finished
+    /**
+     * Main method- initializes environment
+     * 
+     * @param args
+     *            not used
+     */
     public static void main( String[] args )
     {
         PApplet.main( "graphics.Main" );
     }
 
 
-    // finished
+    /**
+     * 
+     * Method called by the environment- initializes all objects and fields,
+     * opens up both player windows, and provides preliminary information about
+     * both tanks to both windows
+     */
     public void setup()
     {
         background = loadImage( "tanksactualforproject.jpg" );
@@ -119,10 +142,8 @@ public class Main extends PApplet
         TankPacket playerOneInit = data.remove();
         TankPacket playerTwoInit = data.remove();
 
-        playerOneWindow
-            .init( playerOneTank, playerTwoTank, playerOneInit, playerTwoInit, 1, mines );
-        playerTwoWindow
-            .init( playerTwoTank, playerOneTank, playerTwoInit, playerOneInit, 2, mines );
+        playerOneWindow.init( playerTwoTank, playerOneInit, playerTwoInit, 1, mines );
+        playerTwoWindow.init( playerOneTank, playerTwoInit, playerOneInit, 2, mines );
 
         String[] args = { "" };
         PApplet.runSketch( args, playerOneWindow );
@@ -130,14 +151,20 @@ public class Main extends PApplet
     }
 
 
-    // finished
+    /**
+     * Sets the size of the window
+     */
     public void settings()
     {
         size( 960, 540 );
     }
 
 
-    // finished
+    /**
+     * Method called periodically by the environment- either draws the home
+     * screen or updates the information, given that all game initialization
+     * conditions are met
+     */
     public void draw()
     {
         if ( gameState == 0 )
@@ -147,7 +174,8 @@ public class Main extends PApplet
         else
         {
             if ( playerOneWindow.initCalled && playerTwoWindow.initCalled
-                && playerOneWindow.setupCalled && playerTwoWindow.setupCalled )
+                && playerOneWindow.setupCalled && playerTwoWindow.setupCalled
+                && !playerOneWindow.countdownRunning && !playerTwoWindow.countdownRunning )
             {
                 update();
             }
@@ -155,8 +183,10 @@ public class Main extends PApplet
     }
 
 
-    // finished
-    public void homeScreen()
+    /**
+     * draws the home screen on the main screen
+     */
+    private void homeScreen()
     {
         background( background );
         textSize( 58 );
@@ -176,24 +206,20 @@ public class Main extends PApplet
     }
 
 
-    // finished
-    public void controls()
+    /**
+     * Lists out all the player controls on the main screen
+     */
+    private void controls()
     {
         textSize( 20 );
+        fill( 5, 22, 231 );
         text( "Player One Controls", width / 2 - 100, height / 3 );
-        fill( 5, 22, 231 );
         text( "Forward: UP Backward: DOWN Left: LEFT Right: RIGHT", width / 6, 2 * height / 5 );
-        fill( 5, 22, 231 );
         text( "Turret Left: [ Turret Right: ] Turret Fire: \\", width / 4, 10 * height / 21 );
-        fill( 5, 22, 231 );
         text( "Player Two Controls", width / 2 - 100, 10 * height / 17 );
-        fill( 5, 22, 231 );
         text( "Forward: W Backward: S Left: A Right: D", 2 * width / 7, 2 * height / 3 );
-        fill( 5, 22, 231 );
         text( "Turret Left: ` Turret Left: 1 Turret Right: 2", width / 4, 5 * height / 7 );
-        fill( 5, 22, 231 );
         text( "Press Q to quit game", width / 2 - 50, 5 * height / 6 );
-        fill( 5, 22, 231 );
 
     }
 
@@ -221,24 +247,32 @@ public class Main extends PApplet
     }
 
 
-    // finished
-    public void startGame()
+    /**
+     * Begins the game by allowing the player windows to begin countdowns
+     */
+    private void startGame()
     {
         playerOneWindow.setGameMode( 1 );
         playerTwoWindow.setGameMode( 1 );
     }
 
 
-    // finished
-    public void pauseGame()
+    /**
+     * Pauses the game- stops the player windows from rendering
+     */
+    private void pauseGame()
     {
         playerOneWindow.noLoop();
         playerTwoWindow.noLoop();
     }
 
 
-    // finished
-    public void resumeGame()
+    /**
+     * Resumes the game by allowing the two player windows to start drawing
+     * again, updates the "last time" of the tanks in order to prevent false
+     * drifting
+     */
+    private void resumeGame()
     {
         playerOneWindow.loop();
         playerTwoWindow.loop();
@@ -247,8 +281,14 @@ public class Main extends PApplet
     }
 
 
-    // finished
-    public void update()
+    /**
+     * This is responsible for sending all information back and forth between
+     * the system and the tanks. It draws the compass view for both players in
+     * the main screen, checks if the two tanks have collided with each other or
+     * a mine and ends the game accordingly, and checks if either of the tanks
+     * have died, ending the game accordingly
+     */
+    private void update()
     {
         playerOneTank.receiveData( new SystemPacket( playerOneData[6] == 1,
             playerOneData[3] - playerOneData[2],
@@ -275,9 +315,12 @@ public class Main extends PApplet
 
         checkBulletState( p1, p2 );
 
-        checkTankState();
+        if ( playerOneTank.onCollision( playerTwoTank ) == -1 )
+        {
+            gameOver( 0 );
+        }
 
-        checkBuildingState();
+        checkMineState();
 
         if ( p1.getHitpoints() <= 0 )
         {
@@ -289,19 +332,11 @@ public class Main extends PApplet
         }
     }
 
-
-    // finished
-    public void checkTankState()
-    {
-        if ( playerOneTank.onCollision( playerTwoTank ) == -1 )
-        {
-            gameOver( 0 );
-        }
-    }
-
-
-    // finished
-    public void checkBuildingState()
+    /**
+     * checks whether or not either of the tanks have collided with a mine, and
+     * accordingly ends the game
+     */
+    private void checkMineState()
     {
         for ( int i = 0; i < mines.length; i++ )
         {
@@ -317,8 +352,19 @@ public class Main extends PApplet
     }
 
 
-    // finished
-    public void checkBulletState( TankPacket one, TankPacket two )
+    /**
+     * Updates the status of a bullet. Creates a new bullet if it does not
+     * already exist and fire is called. If a bullet exists, it is translated.
+     * If it has fallen below the ground due to gravity, it is removed. If it
+     * has collided with a tank, it is removed and the tank's hitpoints are
+     * reduced.
+     * 
+     * @param one
+     *            TankPacket for player one
+     * @param two
+     *            TankPacket for player two
+     */
+    private void checkBulletState( TankPacket one, TankPacket two )
     {
         if ( one.checkIfFired() && playerOneBullet == null )
         {
@@ -379,8 +425,14 @@ public class Main extends PApplet
     }
 
 
-    // finished
-    public void gameOver( int winningPlayer )
+    /**
+     * Text that is displayed on the screen after the game has finished
+     * 
+     * @param winningPlayer
+     *            which player has won; 1 for player one, 2 for player two, and
+     *            0 if both tanks collided with each other and "exploded"
+     */
+    private void gameOver( int winningPlayer )
     {
         gameState = -1;
         background( 255 );
@@ -391,7 +443,8 @@ public class Main extends PApplet
         }
         else
         {
-            text( "Both players exploded, game over", width / 3, height / 2 );
+            text( "Game over", width / 3, height / 2 );
+            text( "Both players exploded", width / 4, 2 * height / 3 );
         }
         playerOneWindow.setGameMode( 0 );
         playerTwoWindow.setGameMode( 0 );
@@ -399,7 +452,11 @@ public class Main extends PApplet
     }
 
 
-    // finished
+    /**
+     * Method called by the system whenever a new key is pressed. This is used
+     * for changing game states (start, pause, quit), as well as to change user
+     * instructions. The variable key contains the key that was just pressed.
+     */
     public void keyPressed()
     {
         if ( key == CODED )
@@ -489,7 +546,11 @@ public class Main extends PApplet
     }
 
 
-    // finished
+    /**
+     * Method called by the system whenever a key is released. This is used to
+     * reflect user instruction changes. The variable key contains the key that
+     * was just released.
+     */
     public void keyReleased()
     {
         if ( key == CODED )
