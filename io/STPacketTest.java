@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  *
  * @author Maithreyee Vatsan
  * @version May 26, 2018
- * @author Period: TODO
+ * @author Period: 2
  * @author Assignment: Tanks
  *
  * @author Sources: Nikash Walia, Roopak Phatak, Maithreyee Vatsan
