@@ -5,6 +5,17 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 
+/**
+ * 
+ * Testing class for Bullet
+ *
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
+ * @version May 12, 2018
+ * @author Period: 2
+ * @author Assignment: Tanks
+ *
+ * @author Sources: None
+ */
 public class BulletTest
 {
 
@@ -12,10 +23,8 @@ public class BulletTest
      * Tests for Bullet
      * 
      * ConstructorTest- all values are initialized correctly
-     * TranslateTest- the
-     * bullet's position is correctly updated
-     * HasCollidedTest- correctly returns
-     * status update
+     * TranslateTest- the bullet's position is correctly updated
+     * HasCollidedTest- correctly returns status update
      */
 
     @Test

@@ -2,14 +2,32 @@ package math;
 
 import org.junit.*;
 
-import static org.junit.Assert.*;
 
-
+/**
+ * 
+ * Testing class for Mine
+ *
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
+ * @version May 26, 2018
+ * @author Period: 2
+ * @author Assignment: Tanks
+ *
+ * @author Sources: None
+ */
 public class MineTest
 {
 
+    /**
+     * Tests for Mine
+     * 
+     * ConstructorTest- values are initialized correctly
+     * TranslateTest- ensures that stub method does not change any states
+     * CollisionTest- Mine returns correct status update for collision checks
+     * with different classes
+     */
+
     @Test
-    public void constructorTest()
+    public void ConstructorTest()
     {
         Mine m = new Mine( 0, 0, 0, 10 );
         assert ( m.getX() == 0 );
@@ -25,7 +43,7 @@ public class MineTest
 
 
     @Test
-    public void translateTest()
+    public void TranslateTest()
     {
         Mine m = new Mine( 0, 0, 0, 10 );
         m.setMoveDirection( 1 );
@@ -44,7 +62,7 @@ public class MineTest
 
 
     @Test
-    public void collisionTest()
+    public void CollisionTest()
     {
         Mine m = new Mine( 0, 0, 0, 10 );
         Base b = new Base( 0, 0, 0, 0, 10, 10, 10 );

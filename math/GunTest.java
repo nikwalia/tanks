@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 /**
  * Testing class for gun
  * 
- * @author Nikash Walia
+ * @author Nikash Walia, Maithreyee Vatsan, Roopak Phatak
  * @version 5/12/18
  * @author Period: 2
  * @author Assignment: Tanks

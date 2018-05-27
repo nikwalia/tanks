@@ -4,12 +4,12 @@ package math;
  * 
  * Class that represents a point in 3D space.
  *
- * @author Nikash Walia
+ * @author Nikash Walia, Roopak Phatak, Maithreyee Vatsan
  * @version May 5, 2018
  * @author Period: 2
  * @author Assignment: Tanks
  *
- * @author Sources: none
+ * @author Sources: None
  */
 public class Value3D
 {
