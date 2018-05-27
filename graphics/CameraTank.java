@@ -4,7 +4,19 @@ import io.TankPacket;
 import math.Tank;
 import processing.core.PApplet;
 
-
+/**
+ * 
+ *  TODO Write a one-sentence summary of your class here.
+ *  TODO Follow it with additional details about its purpose, what abstraction
+ *  it represents, and how to use it.
+ *
+ *  @author  mvats
+ *  @version May 26, 2018
+ *  @author  Period: TODO
+ *  @author  Assignment: Tanks
+ *
+ *  @author  Sources: TODO
+ */
 public class CameraTank
 {
     Tank myTank;
