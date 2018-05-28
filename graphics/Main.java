@@ -99,7 +99,7 @@ public class Main extends PApplet
         playerOneWindow = new RunnerWindow();
         playerTwoWindow = new RunnerWindow();
 
-        playerOneTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) * 1000 ),
+        playerOneTank = new Tank( (int)( Math.random() * distanceConstant ),
             350,
             (int)( ( ( Math.random() * 2 ) - 1 ) * 2500 ),
             Math.random() * Math.PI * 2,
@@ -171,7 +171,7 @@ public class Main extends PApplet
         {
             homeScreen();
         }
-        else
+        else if ( gameState == 1 )
         {
             if ( playerOneWindow.initCalled && playerTwoWindow.initCalled
                 && playerOneWindow.setupCalled && playerTwoWindow.setupCalled
@@ -221,29 +221,6 @@ public class Main extends PApplet
         text( "Turret Left: ` Turret Right: 1 Turret Fire: 2", width / 4, 5 * height / 7 );
         text( "Press Q to quit game", width / 2 - 50, 5 * height / 6 );
 
-    }
-
-
-    // TODO finish
-    public void compassView( TankPacket p1, TankPacket p2 )
-    {
-        background( 255 );
-        pushMatrix();
-        translate( width / 2, height / 2 );
-        fill( 150 );
-        rotate( (float)p1.getAngle() );
-        rectMode( CENTER );
-        rect( 0, 0, 40, 40 );
-        fill( 10 );
-        popMatrix();
-        // pushMatrix();
-        // translate( width / 2, height / 2 );
-        // fill( 150 );
-        // rotate( (float)p2.getAngle() );
-        // rectMode( CENTER );
-        // rect( 0, 0, 40, 40 );
-        // fill( 10 );
-        // popMatrix();
     }
 
 
@@ -307,11 +284,7 @@ public class Main extends PApplet
 
         playerOneWindow.update( p1, p2 );
         playerTwoWindow.update( p2, p1 );
-
-        if ( gameState != -1 )
-        {
-            compassView( p1, p2 );
-        }
+        compassView( p1, p2 );
 
         checkBulletState( p1, p2 );
 
@@ -422,6 +395,15 @@ public class Main extends PApplet
                 playerTwoWindow.sameBullet = null;
             }
 
+        }
+
+        if ( one.getHitpoints() <= 0 )
+        {
+            gameOver( 2 );
+        }
+        else if ( two.getHitpoints() <= 0 )
+        {
+            gameOver( 1 );
         }
     }
 
@@ -616,5 +598,85 @@ public class Main extends PApplet
                 playerTwoData[6] = 0;
             }
         }
+    }
+
+
+    // public void textColor()
+    // {
+    // empty
+    // }
+
+    /**
+     *
+     * 
+     * 
+     * TEST THIS SECTION ONCE FINISHED WITH SCREEN INTEGRATION TEST THIS SECTION
+     * ONCE FINISHED WITH SCREEN INTEGRATION TEST THIS SECTION ONCE FINISHED
+     * WITH SCREEN INTEGRATION
+     * 
+     * 
+     * 
+     */
+
+    // need to test once done with screen integration
+    // int x;
+    // include if key ! not coded - space bar is ascii (white space)
+    // need to test once done with screen integration
+    // boolean[] keys = new boolean[128];
+
+    // need to test once done with screen integration
+    // public void pressedKey()
+    // {
+    // if ( key == ' ' )
+    // {
+    // x++;
+    // }
+    // }
+
+    // need to test once done with screen integration
+    // public void keyPressed()
+    // {
+    // keys[key] = true;
+    // }
+
+    // public void keyReleased()
+    // {
+    // keys[key] = false;
+    //
+    // }
+    public void compassView( TankPacket p1, TankPacket p2 )
+    {
+        background( 255 );
+        // // tank1
+        pushMatrix();
+        translate( width / 4, height / 2 );
+        fill( 150 );
+        rotate( (float)p2.getAngle() );
+        rectMode( CENTER );
+        rect( 0, 0, 40, 80 );
+        rect( 0, 40, 5, 5 );
+        // fill( 10 );
+        popMatrix();
+        pushMatrix();
+        translate( width / 4, height / 2 );
+        rotate( (float)p2.getGunAngle() );
+        line( 0, 0, 0, 80 );
+        popMatrix();
+
+        // tank2
+        pushMatrix();
+        translate( 3 * width / 4, height / 2 );
+        fill( 150 );
+        rotate( (float)p1.getAngle() );
+        rectMode( CENTER );
+        rect( 0, 0, 40, 80 );
+        rect( 0, 40, 5, 5 );
+        fill( 10 );
+        popMatrix();
+        pushMatrix();
+        translate( 3 * width / 4, height / 2 );
+        rotate( (float)p1.getGunAngle() );
+        line( 0, 0, 0, 80 );
+        popMatrix();
     }
 }
