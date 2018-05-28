@@ -171,17 +171,13 @@ public class Main extends PApplet
         {
             homeScreen();
         }
-        else
+        else if ( gameState == 1 )
         {
             if ( playerOneWindow.initCalled && playerTwoWindow.initCalled
                 && playerOneWindow.setupCalled && playerTwoWindow.setupCalled
                 && !playerOneWindow.countdownRunning && !playerTwoWindow.countdownRunning )
             {
                 update();
-                if ( gameState != -1 )
-                {
-                    update();
-                }
             }
         }
     }
@@ -222,7 +218,7 @@ public class Main extends PApplet
         text( "Turret Left: [ Turret Right: ] Turret Fire: \\", width / 4, 10 * height / 21 );
         text( "Player Two Controls", width / 2 - 100, 10 * height / 17 );
         text( "Forward: W Backward: S Left: A Right: D", 2 * width / 7, 2 * height / 3 );
-        text( "Turret Left: ` Turret Left: 1 Turret Right: 2", width / 4, 5 * height / 7 );
+        text( "Turret Left: ` Turret Right: 1 Turret Fire: 2", width / 4, 5 * height / 7 );
         text( "Press Q to quit game", width / 2 - 50, 5 * height / 6 );
 
     }
@@ -290,11 +286,6 @@ public class Main extends PApplet
         playerTwoWindow.update( p2, p1 );
         compassView( p1, p2 );
 
-        if ( gameState != -1 )
-        {
-            compassView( p1, p2 );
-        }
-
         checkBulletState( p1, p2 );
 
         if ( playerOneTank.onCollision( playerTwoTank ) == -1 )
@@ -311,16 +302,6 @@ public class Main extends PApplet
         else if ( p2.getHitpoints() <= 0 )
         {
             gameOver( 1 );
-        }
-    }
-
-
-    // finished
-    public void checkTankState()
-    {
-        if ( playerOneTank.onCollision( playerTwoTank ) == -1 )
-        {
-            gameOver( 0 );
         }
     }
 
@@ -675,32 +656,37 @@ public class Main extends PApplet
         background( 255 );
         // // tank1
         pushMatrix();
-        translate( 200, 250 );
+        translate( width / 4, height / 2 );
         fill( 150 );
-        rotate( (float)p1.getAngle() );
+        rotate( (float)p2.getAngle() );
         rectMode( CENTER );
-        rect( 0, 0, 40, 40 );
+        rect( 0, 0, 40, 80 );
+        rect( 0, 40, 5, 5 );
         // fill( 10 );
         popMatrix();
         pushMatrix();
-        translate( 200, 250 );
-        rotate( (float)p1.getGunAngle() );
-        line( 0, 0, 0, 40 );
+        translate( width / 4, height / 2 );
+        rotate( (float)p2.getGunAngle() );
+        line( 0, 0, 0, 80 );
         popMatrix();
 
         // tank2
         pushMatrix();
-        translate( 800, 250 );
+        translate( 3 * width / 4, height / 2 );
         fill( 150 );
-        rotate( (float)p2.getAngle() );
+        rotate( (float)p1.getAngle() );
         rectMode( CENTER );
-        rect( 0, 0, 40, 40 );
+        rect( 0, 0, 40, 80 );
+        rect( 0, 40, 5, 5 );
         fill( 10 );
         popMatrix();
         pushMatrix();
         translate( 800, 250 );
         rotate( (float)p2.getGunAngle() );
         line( 0, 0, 0, 40 );
+        translate( 3 * width / 4, height / 2 );
+        rotate( (float)p1.getGunAngle() );
+        line( 0, 0, 0, 80 );
         popMatrix();
     }
 }
