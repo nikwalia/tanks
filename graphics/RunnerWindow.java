@@ -255,7 +255,8 @@ public class RunnerWindow extends PApplet
         background( 135, 206, 235 );
         if ( gameMode != 0 )
         {
-            if ( initCalled && setupCalled && System.nanoTime() / 1e+9 - initTime > 20 )
+            if ( initCalled && setupCalled )
+//                            && System.nanoTime() / 1e+9 - initTime > 20 )
             {
                 countdownRunning = false;
                 drawGround();
