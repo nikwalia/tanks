@@ -228,8 +228,6 @@ public class Main extends PApplet
     }
 
 
-
-
     /**
      * Begins the game by allowing the player windows to begin countdowns
      */
@@ -668,34 +666,34 @@ public class Main extends PApplet
     public void compassView( TankPacket p1, TankPacket p2 )
     {
         background( 255 );
-        // tank1
+        // // tank1
         pushMatrix();
-        translate( width / 2, height / 2 );
+        translate( 200, 250 );
         fill( 150 );
         rotate( (float)p1.getAngle() );
+        rectMode( CENTER );
+        rect( 0, 0, 40, 40 );
+        // fill( 10 );
+        popMatrix();
+        pushMatrix();
+        translate( 200, 250 );
+        rotate( (float)p1.getGunAngle() );
+        line( 0, 0, 0, 40 );
+        popMatrix();
+
+        // tank2
+        pushMatrix();
+        translate( 800, 250 );
+        fill( 150 );
+        rotate( (float)p2.getAngle() );
         rectMode( CENTER );
         rect( 0, 0, 40, 40 );
         fill( 10 );
         popMatrix();
         pushMatrix();
-        translate( width / 2, height / 2 );
-        rotate( (float)p1.getGunAngle() );
-        line( 0, 0, width / 24, height / 24 );
-        popMatrix();
-
-        // tank2
-        pushMatrix();
-        translate( width / 2, height / 4 );
-        fill( 150 );
-        rotate( (float)p2.getAngle() );
-        rectMode( CENTER );
-        rect( -30, 400, 40, 40 );
-        fill( 10 );
-        popMatrix();
-        pushMatrix();
-        translate( width / 2, height / 4 );
+        translate( 800,250 );
         rotate( (float)p2.getGunAngle() );
-        line( 0, 0, width / 24, height / 24 );
+        line( 0, 0, 0, 40 );
         popMatrix();
     }
 }
