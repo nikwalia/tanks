@@ -99,7 +99,7 @@ public class Main extends PApplet
         playerOneWindow = new RunnerWindow();
         playerTwoWindow = new RunnerWindow();
 
-        playerOneTank = new Tank( (int)( ( ( Math.random() * 2 ) - 1 ) * 1000 ),
+        playerOneTank = new Tank( (int)( Math.random() * distanceConstant ),
             350,
             (int)( ( ( Math.random() * 2 ) - 1 ) * 2500 ),
             Math.random() * Math.PI * 2,
@@ -224,29 +224,6 @@ public class Main extends PApplet
     }
 
 
-    // TODO finish
-    public void compassView( TankPacket p1, TankPacket p2 )
-    {
-        background( 255 );
-        pushMatrix();
-        translate( width / 2, height / 2 );
-        fill( 150 );
-        rotate( (float)p1.getAngle() );
-        rectMode( CENTER );
-        rect( 0, 0, 40, 40 );
-        fill( 10 );
-        popMatrix();
-        // pushMatrix();
-        // translate( width / 2, height / 2 );
-        // fill( 150 );
-        // rotate( (float)p2.getAngle() );
-        // rectMode( CENTER );
-        // rect( 0, 0, 40, 40 );
-        // fill( 10 );
-        // popMatrix();
-    }
-
-
     /**
      * Begins the game by allowing the player windows to begin countdowns
      */
@@ -307,11 +284,7 @@ public class Main extends PApplet
 
         playerOneWindow.update( p1, p2 );
         playerTwoWindow.update( p2, p1 );
-
-        if ( gameState != -1 )
-        {
-            compassView( p1, p2 );
-        }
+        compassView( p1, p2 );
 
         checkBulletState( p1, p2 );
 
@@ -422,6 +395,15 @@ public class Main extends PApplet
                 playerTwoWindow.sameBullet = null;
             }
 
+        }
+
+        if ( one.getHitpoints() <= 0 )
+        {
+            gameOver( 2 );
+        }
+        else if ( two.getHitpoints() <= 0 )
+        {
+            gameOver( 1 );
         }
     }
 
@@ -616,5 +598,51 @@ public class Main extends PApplet
                 playerTwoData[6] = 0;
             }
         }
+    }
+
+    /**
+     * Draws 2 tanks so that the users know what the tank knows where it is facing 
+	 * at any given point.
+     * 
+     * @param p1 TankPacket p1 is the set of commands for Player1's tank.
+     * @param p2 TankPacket p2 is the set of commands for Player2's tank. 
+     */
+    public void compassView( TankPacket p1, TankPacket p2 )
+    {
+        background( 255 );
+        // // tank1
+        pushMatrix();
+        translate( width / 4, height / 2 );
+        fill( 150 );
+        rotate( (float)p2.getAngle() );
+        rectMode( CENTER );
+        rect( 0, 0, 40, 80 );
+        rect( 0, 40, 5, 5 );
+        // fill( 10 );
+        popMatrix();
+        pushMatrix();
+        translate( width / 4, height / 2 );
+        rotate( (float)p2.getGunAngle() );
+        line( 0, 0, 0, 80 );
+        popMatrix();
+
+        // tank2
+        pushMatrix();
+        translate( 3 * width / 4, height / 2 );
+        fill( 150 );
+        rotate( (float)p1.getAngle() );
+        rectMode( CENTER );
+        rect( 0, 0, 40, 80 );
+        rect( 0, 40, 5, 5 );
+        fill( 10 );
+        popMatrix();
+        pushMatrix();
+        translate( 800, 250 );
+        rotate( (float)p2.getGunAngle() );
+        line( 0, 0, 0, 40 );
+        translate( 3 * width / 4, height / 2 );
+        rotate( (float)p1.getGunAngle() );
+        line( 0, 0, 0, 80 );
+        popMatrix();
     }
 }
