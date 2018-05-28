@@ -9,11 +9,6 @@ package math;
  * @author Period: 2
  * @author Assignment: Tanks
  * @author Sources: none
- *
- *         Group members:
- * @author Maithreyee Vatsan
- * @author Nikash Walia
- * @author Roopak Phatak
  */
 public class Base extends Structure3D
 {
