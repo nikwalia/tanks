@@ -171,7 +171,7 @@ public class Main extends PApplet
         {
             homeScreen();
         }
-        else if ( gameState == 1 )
+        else if (gameState == 1)
         {
             if ( playerOneWindow.initCalled && playerTwoWindow.initCalled
                 && playerOneWindow.setupCalled && playerTwoWindow.setupCalled
@@ -251,10 +251,10 @@ public class Main extends PApplet
      */
     private void resumeGame()
     {
-        playerOneWindow.loop();
-        playerTwoWindow.loop();
         playerOneTank.resume();
         playerTwoTank.resume();
+        playerOneWindow.loop();
+        playerTwoWindow.loop();
     }
 
 
