@@ -185,6 +185,7 @@ public class Tank
      * 
      * @param other
      *            Object to interact with
+     * @return status update to system
      */
     public int onCollision( Object other )
     {
@@ -267,7 +268,8 @@ public class Tank
 
     /**
      * 
-     * Method used to update the timestamp of the gun and the base- important for pausing
+     * Method used to update the timestamp of the gun and the base- important
+     * for pausing
      */
     public void resume()
     {
