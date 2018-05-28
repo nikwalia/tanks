@@ -600,53 +600,9 @@ public class Main extends PApplet
         }
     }
 
-    // public void textColor()
-    // {
-    // empty
-    // }
-
     /**
-     *
-     * 
-     * 
-     * TEST THIS SECTION ONCE FINISHED WITH SCREEN INTEGRATION TEST THIS SECTION
-     * ONCE FINISHED WITH SCREEN INTEGRATION TEST THIS SECTION ONCE FINISHED
-     * WITH SCREEN INTEGRATION
-     * 
-     * 
-     * 
-     */
-
-    // need to test once done with screen integration
-    // int x;
-    // include if key ! not coded - space bar is ascii (white space)
-    // need to test once done with screen integration
-    // boolean[] keys = new boolean[128];
-
-    // need to test once done with screen integration
-    // public void pressedKey()
-    // {
-    // if ( key == ' ' )
-    // {
-    // x++;
-    // }
-    // }
-
-    // need to test once done with screen integration
-    // public void keyPressed()
-    // {
-    // keys[key] = true;
-    // }
-
-
-    // public void keyReleased()
-    // {
-    // keys[key] = false;
-    //
-    // }
-    /**
-     * Draws 2 tanks so that the users know what the tank is doing at any given
-     * point.
+     * Draws 2 tanks so that the users know what the tank knows where it is facing 
+	 * at any given point.
      * 
      * @param p1 TankPacket p1 is the set of commands for Player1's tank.
      * @param p2 TankPacket p2 is the set of commands for Player2's tank. 
