@@ -619,7 +619,6 @@ public class Main extends PApplet
         }
     }
 
-
     // public void textColor()
     // {
     // empty
@@ -658,11 +657,19 @@ public class Main extends PApplet
     // keys[key] = true;
     // }
 
+
     // public void keyReleased()
     // {
     // keys[key] = false;
     //
     // }
+    /**
+     * Draws 2 tanks so that the users know what the tank is doing at any given
+     * point.
+     * 
+     * @param p1 TankPacket p1 is the set of commands for Player1's tank.
+     * @param p2 TankPacket p2 is the set of commands for Player2's tank. 
+     */
     public void compassView( TankPacket p1, TankPacket p2 )
     {
         background( 255 );
@@ -691,7 +698,7 @@ public class Main extends PApplet
         fill( 10 );
         popMatrix();
         pushMatrix();
-        translate( 800,250 );
+        translate( 800, 250 );
         rotate( (float)p2.getGunAngle() );
         line( 0, 0, 0, 40 );
         popMatrix();
