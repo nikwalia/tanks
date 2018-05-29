@@ -282,7 +282,7 @@ public abstract class Structure3D extends Value3D
      * 
      * @param other
      *            structure to check against
-     * @return corner that has collided, or -1 if no collision
+     * @return 1 if has collided, or -1 if no collision
      */
     public abstract int hasCollided( Structure3D other );
 }
