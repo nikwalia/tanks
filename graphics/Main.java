@@ -637,9 +637,6 @@ public class Main extends PApplet
         fill( 10 );
         popMatrix();
         pushMatrix();
-        translate( 800, 250 );
-        rotate( (float)p2.getGunAngle() );
-        line( 0, 0, 0, 40 );
         translate( 3 * width / 4, height / 2 );
         rotate( (float)p1.getGunAngle() );
         line( 0, 0, 0, 80 );
